@@ -7,7 +7,7 @@ Click [here](http://richiecarmichael.github.io/simulator/index.html) or [here](h
 #### This application makes use of the following libraries:
 
 * [ArcGIS API for JavaScript](https://developers.arcgis.com/javascript/) by [Esri](http://www.esri.com/)
-  - Esri’s JavaScript library for mapping and analysis.
+  - Esri's JavaScript library for mapping and analysis.
 * [d3-format](https://github.com/d3/d3-format) by [Mike Bostock](https://github.com/mbostock)
   - Format numbers for human consumption.
 * [jQuery](http://jquery.com/) by jQuery Foundataion Inc

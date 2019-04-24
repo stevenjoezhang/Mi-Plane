@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"/>
 <meta name="author" content="Esri"/>
 <title>Flight Simulator</title>
-<link rel="shortcut icon" href="img/favicon.ico"/>
+<link rel="shortcut icon" href="favicon.ico"/>
 <link rel="stylesheet" href="css/flightindicators.min.css"/>
 <link rel="stylesheet" href="css/style.css"/>
 <style>
@@ -29,7 +29,7 @@
 // Dynamic examples
 var indicator = {};
 
-indicator.airspeed = $.flightIndicator("#airspeed", "airspeed", {showBox: false});
+indicator.airspeed = $.flightIndicator("#airspeed", "airspeed");
 indicator.attitude = $.flightIndicator("#attitude", "attitude", {roll: 50, pitch: -20, showBox: true});
 indicator.altimeter = $.flightIndicator("#altimeter", "altimeter");
 indicator.turn_coordinator = $.flightIndicator("#turn_coordinator", "turn_coordinator", {turn: 0});

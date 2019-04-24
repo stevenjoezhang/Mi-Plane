@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"/>
 <meta name="author" content="Esri"/>
 <title>Flight Simulator</title>
-<link rel="shortcut icon" href="img/favicon.ico"/>
+<link rel="shortcut icon" href="favicon.ico"/>
 <link rel="stylesheet" href="//js.arcgis.com/4.11/esri/css/main.css"/>
 <link rel="stylesheet" href="css/style.css"/>
 <style>
@@ -80,6 +80,7 @@
 	background-image: url(../img/airplane.png);
 	background-size: cover;
 	background-repeat: no-repeat;
+	pointer-events: none;
 }
 #logo {
 	position: absolute;
@@ -129,6 +130,13 @@ window.requestAnimationFrame = window.requestAnimationFrame
 	|| window.msRequestAnimationFrame
 	|| function(callback) { window.setTimeout(callback, 1000 / 30) };
 
+function ConvertDDToDMS(d, lng) {
+	var dir = d < 0 ? lng ? "W" : "S" : lng ? "E" : "N";
+	var deg = 0 | (d < 0 ? d = -d : d);
+	var min = 0 | d % 1 * 60;
+	var sec = (0 | d * 60 % 1 * 60);
+	return deg + "° " + format.format("02d")(min) + "' " + format.format("02d")(sec) + "\" " + dir;
+}
 
 /* -----------------------------------------------------------------------------------
    Developed by the Applications Prototype Lab
@@ -219,8 +227,6 @@ function (
 		viewForward.ui.components = [];
 		viewLeft.ui.components = [];
 		viewRight.ui.components = [];
-		
-		window.requestAnimationFrame(draw);
 
 		function draw(time) {
 			if (lastTime !== null) {
@@ -265,53 +271,7 @@ function (
 			requestAnimationFrame(draw);
 		}
 
-		$("#button-speed-up").click(function () {
-			speed += 100;
-		});
-		$("#button-speed-dn").click(function () {
-			speed -= 100;
-			if (speed < 0) {
-				speed = 0;
-			}
-		});
-		$("#button-altitude-up").click(function () {
-			location.z += 100;
-		});
-		$("#button-altitude-dn").click(function () {
-			location.z -= 100;
-			if (location.z < 0) {
-				location.z = 0;
-			}
-		});
-		$("#button-heading-up").click(function () {
-			heading += 10;
-			if (heading > 360) {
-				heading -= 360;
-			}
-		});
-		$("#button-heading-dn").click(function () {
-			heading -= 10;
-			if (heading < 0) {
-				heading += 360;
-			}
-		});
-
-		function ConvertDDToDMS(d, lng) {
-			var dir = d < 0 ? lng ? "W" : "S" : lng ? "E" : "N";
-			var deg = 0 | (d < 0 ? d = -d : d);
-			var min = 0 | d % 1 * 60;
-			var sec = (0 | d * 60 % 1 * 60);
-			return deg + "° " + format.format("02d")(min) + "' " + format.format("02d")(sec) + "\" " + dir;
-		}
-
-		String.prototype.format = function () {
-			var s = this;
-			var i = arguments.length;
-			while (i--) {
-				s = s.replace(new RegExp("\\{" + i + "\\}", "gm"), arguments[i]);
-			}
-			return s;
-		};
+		requestAnimationFrame(draw);
 	});
 });
 </script>
