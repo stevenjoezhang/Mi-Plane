@@ -178,7 +178,7 @@ function (
 				protocol = location.protocol == "https:" ? "wss:" : "ws:";
 			window.ws = new WebSocket(`${protocol}//${window.location.hostname}:${port}`);
 			ws.onopen = function () {
-				console.log("系统消息：建立连接成功");
+				console.log("Websocket connection is successful");
 			};
 
 			ws.onmessage = function (event) {
@@ -186,7 +186,7 @@ function (
 			};
 
 			ws.onerror = function () {
-				console.log("系统消息：连接失败，请刷新或稍后再试");
+				console.log("Websocket connection failed, please refresh the page and try again");
 			};
 		});
 

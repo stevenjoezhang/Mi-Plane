@@ -10,16 +10,56 @@
 <style>
 @font-face {
 	font-family: "7Seg";
-	src: url(fonts/7 Segment.ttf) format("ttf");
+	src: url(fonts/7Segment.ttf) format("truetype");
 }
-.seven-seg {
+.seven-seg input {
 	font-family: "7Seg";
+	font-size: 3em;
+	background-color: #110F0F;
+	color: #CCC;
 }
 body {
 	background-color: #333;
 }
-#warning {
-
+span {
+	display: block;
+	text-transform: uppercase;
+}
+#container {
+	display: flex;
+	flex-wrap: wrap;
+	padding: 10px;
+	text-align: center;
+}
+#container > div {
+	background-color: #888;
+	border-radius: 20px;
+	border: 1px solid #FFF;
+	margin: 10px;
+	padding: 20px;
+	position: relative;
+}
+.button {
+	padding: 5px 10px 0px 10px;
+	margin-bottom: 20px;
+	border: 5px solid #FFF;
+}
+.button:nth-last-of-type(1) {
+	margin-bottom: 0px;
+}
+.button span:nth-of-type(1), .button span:nth-of-type(2) {
+	font-size: 2em;
+	line-height: 1em;
+}
+.light {
+	border: 5px solid #FFF;
+	border-radius: 50%;
+	background-color: green;
+	width: 4em;
+	height: 4em;
+	position: relative;
+	left: 50%;
+	transform: translateX(-50%);
 }
 #fire {
 	background-color: red;
@@ -29,20 +69,16 @@ body {
 	color: black;
 }
 #bottom-bottom {
-	position: absolute;
 	left: 0px;
 	right: 0px;
 	bottom: 0px;
 	height: 60px;
 }
 #bottom-bottom-panel {
-	position: absolute;
 	top: 0px;
 	left: 50%;
-	margin-left:-225px;
 }
 .rc-panel {
-	position: absolute;
 	top: 0px;
 	bottom: 0px;
 	width: 125px;
@@ -61,7 +97,6 @@ body {
 	width: 200px;
 }
 .rc-buttons {
-	position: absolute;
 	top: 5px;
 	left: 5px;
 }
@@ -70,7 +105,6 @@ body {
 	font-size: 10px;
 }
 .rc-heading {
-	position: absolute;
 	top: 3px;
 	left: 35px;
 	font-size: 15px;
@@ -78,7 +112,6 @@ body {
 	pointer-events: none;
 }
 .rc-reading {
-	position: absolute;
 	top: 25px;
 	left: 35px;
 	font-size: 14px;
@@ -98,48 +131,81 @@ body {
 <script src="js/jquery.min.js"></script>
 <script src="js/format.min.js"></script>
 <script src="//js.arcgis.com/4.11/dojo/dojo.js"></script>
-<div id="warning">
-	<div id="fire">
-		<span>FIRE</span>
-		<span>WARN</span>
-		<p>BELL CUTOUT</p>
+<div id="container">
+	<div id="warning">
+		<div id="fire" class="button">
+			<span>Fire</span>
+			<span>Warn</span>
+			<span>Bell Ccuout</span>
+		</div>
+		<div id="master" class="button">
+			<span>Master</span>
+			<span>Caution</span>
+			<span>Push To Reset</span>
+		</div>
 	</div>
-	<div id="master">
-		<span>MASTER</span>
-		<span>CAUTION</span>
-		<p>PUSH TO RESET</p>
+	<div id="autopilot">
+		<div class="button">
+			<span>Auto</span>
+			<span>Pilot</span>
+		</div>
+		<div class="light"></div>
 	</div>
-</div>
-<div id="bottom-bottom">
-	<div id="bottom-bottom-panel">
-		<div id="panel-speed" class="rc-panel">
-			<div class="rc-buttons btn-group-vertical" role="group" aria-label="">
-				<button id="button-speed-up" type="button" class="btn btn-default"><i class="fas fa-chevron-up"></i></button>
-				<button id="button-speed-dn" type="button" class="btn btn-default"><i class="fas fa-chevron-down"></i></button>
-			</div>
-			<div class="rc-heading">Speed</div>
-			<div class="rc-reading" id="dial-speed"></div>
+	<div id="speed">
+		<span>Speed</span>
+		<div class="seven-seg">
+			<input type="text" maxlength="6" size="6" readonly="readonly"/>
 		</div>
-		<div id="panel-altitude" class="rc-panel">
-			<div class="rc-buttons btn-group-vertical" role="group" aria-label="">
-				<button id="button-altitude-up" type="button" class="btn btn-default"><i class="fas fa-chevron-up"></i></button>
-				<button id="button-altitude-dn" type="button" class="btn btn-default"><i class="fas fa-chevron-down"></i></button>
-			</div>
-			<div class="rc-heading">Altitude</div>
-			<div class="rc-reading" id="dial-altitude"></div>
+	</div>
+	<div id="heading">
+		<span>HDG/TRK</span>
+		<div class="seven-seg">
+			<input type="text" maxlength="6" size="6" readonly="readonly"/>
 		</div>
-		<div id="panel-heading" class="rc-panel">
-			<div class="rc-buttons btn-group-vertical" role="group" aria-label="">
-				<button id="button-heading-up" type="button" class="btn btn-default"><i class="fas fa-chevron-up"></i></button>
-				<button id="button-heading-dn" type="button" class="btn btn-default"><i class="fas fa-chevron-down"></i></button>
-			</div>
-			<div class="rc-heading">Heading</div>
-			<div class="rc-reading" id="dial-heading"></div>
+	</div>
+	<div id="vs">
+		<span>VS/FPA</span>
+		<div class="seven-seg">
+			<input type="text" maxlength="6" size="6" readonly="readonly"/>
 		</div>
-		<div id="panel-location" class="rc-panel">
-			<div class="rc-heading">Location</div>
-			<div class="rc-reading" id="dial-location-x"></div>
-			<div class="rc-reading" id="dial-location-y"></div>
+	</div>
+	<div id="altitude">
+		<span>Altitude</span>
+		<div class="seven-seg">
+			<input type="text" maxlength="6" size="6" readonly="readonly"/>
+		</div>
+	</div>
+	<div id="bottom-bottom">
+		<div id="bottom-bottom-panel">
+			<div id="panel-speed" class="rc-panel">
+				<div class="rc-buttons btn-group-vertical" role="group" aria-label="">
+					<button id="button-speed-up" type="button" class="btn btn-default"></button>
+					<button id="button-speed-dn" type="button" class="btn btn-default"></button>
+				</div>
+				<div class="rc-heading">Speed</div>
+				<div class="rc-reading" id="dial-speed"></div>
+			</div>
+			<div id="panel-altitude" class="rc-panel">
+				<div class="rc-buttons btn-group-vertical" role="group" aria-label="">
+					<button id="button-altitude-up" type="button" class="btn btn-default"></button>
+					<button id="button-altitude-dn" type="button" class="btn btn-default"></button>
+				</div>
+				<div class="rc-heading">Altitude</div>
+				<div class="rc-reading" id="dial-altitude"></div>
+			</div>
+			<div id="panel-heading" class="rc-panel">
+				<div class="rc-buttons btn-group-vertical" role="group" aria-label="">
+					<button id="button-heading-up" type="button" class="btn btn-default"></button>
+					<button id="button-heading-dn" type="button" class="btn btn-default"></button>
+				</div>
+				<div class="rc-heading">Heading</div>
+				<div class="rc-reading" id="dial-heading"></div>
+			</div>
+			<div id="panel-location" class="rc-panel">
+				<div class="rc-heading">Location</div>
+				<div class="rc-reading" id="dial-location-x"></div>
+				<div class="rc-reading" id="dial-location-y"></div>
+			</div>
 		</div>
 	</div>
 </div>
@@ -188,7 +254,7 @@ function (
 				protocol = location.protocol == "https:" ? "wss:" : "ws:";
 			window.ws = new WebSocket(`${protocol}//${window.location.hostname}:${port}`);
 			ws.onopen = function () {
-				console.log("系统消息：建立连接成功");
+				console.log("Websocket connection is successful");
 			};
 
 			ws.onmessage = function (event) {
@@ -197,7 +263,7 @@ function (
 			};
 
 			ws.onerror = function () {
-				console.log("系统消息：连接失败，请刷新或稍后再试");
+				console.log("Websocket connection failed, please refresh the page and try again");
 			};
 		});
 
@@ -209,9 +275,9 @@ function (
 
 			var geographic = webMercatorUtils.webMercatorToGeographic(location);
 
-			$("#dial-speed").html(format.format(",")(plane.speed) + " m/s");
-			$("#dial-altitude").html(format.format(",")(location.z) + " m");
-			$("#dial-heading").html(format.format(",")(plane.heading) + "°");
+			$("#speed input").val(format.format(",")(plane.speed));
+			$("#altitude input").val(format.format(",")(location.z));
+			$("#heading input").val(format.format(",")(plane.heading));
 			$("#dial-location-x").html(ConvertDDToDMS(geographic.x, true));
 			$("#dial-location-y").html(ConvertDDToDMS(geographic.y, false));
 		}
