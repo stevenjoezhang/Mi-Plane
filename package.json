@@ -1,0 +1,28 @@
+{
+	"name": "Flight-Simulator",
+	"version": "0.0.1",
+	"description": "An single-player Flight-Simulator game",
+	"main": "server.js",
+	"scripts": {
+		"start": "node server.js"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/stevenjoezhang/Flight-Simulator.git"
+	},
+	"keywords": [
+		"Flight",
+		"Simulator",
+		"Game"
+	],
+	"author": "Mimi",
+	"license": "MIT",
+	"bugs": {
+		"url": "https://github.com/stevenjoezhang/Flight-Simulator/issues"
+	},
+	"homepage": "https://github.com/stevenjoezhang/Flight-Simulator",
+	"dependencies": {
+		"express": "^4.16.4",
+		"ws": "^6.2.1"
+	}
+}

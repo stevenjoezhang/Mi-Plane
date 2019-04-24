@@ -6,9 +6,28 @@
 <meta name="author" content="Mimi"/>
 <title>Flight Simulator</title>
 <link rel="shortcut icon" href="favicon.ico"/>
-<link rel="stylesheet" href="css/font-awesome/css/all.min.css"/>
 <link rel="stylesheet" href="css/style.css"/>
 <style>
+@font-face {
+	font-family: "7Seg";
+	src: url(fonts/7 Segment.ttf) format("ttf");
+}
+.seven-seg {
+	font-family: "7Seg";
+}
+body {
+	background-color: #333;
+}
+#warning {
+
+}
+#fire {
+	background-color: red;
+}
+#master {
+	background-color: yellow;
+	color: black;
+}
 #bottom-bottom {
 	position: absolute;
 	left: 0px;
@@ -22,7 +41,6 @@
 	left: 50%;
 	margin-left:-225px;
 }
-
 .rc-panel {
 	position: absolute;
 	top: 0px;
@@ -42,18 +60,15 @@
 	left: 350px;
 	width: 200px;
 }
-
 .rc-buttons {
 	position: absolute;
 	top: 5px;
 	left: 5px;
 }
-
 .rc-buttons > .btn {
 	padding: 2px 6px;
 	font-size: 10px;
 }
-
 .rc-heading {
 	position: absolute;
 	top: 3px;
@@ -62,7 +77,6 @@
 	font-weight: 700;
 	pointer-events: none;
 }
-
 .rc-reading {
 	position: absolute;
 	top: 25px;
@@ -70,7 +84,6 @@
 	font-size: 14px;
 	pointer-events: none;
 }
-
 #dial-location-x {
 	font-size: 12px;
 	top: 20px;
@@ -82,6 +95,21 @@
 </style>
 </head>
 <body>
+<script src="js/jquery.min.js"></script>
+<script src="js/format.min.js"></script>
+<script src="//js.arcgis.com/4.11/dojo/dojo.js"></script>
+<div id="warning">
+	<div id="fire">
+		<span>FIRE</span>
+		<span>WARN</span>
+		<p>BELL CUTOUT</p>
+	</div>
+	<div id="master">
+		<span>MASTER</span>
+		<span>CAUTION</span>
+		<p>PUSH TO RESET</p>
+	</div>
+</div>
 <div id="bottom-bottom">
 	<div id="bottom-bottom-panel">
 		<div id="panel-speed" class="rc-panel">
@@ -116,37 +144,111 @@
 	</div>
 </div>
 <script>
+function ConvertDDToDMS(d, lng) {
+	var dir = d < 0 ? lng ? "W" : "S" : lng ? "E" : "N";
+	var deg = 0 | (d < 0 ? d = -d : d);
+	var min = 0 | d % 1 * 60;
+	var sec = (0 | d * 60 % 1 * 60);
+	return deg + "° " + format.format("02d")(min) + "' " + format.format("02d")(sec) + "\" " + dir;
+}
 
-		$("#button-speed-up").click(function () {
-			speed += 100;
-		});
-		$("#button-speed-dn").click(function () {
-			speed -= 100;
-			if (speed < 0) {
-				speed = 0;
+require([
+	"esri/geometry/Point",
+	"esri/geometry/support/webMercatorUtils"
+],
+function (
+	Point,
+	webMercatorUtils
+) {
+	$(document).ready(function() {
+		// Enforce strict mode
+		"use strict";
+
+		window.plane = {
+			x: 779232,
+			y: 5780430,
+			z: 3000,
+			speed: 200,
+			heading: 0
+		}
+
+		var location = new Point({
+			x: plane.x,
+			y: plane.y,
+			z: plane.z,
+			spatialReference: {
+				wkid: 102100
 			}
 		});
-		$("#button-altitude-up").click(function () {
-			location.z += 100;
+
+		fetch("/port").then(response => {
+			return response.text();
+		}).then(data => {
+			var port = data,
+				protocol = location.protocol == "https:" ? "wss:" : "ws:";
+			window.ws = new WebSocket(`${protocol}//${window.location.hostname}:${port}`);
+			ws.onopen = function () {
+				console.log("系统消息：建立连接成功");
+			};
+
+			ws.onmessage = function (event) {
+				plane = JSON.parse(event.data);
+				update();
+			};
+
+			ws.onerror = function () {
+				console.log("系统消息：连接失败，请刷新或稍后再试");
+			};
 		});
-		$("#button-altitude-dn").click(function () {
-			location.z -= 100;
-			if (location.z < 0) {
-				location.z = 0;
-			}
-		});
-		$("#button-heading-up").click(function () {
-			heading += 10;
-			if (heading > 360) {
-				heading -= 360;
-			}
-		});
-		$("#button-heading-dn").click(function () {
-			heading -= 10;
-			if (heading < 0) {
-				heading += 360;
-			}
-		});
+
+		function update() {
+
+			location.x = plane.x;
+			location.y = plane.y;
+			location.z = plane.z;
+
+			var geographic = webMercatorUtils.webMercatorToGeographic(location);
+
+			$("#dial-speed").html(format.format(",")(plane.speed) + " m/s");
+			$("#dial-altitude").html(format.format(",")(location.z) + " m");
+			$("#dial-heading").html(format.format(",")(plane.heading) + "°");
+			$("#dial-location-x").html(ConvertDDToDMS(geographic.x, true));
+			$("#dial-location-y").html(ConvertDDToDMS(geographic.y, false));
+		}
+		update();
+	});
+});
+
+$("#button-speed-up").click(function() {
+	speed += 100;
+});
+$("#button-speed-dn").click(function() {
+	speed -= 100;
+	if (speed < 0) {
+		speed = 0;
+	}
+});
+$("#button-altitude-up").click(function() {
+	location.z += 100;
+});
+$("#button-altitude-dn").click(function() {
+	location.z -= 100;
+	if (location.z < 0) {
+		location.z = 0;
+	}
+});
+$("#button-heading-up").click(function() {
+	heading += 10;
+	if (heading > 360) {
+		heading -= 360;
+	}
+});
+$("#button-heading-dn").click(function() {
+	heading -= 10;
+	if (heading < 0) {
+		heading += 360;
+	}
+});
 </script>
 </body>
 </html>

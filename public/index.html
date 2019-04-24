@@ -73,10 +73,10 @@
 	position: absolute;
 	left: 50%;
 	top: 50%;
-	width: 150px;
-	height: 150px;
-	margin-left: -75px;
-	margin-top: -75px;
+	width: 50px;
+	height: 50px;
+	margin-left: -25px;
+	margin-top: -25px;
 	background-image: url(../img/airplane.png);
 	background-size: cover;
 	background-repeat: no-repeat;
@@ -103,8 +103,6 @@
 </head>
 <body>
 <script src="js/jquery.min.js"></script>
-<script src="js/format.min.js"></script>
-<script src="js/sylvester.min.js"></script>
 <script src="//js.arcgis.com/4.11/dojo/dojo.js"></script>
 <div id="screen">
 	<div id="screen-top">
@@ -130,17 +128,9 @@ window.requestAnimationFrame = window.requestAnimationFrame
 	|| window.msRequestAnimationFrame
 	|| function(callback) { window.setTimeout(callback, 1000 / 30) };
 
-function ConvertDDToDMS(d, lng) {
-	var dir = d < 0 ? lng ? "W" : "S" : lng ? "E" : "N";
-	var deg = 0 | (d < 0 ? d = -d : d);
-	var min = 0 | d % 1 * 60;
-	var sec = (0 | d * 60 % 1 * 60);
-	return deg + "° " + format.format("02d")(min) + "' " + format.format("02d")(sec) + "\" " + dir;
-}
-
 /* -----------------------------------------------------------------------------------
    Developed by the Applications Prototype Lab
-   (c) 2015 Esri | http://www.esri.com/legal/software-license  
+   (c) 2015 Esri | http://www.esri.com/legal/software-license
 ----------------------------------------------------------------------------------- */
 
 require([
@@ -150,7 +140,6 @@ require([
 	"esri/views/SceneView",
 	"esri/Viewpoint",
 	"esri/geometry/Point",
-	"esri/geometry/support/webMercatorUtils",
 	"dojo/domReady!"
 ],
 function (
@@ -159,24 +148,46 @@ function (
 	MapView,
 	SceneView,
 	Viewpoint,
-	Point,
-	webMercatorUtils
-	) {
+	Point
+) {
 	$(document).ready(function() {
 		// Enforce strict mode
 		"use strict";
 
-		// Plane flight details
-		var lastTime = null;
-		var speed = 200; // m/s
-		var heading = 0;
-		var location = new Point({
+		window.plane = {
 			x: 779232,
 			y: 5780430,
 			z: 3000,
+			speed: 200,
+			heading: 0
+		}
+
+		var location = new Point({
+			x: plane.x,
+			y: plane.y,
+			z: plane.z,
 			spatialReference: {
 				wkid: 102100
 			}
+		});
+
+		fetch("/port").then(response => {
+			return response.text();
+		}).then(data => {
+			var port = data,
+				protocol = location.protocol == "https:" ? "wss:" : "ws:";
+			window.ws = new WebSocket(`${protocol}//${window.location.hostname}:${port}`);
+			ws.onopen = function () {
+				console.log("系统消息：建立连接成功");
+			};
+
+			ws.onmessage = function (event) {
+				plane = JSON.parse(event.data);
+			};
+
+			ws.onerror = function () {
+				console.log("系统消息：连接失败，请刷新或稍后再试");
+			};
 		});
 
 		// Initialize maps and views
@@ -198,6 +209,17 @@ function (
 		var viewForward = new SceneView({
 			container: "forward-map",
 			map: map,
+			qualityProfile: "high",
+			environment: {
+				lighting: {
+					date: Date.now(),
+					directShadowsEnabled: true,
+					ambientOcclusionEnabled: true
+				},
+				atmosphere: {
+				quality: "high"
+				}
+			},
 			camera: {
 				heading: 0,
 				position: location,
@@ -207,6 +229,17 @@ function (
 		var viewLeft = new SceneView({
 			container: "left-map",
 			map: map,
+			qualityProfile: "high",
+			environment: {
+				lighting: {
+					date: Date.now(),
+					directShadowsEnabled: true,
+					ambientOcclusionEnabled: true
+				},
+				atmosphere: {
+				quality: "high"
+				}
+			},
 			camera: {
 				heading: 270,
 				position: location,
@@ -216,6 +249,17 @@ function (
 		var viewRight = new SceneView({
 			container: "right-map",
 			map: map,
+			qualityProfile: "high",
+			environment: {
+				lighting: {
+					date: Date.now(),
+					directShadowsEnabled: true,
+					ambientOcclusionEnabled: true
+				},
+				atmosphere: {
+				quality: "high"
+				}
+			},
 			camera: {
 				heading: 90,
 				position: location,
@@ -228,50 +272,33 @@ function (
 		viewLeft.ui.components = [];
 		viewRight.ui.components = [];
 
-		function draw(time) {
-			if (lastTime !== null) {
-				//var h = viewMain.rotation;
-				var t = time - lastTime; // ms
-				var d = speed * t / 1000;
-				var v = Vector.create([location.x, location.y]);
-				var x = Vector.create([0, d]).rotate(-heading * Math.PI / 180, Vector.create([0, 0]));
-				var z = v.add(x);
+		function draw() {
+			location.x = plane.x;
+			location.y = plane.y;
+			location.z = plane.z;
 
-				location.x = z.e(1);
-				location.y = z.e(2);
-				location.z = location.z;
+			viewMain.center = location;
+			viewMain.rotation = -plane.heading;
+			viewForward.camera = new Camera({
+				heading: plane.heading,
+				position: location,
+				tilt: 85
+			});
+			viewLeft.camera = new Camera({
+				heading: plane.heading - 90,
+				position: location,
+				tilt: 80
+			});
+			viewRight.camera = new Camera({
+				heading: plane.heading + 90,
+				position: location,
+				tilt: 80
+			});
 
-				viewMain.center = location;
-				viewMain.rotation = -heading;
-				viewForward.camera = new Camera({
-					heading: heading,
-					position: location,
-					tilt: 85
-				});
-				viewLeft.camera = new Camera({
-					heading: heading - 90,
-					position: location,
-					tilt: 80
-				});
-				viewRight.camera = new Camera({
-					heading: heading + 90,
-					position: location,
-					tilt: 80
-				});
-
-				var geographic = webMercatorUtils.webMercatorToGeographic(location);
-
-				$("#dial-speed").html(format.format(",")(speed) + " m/s");
-				$("#dial-altitude").html(format.format(",")(location.z) + " m");
-				$("#dial-heading").html(format.format(",")(heading) + "°");
-				$("#dial-location-x").html(ConvertDDToDMS(geographic.x, true));
-				$("#dial-location-y").html(ConvertDDToDMS(geographic.y, false));
-			}
-			lastTime = time;
 			requestAnimationFrame(draw);
 		}
 
-		requestAnimationFrame(draw);
+		draw();
 	});
 });
 </script>

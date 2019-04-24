@@ -9,6 +9,9 @@
 <link rel="stylesheet" href="css/flightindicators.min.css"/>
 <link rel="stylesheet" href="css/style.css"/>
 <style>
+body {
+	background-color: #333;
+}
 #container span {
 	float: left;
 }
@@ -37,38 +40,39 @@ indicator.heading = $.flightIndicator("#heading", "heading", {heading: 150, show
 indicator.variometer = $.flightIndicator("#variometer", "variometer", {vario: -5, showBox: true});
 
 function setSize() {
-	var size = window.innerWidth / 3;
+	var size = window.innerWidth > window.innerHeight ? window.innerWidth / 3 : window.innerWidth / 2;
 	for (var ins in indicator) {
 		indicator[ins].resize(size);
 	}
 }
 setSize();
 
-// Update at 20Hz
-var increment = 0;
-setInterval(function() {
-	// Airspeed update
-	indicator.airspeed.setAirSpeed(80+80*Math.sin(increment/10));
+fetch("/port").then(response => {
+	return response.text();
+}).then(data => {
+	var port = data,
+		protocol = location.protocol == "https:" ? "wss:" : "ws:";
+	window.ws = new WebSocket(`${protocol}//${window.location.hostname}:${port}`);
+	ws.onopen = function () {
+		console.log("系统消息：建立连接成功");
+	};
 
-	// Attitude update
-	indicator.attitude.setRoll(30*Math.sin(increment/10));
-	indicator.attitude.setPitch(50*Math.sin(increment/20));
+	ws.onmessage = function (event) {
+		plane = JSON.parse(event.data);
+		// Airspeed update
+		indicator.airspeed.setAirSpeed(plane.speed * 1.943844);
+		// Altimeter update
+		indicator.altimeter.setAltitude(plane.z);
+		indicator.altimeter.setPressure(Math.pow((1 - plane.z / 44300), 5.256) * 1013.25);
+		// Heading update
+		indicator.heading.setHeading(plane.heading);
+	};
 
-	// Altimeter update
-	indicator.altimeter.setAltitude(10*increment);
-	indicator.altimeter.setPressure(1000+3*Math.sin(increment/50));
-	increment++;
-	
-	// TC update
-	indicator.turn_coordinator.setTurn(30*Math.sin(increment/10));
+	ws.onerror = function () {
+		console.log("系统消息：连接失败，请刷新或稍后再试");
+	};
+});
 
-	// Heading update
-	indicator.heading.setHeading(increment);
-	
-	// Vario update
-	indicator.variometer.setVario(2*Math.sin(increment/10));
-	
-}, 50);
 $(window).on("resize", setSize);
 </script>
 </body>
