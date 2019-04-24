@@ -1,4 +1,4 @@
-# Flight Simulator
+# Mi Plane
 
 A basic flight simulator with four synchronized views.
 

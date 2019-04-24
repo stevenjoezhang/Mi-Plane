@@ -19,7 +19,7 @@ app.get("/port", (req, res) => {
 var WebSocketServer = require("ws").Server,
 	wss = new WebSocketServer({
 		clientTracking: true,
-		maxPayload: 1300, //50个unicode字符最大可能大小（Emoji表情“一家人”）
+		maxPayload: 1300,
 		server
 	});
 
