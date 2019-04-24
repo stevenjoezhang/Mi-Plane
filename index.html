@@ -1,74 +1,319 @@
 ﻿<!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<title>Flight Simulator</title>
-<meta http-equiv="content-type" content="text/html;charset=utf-8"/>
+<meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"/>
 <meta name="author" content="Esri"/>
-<meta name="keywords" content=""/>
-<meta name="description" content=""/>
-<link type="image/ico" rel="shortcut icon" href="img/favicon.ico"/>
-<link type="image/ico" rel="icon" href="img/favicon.ico"/>
+<title>Flight Simulator</title>
+<link rel="shortcut icon" href="img/favicon.ico"/>
 <link rel="stylesheet" href="//js.arcgis.com/4.11/esri/css/main.css"/>
-<link rel="stylesheet" href="css/bootstrap.min.css"/>
-<link rel="stylesheet" href="css/bootstrap-theme.min.css"/>
-<link rel="stylesheet" href="css/main.css"/>
+<link rel="stylesheet" href="css/style.css"/>
+<style>
+#screen {
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	right: 0px;
+	bottom: 0px;
+	background-color: #000;
+}
+#screen-top {
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	right: 0px;
+	height: calc(50% - 2px);
+}
+#screen-middle {
+	position: absolute;
+	top: 50%;
+	left: 0px;
+	right: 0px;
+	bottom: 0px;
+}
+#forward-map {
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	right: 0px;
+	bottom: 0px;
+}
+#left-map {
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	bottom: 0px;
+	width: 33%;
+	margin-left: -2px;
+}
+#middle-map {
+	position: absolute;
+	top: 0px;
+	bottom: 0px;
+	left: 0px;
+	width: 33%;
+	margin-left: 33%
+}
+#right-map {
+	position: absolute;
+	top: 0px;
+	right: 0px;
+	bottom: 0px;
+	width: 34%;
+	margin-right: -2px;
+}
+#map {
+	position: absolute;
+	top: 0px;
+	right: 0px;
+	bottom: 0px;
+	left: 0px;
+}
+#plane {
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	width: 150px;
+	height: 150px;
+	margin-left: -75px;
+	margin-top: -75px;
+	background-image: url(../img/airplane.png);
+	background-size: cover;
+	background-repeat: no-repeat;
+}
+#logo {
+	position: absolute;
+	top: 0px;
+	left: 10px;
+	right: 0px;
+	/*height: 60px;
+	background-color: #2D6CA2;
+	border-bottom: 1px solid #000;
+	text-align: center;*/
+	opacity: 0.5;
+	font-size: 2.625em;
+	font-weight: 700;
+	pointer-events: none;
+}
+#forward-map, #left-map, #right-map {
+	pointer-events: none;
+}
+</style>
+</head>
+<body>
 <script src="js/jquery.min.js"></script>
 <script src="js/format.min.js"></script>
 <script src="js/sylvester.min.js"></script>
-<script src="js/bootstrap.min.js"></script>
 <script src="//js.arcgis.com/4.11/dojo/dojo.js"></script>
-<script src="index.js"></script>
-</head>
-<body>
-<div id="bottom">
-    <div id="bottom-top">
-        <div id="forward-map"></div>
-    </div>
-    <div id="bottom-middle">
-        <div id="left-map"></div>
-        <div id="right-map"></div>
-        <div id="middle-map">
-            <div id="map"></div>
-            <div id="plane"></div>
-        </div>
-    </div>
-    <div id="bottom-bottom">
-        <div id="bottom-bottom-panel">
-            <div id="panel-speed" class="rc-panel">
-                <div class="rc-buttons btn-group-vertical" role="group" aria-label="">
-                    <button id="button-speed-up" type="button" class="btn btn-default"><span class="glyphicon glyphicon-chevron-up" aria-hidden="true"></span></button>
-                    <button id="button-speed-dn" type="button" class="btn btn-default"><span class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span></button>
-                </div>
-                <div class="rc-heading">Speed</div>
-                <div class="rc-reading" id="dial-speed"></div>
-            </div>
-            <div id="panel-altitude" class="rc-panel">
-                <div class="rc-buttons btn-group-vertical" role="group" aria-label="">
-                    <button id="button-altitude-up" type="button" class="btn btn-default"><span class="glyphicon glyphicon-chevron-up" aria-hidden="true"></span></button>
-                    <button id="button-altitude-dn" type="button" class="btn btn-default"><span class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span></button>
-                </div>
-                <div class="rc-heading">Altitude</div>
-                <div class="rc-reading" id="dial-altitude"></div>
-            </div>
-            <div id="panel-heading" class="rc-panel">
-                <div class="rc-buttons btn-group-vertical" role="group" aria-label="">
-                    <button id="button-heading-up" type="button" class="btn btn-default"><span class="glyphicon glyphicon-chevron-up" aria-hidden="true"></span></button>
-                    <button id="button-heading-dn" type="button" class="btn btn-default"><span class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span></button>
-                </div>
-                <div class="rc-heading">Heading</div>
-                <div class="rc-reading" id="dial-heading"></div>
-            </div>
-            <div id="panel-location" class="rc-panel">
-                <div class="rc-heading">Location</div>
-                <div class="rc-reading" id="dial-location-x"></div>
-                <div class="rc-reading" id="dial-location-y"></div>
-            </div>
-        </div>
-    </div>
+<div id="screen">
+	<div id="screen-top">
+		<div id="forward-map"></div>
+	</div>
+	<div id="screen-middle">
+		<div id="left-map"></div>
+		<div id="right-map"></div>
+		<div id="middle-map">
+			<div id="map"></div>
+			<div id="plane"></div>
+		</div>
+	</div>
 </div>
-<div id="top">
-    <div id="heading">Flight Simulator</div>
+<div id="logo">
+	Flight Simulator
 </div>
+<script>
+window.requestAnimationFrame = window.requestAnimationFrame
+	|| window.webkitRequestAnimationFrame
+	|| window.mozRequestAnimationFrame
+	|| window.oRequestAnimationFrame
+	|| window.msRequestAnimationFrame
+	|| function(callback) { window.setTimeout(callback, 1000 / 30) };
+
+
+/* -----------------------------------------------------------------------------------
+   Developed by the Applications Prototype Lab
+   (c) 2015 Esri | http://www.esri.com/legal/software-license  
+----------------------------------------------------------------------------------- */
+
+require([
+	"esri/Map",
+	"esri/Camera",
+	"esri/views/MapView",
+	"esri/views/SceneView",
+	"esri/Viewpoint",
+	"esri/geometry/Point",
+	"esri/geometry/support/webMercatorUtils",
+	"dojo/domReady!"
+],
+function (
+	Map,
+	Camera,
+	MapView,
+	SceneView,
+	Viewpoint,
+	Point,
+	webMercatorUtils
+	) {
+	$(document).ready(function() {
+		// Enforce strict mode
+		"use strict";
+
+		// Plane flight details
+		var lastTime = null;
+		var speed = 200; // m/s
+		var heading = 0;
+		var location = new Point({
+			x: 779232,
+			y: 5780430,
+			z: 3000,
+			spatialReference: {
+				wkid: 102100
+			}
+		});
+
+		// Initialize maps and views
+		var main = new Map({
+			basemap: "satellite"
+		});
+		var viewMain = new MapView({
+			container: "map",
+			map: main,
+			zoom: 12,
+			rotation: 0,
+			center: location
+		});
+
+		var map = new Map({
+			basemap: "satellite",
+			ground: "world-elevation"
+		});
+		var viewForward = new SceneView({
+			container: "forward-map",
+			map: map,
+			camera: {
+				heading: 0,
+				position: location,
+				tilt: 85
+			}
+		});
+		var viewLeft = new SceneView({
+			container: "left-map",
+			map: map,
+			camera: {
+				heading: 270,
+				position: location,
+				tilt: 80
+			}
+		});
+		var viewRight = new SceneView({
+			container: "right-map",
+			map: map,
+			camera: {
+				heading: 90,
+				position: location,
+				tilt: 80
+			}
+		});
+
+		viewMain.ui.components = ["compass", "zoom"];
+		viewForward.ui.components = [];
+		viewLeft.ui.components = [];
+		viewRight.ui.components = [];
+		
+		window.requestAnimationFrame(draw);
+
+		function draw(time) {
+			if (lastTime !== null) {
+				//var h = viewMain.rotation;
+				var t = time - lastTime; // ms
+				var d = speed * t / 1000;
+				var v = Vector.create([location.x, location.y]);
+				var x = Vector.create([0, d]).rotate(-heading * Math.PI / 180, Vector.create([0, 0]));
+				var z = v.add(x);
+
+				location.x = z.e(1);
+				location.y = z.e(2);
+				location.z = location.z;
+
+				viewMain.center = location;
+				viewMain.rotation = -heading;
+				viewForward.camera = new Camera({
+					heading: heading,
+					position: location,
+					tilt: 85
+				});
+				viewLeft.camera = new Camera({
+					heading: heading - 90,
+					position: location,
+					tilt: 80
+				});
+				viewRight.camera = new Camera({
+					heading: heading + 90,
+					position: location,
+					tilt: 80
+				});
+
+				var geographic = webMercatorUtils.webMercatorToGeographic(location);
+
+				$("#dial-speed").html(format.format(",")(speed) + " m/s");
+				$("#dial-altitude").html(format.format(",")(location.z) + " m");
+				$("#dial-heading").html(format.format(",")(heading) + "°");
+				$("#dial-location-x").html(ConvertDDToDMS(geographic.x, true));
+				$("#dial-location-y").html(ConvertDDToDMS(geographic.y, false));
+			}
+			lastTime = time;
+			requestAnimationFrame(draw);
+		}
+
+		$("#button-speed-up").click(function () {
+			speed += 100;
+		});
+		$("#button-speed-dn").click(function () {
+			speed -= 100;
+			if (speed < 0) {
+				speed = 0;
+			}
+		});
+		$("#button-altitude-up").click(function () {
+			location.z += 100;
+		});
+		$("#button-altitude-dn").click(function () {
+			location.z -= 100;
+			if (location.z < 0) {
+				location.z = 0;
+			}
+		});
+		$("#button-heading-up").click(function () {
+			heading += 10;
+			if (heading > 360) {
+				heading -= 360;
+			}
+		});
+		$("#button-heading-dn").click(function () {
+			heading -= 10;
+			if (heading < 0) {
+				heading += 360;
+			}
+		});
+
+		function ConvertDDToDMS(d, lng) {
+			var dir = d < 0 ? lng ? "W" : "S" : lng ? "E" : "N";
+			var deg = 0 | (d < 0 ? d = -d : d);
+			var min = 0 | d % 1 * 60;
+			var sec = (0 | d * 60 % 1 * 60);
+			return deg + "° " + format.format("02d")(min) + "' " + format.format("02d")(sec) + "\" " + dir;
+		}
+
+		String.prototype.format = function () {
+			var s = this;
+			var i = arguments.length;
+			while (i--) {
+				s = s.replace(new RegExp("\\{" + i + "\\}", "gm"), arguments[i]);
+			}
+			return s;
+		};
+	});
+});
+</script>
 </body>
 </html>

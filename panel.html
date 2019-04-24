@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"/>
+<meta name="author" content="Mimi"/>
+<title>Flight Simulator</title>
+<link rel="shortcut icon" href="img/favicon.ico"/>
+<link rel="stylesheet" href="css/font-awesome/css/all.min.css"/>
+<link rel="stylesheet" href="css/style.css"/>
+<style>
+#bottom-bottom {
+	position: absolute;
+	left: 0px;
+	right: 0px;
+	bottom: 0px;
+	height: 60px;
+}
+#bottom-bottom-panel {
+	position: absolute;
+	top: 0px;
+	left: 50%;
+	margin-left:-225px;
+}
+
+.rc-panel {
+	position: absolute;
+	top: 0px;
+	bottom: 0px;
+	width: 125px;
+}
+#panel-speed {
+	left: 0px;
+}
+#panel-altitude {
+	left: 125px;
+}
+#panel-heading {
+	left: 250px;
+}
+#panel-location {
+	left: 350px;
+	width: 200px;
+}
+
+.rc-buttons {
+	position: absolute;
+	top: 5px;
+	left: 5px;
+}
+
+.rc-buttons > .btn {
+	padding: 2px 6px;
+	font-size: 10px;
+}
+
+.rc-heading {
+	position: absolute;
+	top: 3px;
+	left: 35px;
+	font-size: 15px;
+	font-weight: 700;
+	pointer-events: none;
+}
+
+.rc-reading {
+	position: absolute;
+	top: 25px;
+	left: 35px;
+	font-size: 14px;
+	pointer-events: none;
+}
+
+#dial-location-x {
+	font-size: 12px;
+	top: 20px;
+}
+#dial-location-y {
+	font-size: 12px;
+	top: 37px;
+}
+</style>
+</head>
+<body>
+	<div id="bottom-bottom">
+		<div id="bottom-bottom-panel">
+			<div id="panel-speed" class="rc-panel">
+				<div class="rc-buttons btn-group-vertical" role="group" aria-label="">
+					<button id="button-speed-up" type="button" class="btn btn-default"><i class="fas fa-chevron-up"></i></button>
+					<button id="button-speed-dn" type="button" class="btn btn-default"><i class="fas fa-chevron-down"></i></button>
+				</div>
+				<div class="rc-heading">Speed</div>
+				<div class="rc-reading" id="dial-speed"></div>
+			</div>
+			<div id="panel-altitude" class="rc-panel">
+				<div class="rc-buttons btn-group-vertical" role="group" aria-label="">
+					<button id="button-altitude-up" type="button" class="btn btn-default"><i class="fas fa-chevron-up"></i></button>
+					<button id="button-altitude-dn" type="button" class="btn btn-default"><i class="fas fa-chevron-down"></i></button>
+				</div>
+				<div class="rc-heading">Altitude</div>
+				<div class="rc-reading" id="dial-altitude"></div>
+			</div>
+			<div id="panel-heading" class="rc-panel">
+				<div class="rc-buttons btn-group-vertical" role="group" aria-label="">
+					<button id="button-heading-up" type="button" class="btn btn-default"><i class="fas fa-chevron-up"></i></button>
+					<button id="button-heading-dn" type="button" class="btn btn-default"><i class="fas fa-chevron-down"></i></button>
+				</div>
+				<div class="rc-heading">Heading</div>
+				<div class="rc-reading" id="dial-heading"></div>
+			</div>
+			<div id="panel-location" class="rc-panel">
+				<div class="rc-heading">Location</div>
+				<div class="rc-reading" id="dial-location-x"></div>
+				<div class="rc-reading" id="dial-location-y"></div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>
