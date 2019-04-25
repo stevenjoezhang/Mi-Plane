@@ -82,18 +82,18 @@
 	background-repeat: no-repeat;
 	pointer-events: none;
 }
+#coordsWidget {
+	padding: 7px 15px 5px;
+	text-align: right;
+}
 #logo {
 	position: absolute;
 	top: 0px;
 	left: 10px;
 	right: 0px;
-	/*height: 60px;
-	background-color: #2D6CA2;
-	border-bottom: 1px solid #000;
-	text-align: center;*/
 	opacity: 0.5;
 	font-size: 2.625em;
-	font-weight: 700;
+	line-height: 1em;
 	pointer-events: none;
 }
 #forward-map, #left-map, #right-map {
@@ -103,6 +103,7 @@
 </head>
 <body>
 <script src="js/jquery.min.js"></script>
+<script src="js/format.min.js"></script>
 <script src="//js.arcgis.com/4.11/dojo/dojo.js"></script>
 <div id="screen">
 	<div id="screen-top">
@@ -128,6 +129,14 @@ window.requestAnimationFrame = window.requestAnimationFrame
 	|| window.msRequestAnimationFrame
 	|| function(callback) { window.setTimeout(callback, 1000 / 30) };
 
+function ConvertDDToDMS(d, lng) {
+	var dir = d < 0 ? lng ? "W" : "S" : lng ? "E" : "N";
+	var deg = 0 | (d < 0 ? d = -d : d);
+	var min = 0 | d % 1 * 60;
+	var sec = (0 | d * 60 % 1 * 60);
+	return deg + "° " + format.format("02d")(min) + "' " + format.format("02d")(sec) + "\" " + dir;
+}
+
 /* -----------------------------------------------------------------------------------
    Developed by the Applications Prototype Lab
    (c) 2015 Esri | http://www.esri.com/legal/software-license
@@ -140,6 +149,7 @@ require([
 	"esri/views/SceneView",
 	"esri/Viewpoint",
 	"esri/geometry/Point",
+	"esri/geometry/support/webMercatorUtils",
 	"dojo/domReady!"
 ],
 function(
@@ -148,7 +158,8 @@ function(
 	MapView,
 	SceneView,
 	Viewpoint,
-	Point
+	Point,
+	webMercatorUtils
 ) {
 	$(document).ready(function() {
 		// Enforce strict mode
@@ -159,6 +170,11 @@ function(
 				x: 779232,
 				y: 5780430,
 				z: 3000
+			},
+			attitude: {
+				pitch: 0,
+				roll: 0,
+				yaw: 0
 			},
 			speed: 200,
 			heading: 0
@@ -219,7 +235,7 @@ function(
 					ambientOcclusionEnabled: true
 				},
 				atmosphere: {
-				quality: "high"
+					quality: "high"
 				}
 			},
 			camera: {
@@ -239,7 +255,7 @@ function(
 					ambientOcclusionEnabled: true
 				},
 				atmosphere: {
-				quality: "high"
+					quality: "high"
 				}
 			},
 			camera: {
@@ -259,7 +275,7 @@ function(
 					ambientOcclusionEnabled: true
 				},
 				atmosphere: {
-				quality: "high"
+					quality: "high"
 				}
 			},
 			camera: {
@@ -270,6 +286,8 @@ function(
 		});
 
 		viewMain.ui.components = ["compass", "zoom"];
+		viewMain.ui.add($(`<div id="coordsWidget" class="esri-widget esri-component"></div>`)[0], "bottom-right");
+
 		viewForward.ui.components = [];
 		viewLeft.ui.components = [];
 		viewRight.ui.components = [];
@@ -282,20 +300,23 @@ function(
 			viewMain.center = location;
 			viewMain.rotation = -plane.heading;
 			viewForward.camera = new Camera({
-				heading: plane.heading,
+				heading: plane.heading + plane.attitude.yaw,
 				position: location,
-				tilt: 85
+				tilt: 85 + plane.attitude.pitch
 			});
 			viewLeft.camera = new Camera({
 				heading: plane.heading - 90,
 				position: location,
-				tilt: 80
+				tilt: 80 + plane.attitude.roll
 			});
 			viewRight.camera = new Camera({
 				heading: plane.heading + 90,
 				position: location,
-				tilt: 80
+				tilt: 80 - plane.attitude.roll
 			});
+
+			var geographic = webMercatorUtils.webMercatorToGeographic(location);
+			$("#coordsWidget").html(ConvertDDToDMS(geographic.x, true) + "<br/>" + ConvertDDToDMS(geographic.y, false))
 
 			requestAnimationFrame(draw);
 		}

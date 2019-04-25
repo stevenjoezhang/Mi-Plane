@@ -146,90 +146,56 @@ input.seven-seg {
 				<div class="rc-heading">Heading</div>
 				<div class="rc-reading" id="dial-heading"></div>
 			</div>
-			<div id="panel-location" class="rc-panel">
-				<div class="rc-heading">Location</div>
-				<div class="rc-reading" id="dial-location-x"></div>
-				<div class="rc-reading" id="dial-location-y"></div>
-			</div>
 		</div>
 	</div>
 </div>
 <script>
-function ConvertDDToDMS(d, lng) {
-	var dir = d < 0 ? lng ? "W" : "S" : lng ? "E" : "N";
-	var deg = 0 | (d < 0 ? d = -d : d);
-	var min = 0 | d % 1 * 60;
-	var sec = (0 | d * 60 % 1 * 60);
-	return deg + "° " + format.format("02d")(min) + "' " + format.format("02d")(sec) + "\" " + dir;
-}
+$(document).ready(function() {
+	// Enforce strict mode
+	"use strict";
 
-require([
-	"esri/geometry/Point",
-	"esri/geometry/support/webMercatorUtils"
-],
-function(
-	Point,
-	webMercatorUtils
-) {
-	$(document).ready(function() {
-		// Enforce strict mode
-		"use strict";
+	window.plane = {
+		location: {
+			x: 779232,
+			y: 5780430,
+			z: 3000
+		},
+		attitude: {
+			pitch: 0,
+			roll: 0,
+			yaw: 0
+		},
+		speed: 200,
+		heading: 0
+	}
 
-		window.plane = {
-			location: {
-				x: 779232,
-				y: 5780430,
-				z: 3000
-			},
-			speed: 200,
-			heading: 0
-		}
+	fetch("/port").then(response => {
+		return response.text();
+	}).then(data => {
+		var port = data,
+			protocol = location.protocol == "https:" ? "wss:" : "ws:";
+		window.ws = new WebSocket(`${protocol}//${window.location.hostname}:${port}`);
+		ws.onopen = function() {
+			console.log("Websocket connection is successful");
+		};
 
-		var location = new Point({
-			x: plane.location.x,
-			y: plane.location.y,
-			z: plane.location.z,
-			spatialReference: {
-				wkid: 102100
-			}
-		});
+		ws.onmessage = function(event) {
+			plane = JSON.parse(event.data);
+			update();
+		};
 
-		fetch("/port").then(response => {
-			return response.text();
-		}).then(data => {
-			var port = data,
-				protocol = location.protocol == "https:" ? "wss:" : "ws:";
-			window.ws = new WebSocket(`${protocol}//${window.location.hostname}:${port}`);
-			ws.onopen = function() {
-				console.log("Websocket connection is successful");
-			};
-
-			ws.onmessage = function(event) {
-				plane = JSON.parse(event.data);
-				update();
-			};
-
-			ws.onerror = function() {
-				console.log("Websocket connection failed, please refresh the page and try again");
-			};
-		});
-
-		function update() {
-
-			location.x = plane.location.x;
-			location.y = plane.location.y;
-			location.z = plane.location.z;
-
-			var geographic = webMercatorUtils.webMercatorToGeographic(location);
-
-			$("#speed input").val(format.format(",")(plane.speed));
-			$("#altitude input").val(format.format(",")(location.z));
-			$("#heading input").val(format.format(",")(plane.heading));
-			$("#dial-location-x").html(ConvertDDToDMS(geographic.x, true));
-			$("#dial-location-y").html(ConvertDDToDMS(geographic.y, false));
-		}
-		update();
+		ws.onerror = function() {
+			console.log("Websocket connection failed, please refresh the page and try again");
+		};
 	});
+
+	function update() {
+
+		$("#speed input").val(format.format(",")(plane.speed));
+		$("#altitude input").val(format.format(",")(plane.location.z));
+		$("#heading input").val(format.format(",")(plane.heading));
+	}
+	update();
 });
 
 $("#button-speed-up").click(function() {

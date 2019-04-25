@@ -5,7 +5,7 @@ function Plane() {
 	this.heading = 0;
 	this.location = {
 		x: 779232,
-		y: 5780430,
+		y: 5780430, //法国与瑞士边界，莱芒湖（日内瓦湖）
 		z: 3000
 	};
 	this.attitude = {
