@@ -25,20 +25,12 @@ Click [here](http://richiecarmichael.github.io/simulator/index.html) or [here](h
 | PWR | Power | 节流阀位置 |
 | NAV | Navigator | 导航（航路点） |
 | SPD | Speed | 空速 |
-| HDG | Heading | 朝向 |
+| HDG | Heading | 航向 |
 | ALT | Altitude | 高度 |
 | VS | Vertical Speed | 升降速率 |
 | A/P | Auto Pilot | 自动驾驶 |
 
 TRIM,FLAPS,SPOILERS,GEAR,BREAKS等与起降有关的内容不做处理。
-
-### 控制
-
-micro:bit传感器自由度：倾角（roll,pitch,即俯仰和转向）和节流阀，使用时需按键配平
-
-使用键盘、鼠标可以进行更详尽的操作
-
-在A/P开启时，不接受输入（或在操作幅度较大时解除A/P）
 
 ### 仪表
 
@@ -54,16 +46,26 @@ micro:bit传感器自由度：倾角（roll,pitch,即俯仰和转向）和节流
 向仪表盘传递的参数为：
 speed,roll,pitch,altitude,turn,heading
 
-pressure由altitude计算，vertical_speed由altitude做差/求导计算
+pressure由altitude计算，vertical_speed由altitude做差/求导计算。
+
+### 控制
+
+#### 用户输入
+
+micro:bit传感器自由度：倾角（roll,pitch,即俯仰和转向）和节流阀，使用时需按键配平；
+
+使用键盘、鼠标可以进行更详尽的操作。
+
+#### AP设置内容
+
+；
+
+在A/P开启时，不接受输入（或在操作幅度较大时解除A/P）。
 
 ### 数据结构与算法
 
 #### 概述
 为保证参数自洽性，所有输入参数通过Websocket传递到服务器进行计算，然后向各个屏幕输出。将运算与现实分离。
-
-#### AP设置内容
-
-
 
 #### Camera
 在转向过程中，需要改变Camera的tilt
@@ -73,3 +75,4 @@ pressure由altitude计算，vertical_speed由altitude做差/求导计算
 - [ ] ICAO 航路点，在A/P中设置
 - [ ] 允许通过A/P设置自动油门
 - [ ] 允许用户手动调整Camera参数
+- [ ] GPWS
