@@ -142,7 +142,7 @@ require([
 	"esri/geometry/Point",
 	"dojo/domReady!"
 ],
-function (
+function(
 	Map,
 	Camera,
 	MapView,
@@ -155,17 +155,19 @@ function (
 		"use strict";
 
 		window.plane = {
-			x: 779232,
-			y: 5780430,
-			z: 3000,
+			location: {
+				x: 779232,
+				y: 5780430,
+				z: 3000
+			},
 			speed: 200,
 			heading: 0
 		}
 
 		var location = new Point({
-			x: plane.x,
-			y: plane.y,
-			z: plane.z,
+			x: plane.location.x,
+			y: plane.location.y,
+			z: plane.location.z,
 			spatialReference: {
 				wkid: 102100
 			}
@@ -177,15 +179,15 @@ function (
 			var port = data,
 				protocol = location.protocol == "https:" ? "wss:" : "ws:";
 			window.ws = new WebSocket(`${protocol}//${window.location.hostname}:${port}`);
-			ws.onopen = function () {
+			ws.onopen = function() {
 				console.log("Websocket connection is successful");
 			};
 
-			ws.onmessage = function (event) {
+			ws.onmessage = function(event) {
 				plane = JSON.parse(event.data);
 			};
 
-			ws.onerror = function () {
+			ws.onerror = function() {
 				console.log("Websocket connection failed, please refresh the page and try again");
 			};
 		});
@@ -273,9 +275,9 @@ function (
 		viewRight.ui.components = [];
 
 		function draw() {
-			location.x = plane.x;
-			location.y = plane.y;
-			location.z = plane.z;
+			location.x = plane.location.x;
+			location.y = plane.location.y;
+			location.z = plane.location.z;
 
 			viewMain.center = location;
 			viewMain.rotation = -plane.heading;

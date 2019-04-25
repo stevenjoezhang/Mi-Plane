@@ -53,11 +53,11 @@ fetch("/port").then(response => {
 	var port = data,
 		protocol = location.protocol == "https:" ? "wss:" : "ws:";
 	window.ws = new WebSocket(`${protocol}//${window.location.hostname}:${port}`);
-	ws.onopen = function () {
+	ws.onopen = function() {
 		console.log("Websocket connection is successful");
 	};
 
-	ws.onmessage = function (event) {
+	ws.onmessage = function(event) {
 		plane = JSON.parse(event.data);
 		// Airspeed update
 		indicator.airspeed.setAirSpeed(plane.speed * 1.943844);
@@ -68,7 +68,7 @@ fetch("/port").then(response => {
 		indicator.heading.setHeading(plane.heading);
 	};
 
-	ws.onerror = function () {
+	ws.onerror = function() {
 		console.log("Websocket connection failed, please refresh the page and try again");
 	};
 });

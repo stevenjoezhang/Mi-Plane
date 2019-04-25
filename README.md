@@ -27,7 +27,7 @@ Click [here](http://richiecarmichael.github.io/simulator/index.html) or [here](h
 | SPD | Speed | 空速 |
 | HDG | Heading | 朝向 |
 | ALT | Altitude | 高度 |
-| VS | Vertical Speed | 爬升/下降率 |
+| VS | Vertical Speed | 升降速率 |
 | A/P | Auto Pilot | 自动驾驶 |
 
 TRIM,FLAPS,SPOILERS,GEAR,BREAKS等与起降有关的内容不做处理。
@@ -45,11 +45,11 @@ micro:bit传感器自由度：倾角（roll,pitch,即俯仰和转向）和节流
 | 仪表名 | 中文 | 接受输入
 | - | - | - |
 | airspeed | 空速表 | speed |
-| attitude | 姿态仪 | roll,pitch |
-| altimeter | 高度计 | altitude,pressure |
-| turn_coordinator | 转向 | turn |
-| heading | 朝向 | heading |
-| variometer | 垂直速率 | vertical_speed |
+| attitude | 姿态指示仪 | roll,pitch |
+| altimeter | 高度表 | altitude,pressure |
+| turn_coordinator | 转弯、侧滑指示仪 | turn |
+| heading | 远读式陀螺罗盘 | heading |
+| variometer | 升降速率表 | vertical_speed |
 
 向仪表盘传递的参数为：
 speed,roll,pitch,altitude,turn,heading

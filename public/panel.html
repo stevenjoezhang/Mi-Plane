@@ -12,24 +12,15 @@
 	font-family: "7Seg";
 	src: url(fonts/7Segment.ttf) format("truetype");
 }
-.seven-seg input {
-	font-family: "7Seg";
-	font-size: 3em;
-	background-color: #110F0F;
-	color: #CCC;
-}
 body {
 	background-color: #333;
-}
-span {
-	display: block;
-	text-transform: uppercase;
 }
 #container {
 	display: flex;
 	flex-wrap: wrap;
 	padding: 10px;
 	text-align: center;
+	cursor: default;
 }
 #container > div {
 	background-color: #888;
@@ -43,6 +34,7 @@ span {
 	padding: 5px 10px 0px 10px;
 	margin-bottom: 20px;
 	border: 5px solid #FFF;
+	cursor: pointer;
 }
 .button:nth-last-of-type(1) {
 	margin-bottom: 0px;
@@ -50,6 +42,10 @@ span {
 .button span:nth-of-type(1), .button span:nth-of-type(2) {
 	font-size: 2em;
 	line-height: 1em;
+}
+span {
+	display: block;
+	text-transform: uppercase;
 }
 .light {
 	border: 5px solid #FFF;
@@ -61,69 +57,20 @@ span {
 	left: 50%;
 	transform: translateX(-50%);
 }
+input.seven-seg {
+	display: block;
+	font-family: "7Seg";
+	font-size: 3em;
+	background-color: #110F0F;
+	color: #CCC;
+	cursor: default;
+}
 #fire {
 	background-color: red;
 }
 #master {
 	background-color: yellow;
 	color: black;
-}
-#bottom-bottom {
-	left: 0px;
-	right: 0px;
-	bottom: 0px;
-	height: 60px;
-}
-#bottom-bottom-panel {
-	top: 0px;
-	left: 50%;
-}
-.rc-panel {
-	top: 0px;
-	bottom: 0px;
-	width: 125px;
-}
-#panel-speed {
-	left: 0px;
-}
-#panel-altitude {
-	left: 125px;
-}
-#panel-heading {
-	left: 250px;
-}
-#panel-location {
-	left: 350px;
-	width: 200px;
-}
-.rc-buttons {
-	top: 5px;
-	left: 5px;
-}
-.rc-buttons > .btn {
-	padding: 2px 6px;
-	font-size: 10px;
-}
-.rc-heading {
-	top: 3px;
-	left: 35px;
-	font-size: 15px;
-	font-weight: 700;
-	pointer-events: none;
-}
-.rc-reading {
-	top: 25px;
-	left: 35px;
-	font-size: 14px;
-	pointer-events: none;
-}
-#dial-location-x {
-	font-size: 12px;
-	top: 20px;
-}
-#dial-location-y {
-	font-size: 12px;
-	top: 37px;
 }
 </style>
 </head>
@@ -136,13 +83,19 @@ span {
 		<div id="fire" class="button">
 			<span>Fire</span>
 			<span>Warn</span>
-			<span>Bell Ccuout</span>
+			<span>Bell Cutout</span>
 		</div>
 		<div id="master" class="button">
 			<span>Master</span>
 			<span>Caution</span>
 			<span>Push To Reset</span>
 		</div>
+	</div>
+	<div id="time">
+		<span>Time</span>
+		<input class="seven-seg" type="text" maxlength="6" size="6" readonly="readonly"/>
+		<br/>
+		<input class="seven-seg" type="text" maxlength="6" size="6" readonly="readonly"/>
 	</div>
 	<div id="autopilot">
 		<div class="button">
@@ -153,27 +106,19 @@ span {
 	</div>
 	<div id="speed">
 		<span>Speed</span>
-		<div class="seven-seg">
-			<input type="text" maxlength="6" size="6" readonly="readonly"/>
-		</div>
+		<input class="seven-seg" type="text" maxlength="6" size="6" readonly="readonly"/>
 	</div>
 	<div id="heading">
 		<span>HDG/TRK</span>
-		<div class="seven-seg">
-			<input type="text" maxlength="6" size="6" readonly="readonly"/>
-		</div>
+		<input class="seven-seg" type="text" maxlength="6" size="6" readonly="readonly"/>
 	</div>
 	<div id="vs">
 		<span>VS/FPA</span>
-		<div class="seven-seg">
-			<input type="text" maxlength="6" size="6" readonly="readonly"/>
-		</div>
+		<input class="seven-seg" type="text" maxlength="6" size="6" readonly="readonly"/>
 	</div>
 	<div id="altitude">
 		<span>Altitude</span>
-		<div class="seven-seg">
-			<input type="text" maxlength="6" size="6" readonly="readonly"/>
-		</div>
+		<input class="seven-seg" type="text" maxlength="6" size="6" readonly="readonly"/>
 	</div>
 	<div id="bottom-bottom">
 		<div id="bottom-bottom-panel">
@@ -222,7 +167,7 @@ require([
 	"esri/geometry/Point",
 	"esri/geometry/support/webMercatorUtils"
 ],
-function (
+function(
 	Point,
 	webMercatorUtils
 ) {
@@ -231,17 +176,19 @@ function (
 		"use strict";
 
 		window.plane = {
-			x: 779232,
-			y: 5780430,
-			z: 3000,
+			location: {
+				x: 779232,
+				y: 5780430,
+				z: 3000
+			},
 			speed: 200,
 			heading: 0
 		}
 
 		var location = new Point({
-			x: plane.x,
-			y: plane.y,
-			z: plane.z,
+			x: plane.location.x,
+			y: plane.location.y,
+			z: plane.location.z,
 			spatialReference: {
 				wkid: 102100
 			}
@@ -253,25 +200,25 @@ function (
 			var port = data,
 				protocol = location.protocol == "https:" ? "wss:" : "ws:";
 			window.ws = new WebSocket(`${protocol}//${window.location.hostname}:${port}`);
-			ws.onopen = function () {
+			ws.onopen = function() {
 				console.log("Websocket connection is successful");
 			};
 
-			ws.onmessage = function (event) {
+			ws.onmessage = function(event) {
 				plane = JSON.parse(event.data);
 				update();
 			};
 
-			ws.onerror = function () {
+			ws.onerror = function() {
 				console.log("Websocket connection failed, please refresh the page and try again");
 			};
 		});
 
 		function update() {
 
-			location.x = plane.x;
-			location.y = plane.y;
-			location.z = plane.z;
+			location.x = plane.location.x;
+			location.y = plane.location.y;
+			location.z = plane.location.z;
 
 			var geographic = webMercatorUtils.webMercatorToGeographic(location);
 

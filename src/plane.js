@@ -8,6 +8,11 @@ function Plane() {
 		y: 5780430,
 		z: 3000
 	};
+	this.attitude = {
+		pitch: 0, // 向上为正
+		roll: 0, //向右为正
+		yaw: 0 //向右为正
+	};
 	this.update = function() {
 
 		//var h = viewMain.rotation;
@@ -22,13 +27,12 @@ function Plane() {
 		this.lastTime = time;
 	};
 	this.stringify = function() {
-		var data = {
-			x: this.location.x,
-			y: this.location.y,
-			z: this.location.z,
-			heading: this.heading,
-			speed: this.speed
-		};
+		var data = {};
+		for (var prop in this) {
+			if (typeof this[prop] != "function") {
+				data[prop] = this[prop];
+			}
+		}
 		return JSON.stringify(data);
 	};
 }
