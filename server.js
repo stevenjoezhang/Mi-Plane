@@ -26,7 +26,20 @@ var WebSocket = require("ws"),
 wss.on("connection", ws => {
 
 	ws.on("message", data => {
-		
+		if (!plane) return;
+		data = JSON.parse(data);
+		switch(data.type) {
+			case "autopilot":
+				plane.data.enable = data.enable;
+				plane.autopilot.config = data.config;
+				break;
+			case "set":
+				plane.data = data.data;
+			case "analog_input":
+				plane.controller.input = data.input;
+			default:
+				break;
+		}
 	});
 
 	ws.on("close", close => {

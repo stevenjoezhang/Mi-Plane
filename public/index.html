@@ -168,14 +168,14 @@ function(
 			location: {
 				x: 779232,
 				y: 5780430,
-				z: 3000
+				z: 5000
 			},
 			attitude: {
 				pitch: 0,
 				roll: 0,
 				yaw: 0
 			},
-			speed: 200,
+			speed: 120,
 			heading: 90
 		}
 
@@ -226,7 +226,6 @@ function(
 		var viewForward = new SceneView({
 			container: "forward-map",
 			map: map,
-			qualityProfile: "high",
 			environment: {
 				lighting: {
 					date: Date.now(),
@@ -246,7 +245,6 @@ function(
 		var viewLeft = new SceneView({
 			container: "left-map",
 			map: map,
-			qualityProfile: "high",
 			environment: {
 				lighting: {
 					date: Date.now(),
@@ -266,7 +264,6 @@ function(
 		var viewRight = new SceneView({
 			container: "right-map",
 			map: map,
-			qualityProfile: "high",
 			environment: {
 				lighting: {
 					date: Date.now(),

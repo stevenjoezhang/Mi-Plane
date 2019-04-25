@@ -34,7 +34,9 @@ TRIM,FLAPS,SPOILERS,GEAR,BREAKS等与起降有关的内容不做处理。
 
 ### 仪表
 
-| 仪表名 | 中文 | 接受输入
+http://www.dof.cn/redstar/lesson/2instru/basicins.htm
+
+| 仪表名 | 中文 | 接受输入 |
 | - | - | - |
 | airspeed | 空速表 | speed |
 | attitude | 姿态指示仪 | roll,pitch |
@@ -58,14 +60,20 @@ micro:bit传感器自由度：倾角（roll,pitch,即俯仰和转向）和节流
 
 #### AP设置内容
 
-；
-
 在A/P开启时，不接受输入（或在操作幅度较大时解除A/P）。
 
 ### 数据结构与算法
 
 #### 概述
 为保证参数自洽性，所有输入参数通过Websocket传递到服务器进行计算，然后向各个屏幕输出。将运算与现实分离。
+
+服务器以30Hz发送plane。各终端反馈的方式为发送json到服务器，规范为：
+
+| type | 描述 | 接受输入 |
+| - | - | - |
+| analog_input | 模拟输入（双轴） | speed |
+| set | 设置plane值 | roll,pitch |
+| autopilot | 设置autopilot | altitude,pressure |
 
 #### Camera
 在转向过程中，需要改变Camera的tilt

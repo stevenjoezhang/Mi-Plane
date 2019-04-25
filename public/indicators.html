@@ -61,13 +61,15 @@ fetch("/port").then(response => {
 		// Airspeed update
 		indicator.airspeed.setAirSpeed(plane.speed * 1.943844);
 		// Attitude update
-		indicator.attitude.setRoll(plane.attitude.roll);
+		indicator.attitude.setRoll(-plane.attitude.roll);
 		indicator.attitude.setPitch(plane.attitude.pitch);
 		// Altimeter update
-		indicator.altimeter.setAltitude(plane.location.z);
+		indicator.altimeter.setAltitude(plane.location.z * 10000 / 3048);
 		indicator.altimeter.setPressure(Math.pow((1 - plane.location.z / 44300), 5.256) * 1013.25);
 		// Heading update
 		indicator.heading.setHeading(plane.heading);
+		// Vario update
+		indicator.variometer.setVario(plane.vspeed);
 	};
 
 	ws.onerror = function() {

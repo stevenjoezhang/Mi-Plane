@@ -1,39 +1,47 @@
+const Controller = require("./controller");
+const Autopilot = require("./autopilot");
+
 function Plane() {
 	// Plane flight details
-	this.location = {
-		x: 779232,
-		y: 5780430, //法国与瑞士边界，莱芒湖（日内瓦湖）
-		z: 3000
-	};
-	this.attitude = {
-		pitch: 0, // 向上为正
-		roll: 0, //向右为正
-		yaw: 0 //向右为正
-	};
+	this.data = {
+		location: {
+			x: 779232,
+			y: 5780430, //法国与瑞士边界，莱芒湖（日内瓦湖）
+			z: 5000
+		},
+		attitude: {
+			pitch: 0, // 向上为正
+			roll: 0, //向右为正
+			yaw: 0 //向右为正
+		},
+		//this.power = 0;
+		speed: 120, // m/s
+		heading: 90,
+		vspeed: 0,
+		power: 0,
+		enable: [0, 0, 0, 0]
+	}
+	this.controller = new Controller();
+	this.autopilot = new Autopilot();
 	this.lastTime = null;
-	this.speed = 200; // m/s
-	this.heading = 90;
 	this.update = function() {
-
-		//var h = viewMain.rotation;
 		var time = new Date().getTime();
 		var deltaT = this.lastTime ? time - this.lastTime : 0; // ms
-		var deltaS = this.speed * deltaT / 1000;
-
-		this.location.x += deltaS * Math.sin(this.heading * Math.PI / 180);
-		this.location.y += deltaS * Math.cos(this.heading * Math.PI / 180);
-		this.location.z = this.location.z;
-
 		this.lastTime = time;
+
+		this.data = this.controller.update(deltaT, this.data);
+		this.data = this.autopilot.update(deltaT, this.data);
+		this.updateLocation(deltaT);
+	};
+	this.updateLocation = function(deltaT) {
+		var deltaS = this.data.speed * deltaT / 1000;
+
+		this.data.location.x += deltaS * Math.sin(this.data.heading * Math.PI / 180);
+		this.data.location.y += deltaS * Math.cos(this.data.heading * Math.PI / 180);
+		this.data.location.z += this.data.vspeed * deltaT / 1000;
 	};
 	this.stringify = function() {
-		var data = {};
-		for (var prop in this) {
-			if (typeof this[prop] != "function") {
-				data[prop] = this[prop];
-			}
-		}
-		return JSON.stringify(data);
+		return JSON.stringify(this.data);
 	};
 }
 

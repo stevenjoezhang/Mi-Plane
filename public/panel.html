@@ -125,25 +125,25 @@ input.seven-seg {
 	<div id="bottom-bottom">
 		<div id="bottom-bottom-panel">
 			<div id="panel-speed" class="rc-panel">
-				<div class="rc-buttons btn-group-vertical" role="group" aria-label="">
-					<button id="button-speed-up" type="button" class="btn btn-default"></button>
-					<button id="button-speed-dn" type="button" class="btn btn-default"></button>
+				<div role="group" aria-label="">
+					<button id="button-speed-up" type="button">+</button>
+					<button id="button-speed-dn" type="button">-</button>
 				</div>
 				<div class="rc-heading">Speed</div>
 				<div class="rc-reading" id="dial-speed"></div>
 			</div>
 			<div id="panel-altitude" class="rc-panel">
-				<div class="rc-buttons btn-group-vertical" role="group" aria-label="">
-					<button id="button-altitude-up" type="button" class="btn btn-default"></button>
-					<button id="button-altitude-dn" type="button" class="btn btn-default"></button>
+				<div role="group" aria-label="">
+					<button id="button-altitude-up" type="button">+</button>
+					<button id="button-altitude-dn" type="button">-</button>
 				</div>
 				<div class="rc-heading">Altitude</div>
 				<div class="rc-reading" id="dial-altitude"></div>
 			</div>
 			<div id="panel-heading" class="rc-panel">
-				<div class="rc-buttons btn-group-vertical" role="group" aria-label="">
-					<button id="button-heading-up" type="button" class="btn btn-default"></button>
-					<button id="button-heading-dn" type="button" class="btn btn-default"></button>
+				<div role="group" aria-label="">
+					<button id="button-heading-up" type="button">+</button>
+					<button id="button-heading-dn" type="button">-</button>
 				</div>
 				<div class="rc-heading">Heading</div>
 				<div class="rc-reading" id="dial-heading"></div>
@@ -160,14 +160,14 @@ $(document).ready(function() {
 		location: {
 			x: 779232,
 			y: 5780430,
-			z: 3000
+			z: 5000
 		},
 		attitude: {
 			pitch: 0,
 			roll: 0,
 			yaw: 0
 		},
-		speed: 200,
+		speed: 120,
 		heading: 90
 	}
 
