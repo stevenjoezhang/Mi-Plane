@@ -61,3 +61,23 @@ setInterval(function() {
 		if (client.readyState === WebSocket.OPEN) client.send(plane.stringify());
 	});
 }, 1000 / 30);
+
+var SerialPort = require("serialport");
+var serialport = new SerialPort("/dev/cu.usbmodem14202", {
+	baudRate: 9600
+});
+buffer = "";
+// Switches the serialport into "flowing mode"
+serialport.on("data", function (data) {
+	char = data.toString();
+	buffer += char;
+	if (char == "\n") {
+		if (buffer[0] == "(") {
+			value = buffer.split("(")[1].split(")")[0].split(",");
+			accelerometer = value.map(x => parseInt(x));
+			console.log("Data:", accelerometer);
+			plane.controller.input = accelerometer;
+		}
+		buffer = "";
+	}
+});

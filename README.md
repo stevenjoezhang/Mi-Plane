@@ -24,13 +24,15 @@ Click [here](http://richiecarmichael.github.io/simulator/index.html) or [here](h
 | - | - | - |
 | PWR | Power | 节流阀位置 |
 | NAV | Navigator | 导航（航路点） |
-| SPD | Speed | 空速 |
+| SPD | Speed | 地速 |
 | HDG | Heading | 航向 |
 | ALT | Altitude | 高度 |
 | VS | Vertical Speed | 升降速率 |
 | A/P | Auto Pilot | 自动驾驶 |
 
 TRIM,FLAPS,SPOILERS,GEAR,BREAKS等与起降有关的内容不做处理。
+
+低速为水平分量。暂时无法计算空速。
 
 ### 仪表
 

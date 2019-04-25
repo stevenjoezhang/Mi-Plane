@@ -166,9 +166,9 @@ function(
 
 		window.plane = {
 			location: {
-				x: 779232,
-				y: 5780430,
-				z: 5000
+				x: 12988000,
+				y: 4865000,
+				z: 3000
 			},
 			attitude: {
 				pitch: 0,
@@ -176,7 +176,7 @@ function(
 				yaw: 0
 			},
 			speed: 120,
-			heading: 90
+			heading: 270
 		}
 
 		var location = new Point({
@@ -188,11 +188,7 @@ function(
 			}
 		});
 
-		fetch("/port").then(response => {
-			return response.text();
-		}).then(data => {
-			var port = data,
-				protocol = location.protocol == "https:" ? "wss:" : "ws:";
+		function wsinit(port, protocol) {
 			window.ws = new WebSocket(`${protocol}//${window.location.hostname}:${port}`);
 			ws.onopen = function() {
 				console.log("Websocket connection is successful");
@@ -202,9 +198,20 @@ function(
 				plane = JSON.parse(event.data);
 			};
 
-			ws.onerror = function() {
+			ws.onclose = function() {
 				console.log("Websocket connection failed, please refresh the page and try again");
+				setTimeout(function() {
+					wsinit(port, protocol);
+				}, 5000);
 			};
+		}
+
+		fetch("/port").then(response => {
+			return response.text();
+		}).then(data => {
+			var port = data,
+				protocol = location.protocol == "https:" ? "wss:" : "ws:";
+			wsinit(port, protocol);
 		});
 
 		// Initialize maps and views

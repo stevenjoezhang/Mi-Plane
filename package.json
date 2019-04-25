@@ -23,6 +23,7 @@
 	"homepage": "https://github.com/stevenjoezhang/Mi-Plane",
 	"dependencies": {
 		"express": "^4.16.4",
+		"serialport": "^7.1.4",
 		"ws": "^6.2.1"
 	}
 }

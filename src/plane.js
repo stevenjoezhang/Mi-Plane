@@ -5,8 +5,8 @@ function Plane() {
 	// Plane flight details
 	this.data = {
 		location: {
-			x: 779232,
-			y: 5780430, //法国与瑞士边界，莱芒湖（日内瓦湖）
+			x: 12988000,
+			y: 4865000,
 			z: 5000
 		},
 		attitude: {
@@ -16,7 +16,7 @@ function Plane() {
 		},
 		//this.power = 0;
 		speed: 120, // m/s
-		heading: 90,
+		heading: 270,
 		vspeed: 0,
 		power: 0,
 		enable: [0, 0, 0, 0]
