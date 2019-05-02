@@ -1,22 +1,40 @@
 # Mi Plane
 
-A basic flight simulator with four synchronized views.
+The best Flight Simulator in your browser. Based on Node.js and Websocket.
 
 Click [here](http://richiecarmichael.github.io/simulator/index.html) or [here](http://maps.esri.com/rc/simulator/index.html) to view the live application.
 
-### This application makes use of the following libraries:
+### Screenshots
 
-* [ArcGIS API for JavaScript](https://developers.arcgis.com/javascript/) by [Esri](http://www.esri.com/)
-  - Esri's JavaScript library for mapping and analysis.
-* [d3-format](https://github.com/d3/d3-format) by [Mike Bostock](https://github.com/mbostock)
-  - Format numbers for human consumption.
-* [jQuery](http://jquery.com/) by jQuery Foundataion Inc
-  - A JavaScript framework for DOM manipulation and a foundation for many other frameworks.
-* [jQuery-Flight-Indicators](https://github.com/sebmatton/jQuery-Flight-Indicators) by [Matton Sébastien](https://github.com/sebmatton)
-  - The Flight Indicators Plugin allows you to display high quality flight indicators using html, css3, jQuery and SVG vector images.
-
-### The App in Action:
+The App in Action:
 ![](./simulator.gif)
+
+### Feature
+
+The App provides several views in the cockpit.
+
+#### Main view
+WebGL is required to render the canvas. Use Chrome for better performance.
+
+#### Indicators view
+
+仪表设计参考：http://www.dof.cn/redstar/lesson/2instru/basicins.htm
+
+| 仪表名 | 中文 | 接受输入 |
+| - | - | - |
+| airspeed | 空速表 | speed |
+| attitude | 姿态指示仪 | roll,pitch |
+| altimeter | 高度表 | altitude,pressure |
+| turn_coordinator | 转弯、侧滑指示仪 | turn |
+| heading | 远读式陀螺罗盘 | heading |
+| variometer | 升降速率表 | vertical_speed |
+
+向仪表盘传递的参数为：
+speed,roll,pitch,altitude,turn,heading
+
+pressure由altitude计算，vertical_speed由altitude做差/求导计算。
+
+#### Panel view
 
 ### 简写对照
 
@@ -32,25 +50,7 @@ Click [here](http://richiecarmichael.github.io/simulator/index.html) or [here](h
 
 TRIM,FLAPS,SPOILERS,GEAR,BREAKS等与起降有关的内容不做处理。
 
-低速为水平分量。暂时无法计算空速。
-
-### 仪表
-
-http://www.dof.cn/redstar/lesson/2instru/basicins.htm
-
-| 仪表名 | 中文 | 接受输入 |
-| - | - | - |
-| airspeed | 空速表 | speed |
-| attitude | 姿态指示仪 | roll,pitch |
-| altimeter | 高度表 | altitude,pressure |
-| turn_coordinator | 转弯、侧滑指示仪 | turn |
-| heading | 远读式陀螺罗盘 | heading |
-| variometer | 升降速率表 | vertical_speed |
-
-向仪表盘传递的参数为：
-speed,roll,pitch,altitude,turn,heading
-
-pressure由altitude计算，vertical_speed由altitude做差/求导计算。
+地速为水平分量。暂时无法计算空速。
 
 ### 控制
 
@@ -86,3 +86,24 @@ micro:bit传感器自由度：倾角（roll,pitch,即俯仰和转向）和节流
 - [ ] 允许通过A/P设置自动油门
 - [ ] 允许用户手动调整Camera参数
 - [ ] GPWS
+- [ ] HUD
+- [ ] FDR & CVR
+- [ ] Sensitive
+
+### Credits
+
+This application makes use of the following libraries:
+
+* [ArcGIS API for JavaScript](https://developers.arcgis.com/javascript/) by [Esri](http://www.esri.com/)
+  - Esri's JavaScript library for mapping and analysis.
+* [d3-format](https://github.com/d3/d3-format) by [Mike Bostock](https://github.com/mbostock)
+  - Format numbers for human consumption.
+* [jQuery](http://jquery.com/) by jQuery Foundataion Inc
+  - A JavaScript framework for DOM manipulation and a foundation for many other frameworks.
+
+This application is inspired by the following GitHub repos:
+
+* [Esri-Flight-Simulator](https://github.com/richiecarmichael/Esri-Flight-Simulator) by [Richie Carmichael](https://github.com/richiecarmichael)
+  - A basic flight simulator with four synchronized views.
+* [jQuery-Flight-Indicators](https://github.com/sebmatton/jQuery-Flight-Indicators) by [Matton Sébastien](https://github.com/sebmatton)
+  - The Flight Indicators Plugin allows you to display high quality flight indicators using html, css3, jQuery and SVG vector images.

@@ -28,4 +28,5 @@ html, body {
 	height: 100%;
 	font-family: "Changa", cursive;
 	color: white;
+	overflow-x: hidden;
 }

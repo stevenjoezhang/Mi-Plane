@@ -62,6 +62,8 @@ function wsinit(port, protocol) {
 		// Altimeter update
 		indicator.altimeter.setAltitude(plane.location.z / 0.3048);
 		indicator.altimeter.setPressure(Math.pow((1 - plane.location.z / 44300), 5.256) * 1013.25);
+		// TC update
+		indicator.turn_coordinator.setTurn(0);
 		// Heading update
 		indicator.heading.setHeading(plane.heading);
 		// Vario update
