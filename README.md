@@ -4,19 +4,19 @@ The best Flight Simulator in your browser. Based on Node.js and Websocket.
 
 Click [here](http://richiecarmichael.github.io/simulator/index.html) or [here](http://maps.esri.com/rc/simulator/index.html) to view the live application.
 
-### Screenshots
+## Screenshots
 
 The App in Action:
 ![](./simulator.gif)
 
-### Feature
+## Feature
 
 The App provides several views in the cockpit.
 
-#### Main view
+### Main view
 WebGL is required to render the canvas. Use Chrome for better performance.
 
-#### Indicators view
+### Indicators view
 
 仪表设计参考：http://www.dof.cn/redstar/lesson/2instru/basicins.htm
 
@@ -34,9 +34,9 @@ speed,roll,pitch,altitude,turn,heading
 
 pressure由altitude计算，vertical_speed由altitude做差/求导计算。
 
-#### Panel view
+### Panel view
 
-### 简写对照
+## 简写对照
 
 | 简写 | 全称 | 中文 |
 | - | - | - |
@@ -52,21 +52,21 @@ TRIM,FLAPS,SPOILERS,GEAR,BREAKS等与起降有关的内容不做处理。
 
 地速为水平分量。暂时无法计算空速。
 
-### 控制
+## 控制
 
-#### 用户输入
+### 用户输入
 
 micro:bit传感器自由度：倾角（roll,pitch,即俯仰和转向）和节流阀，使用时需按键配平；
 
 使用键盘、鼠标可以进行更详尽的操作。
 
-#### AP设置内容
+### AP设置内容
 
 在A/P开启时，不接受输入（或在操作幅度较大时解除A/P）。
 
-### 数据结构与算法
+## 数据结构与算法
 
-#### 概述
+### 概述
 为保证参数自洽性，所有输入参数通过Websocket传递到服务器进行计算，然后向各个屏幕输出。将运算与现实分离。
 
 服务器以30Hz发送plane。各终端反馈的方式为发送json到服务器，规范为：
@@ -77,10 +77,10 @@ micro:bit传感器自由度：倾角（roll,pitch,即俯仰和转向）和节流
 | set | 设置plane值 | roll,pitch |
 | autopilot | 设置autopilot | altitude,pressure |
 
-#### Camera
+### Camera
 在转向过程中，需要改变Camera的tilt
 
-### TODO
+## TODO
 
 - [ ] ICAO 航路点，在A/P中设置
 - [ ] 允许通过A/P设置自动油门
@@ -90,20 +90,24 @@ micro:bit传感器自由度：倾角（roll,pitch,即俯仰和转向）和节流
 - [ ] FDR & CVR
 - [ ] Sensitive
 
-### Credits
+## Credits
 
 This application makes use of the following libraries:
 
-* [ArcGIS API for JavaScript](https://developers.arcgis.com/javascript/) by [Esri](http://www.esri.com/)
-  - Esri's JavaScript library for mapping and analysis.
-* [d3-format](https://github.com/d3/d3-format) by [Mike Bostock](https://github.com/mbostock)
-  - Format numbers for human consumption.
-* [jQuery](http://jquery.com/) by jQuery Foundataion Inc
-  - A JavaScript framework for DOM manipulation and a foundation for many other frameworks.
+- [ArcGIS API for JavaScript](https://developers.arcgis.com/javascript/) by [Esri](http://www.esri.com/)  
+  *Esri's JavaScript library for mapping and analysis.*
+- [d3-format](https://github.com/d3/d3-format) by [Mike Bostock](https://github.com/mbostock)  
+  *Format numbers for human consumption.*
+- [jQuery](http://jquery.com/) by jQuery Foundataion Inc  
+  *A JavaScript framework for DOM manipulation and a foundation for many other frameworks.*
 
 This application is inspired by the following GitHub repos:
 
-* [Esri-Flight-Simulator](https://github.com/richiecarmichael/Esri-Flight-Simulator) by [Richie Carmichael](https://github.com/richiecarmichael)
-  - A basic flight simulator with four synchronized views.
-* [jQuery-Flight-Indicators](https://github.com/sebmatton/jQuery-Flight-Indicators) by [Matton Sébastien](https://github.com/sebmatton)
-  - The Flight Indicators Plugin allows you to display high quality flight indicators using html, css3, jQuery and SVG vector images.
+- [Esri-Flight-Simulator](https://github.com/richiecarmichael/Esri-Flight-Simulator) by [Richie Carmichael](https://github.com/richiecarmichael)  
+  *A basic flight simulator with four synchronized views.*
+- [jQuery-Flight-Indicators](https://github.com/sebmatton/jQuery-Flight-Indicators) by [Matton Sébastien](https://github.com/sebmatton)  
+  *The Flight Indicators Plugin allows you to display high quality flight indicators using html, css3, jQuery and SVG vector images.*
+
+## License
+Released under the GNU General Public License v3  
+http://www.gnu.org/licenses/gpl-3.0.html
