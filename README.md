@@ -2,12 +2,29 @@
 
 The best Flight Simulator in your browser. Based on Node.js and Websocket.
 
-Click [here](http://richiecarmichael.github.io/simulator/index.html) or [here](http://maps.esri.com/rc/simulator/index.html) to view the live application.
-
 ## Screenshots
 
 The App in Action:
-![](./simulator.gif)
+
+![](assets/simulator.gif)
+
+![](assets/indicator.png)
+
+## Install
+
+To clone and run this repository you'll need [Git](https://git-scm.com) and [Node.js](https://nodejs.org/en/download) (which comes with [npm](http://npmjs.com)) installed on your computer. From your command line:
+```bash
+# Clone this repository
+git clone https://github.com/stevenjoezhang/Mi-Plane.git
+# Go into the repository
+cd Mi-Plane
+# Install dependencies
+npm install
+# Run the app
+npm start
+```
+
+[Python3](https://python.org) and pip3 is required if you want to use PS4 controller.
 
 ## Feature
 
@@ -104,7 +121,7 @@ This application makes use of the following libraries:
 This application is inspired by the following GitHub repos:
 
 - [Esri-Flight-Simulator](https://github.com/richiecarmichael/Esri-Flight-Simulator) by [Richie Carmichael](https://github.com/richiecarmichael)  
-  *A basic flight simulator with four synchronized views.*
+  *A basic flight simulator with four synchronized views. Live demo: http://maps.esri.com/rc/simulator/index.html*
 - [jQuery-Flight-Indicators](https://github.com/sebmatton/jQuery-Flight-Indicators) by [Matton Sébastien](https://github.com/sebmatton)  
   *The Flight Indicators Plugin allows you to display high quality flight indicators using html, css3, jQuery and SVG vector images.*
 
