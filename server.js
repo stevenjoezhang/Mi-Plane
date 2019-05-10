@@ -64,7 +64,7 @@ setInterval(function() {
 
 var SerialPort = require("serialport");
 var serialport = new SerialPort("/dev/cu.usbmodem14202", {
-	baudRate: 9600
+	baudRate: 115200
 });
 buffer = "";
 // Switches the serialport into "flowing mode"
@@ -74,7 +74,7 @@ serialport.on("data", function (data) {
 	if (char == "\n") {
 		if (buffer[0] == "(") {
 			value = buffer.split("(")[1].split(")")[0].split(",");
-			accelerometer = value.map(x => parseInt(x));
+			accelerometer = value.map(x => parseFloat(x));
 			console.log("Data:", accelerometer);
 			plane.controller.input = accelerometer;
 		}

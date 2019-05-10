@@ -15,7 +15,7 @@ function Plane() {
 			yaw: 0 //向右为正
 		},
 		//this.power = 0;
-		speed: 120, // m/s
+		speed: 180, // m/s
 		heading: 270,
 		vspeed: 0,
 		power: 0,
