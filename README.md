@@ -37,6 +37,8 @@ WebGL is required to render the canvas. Use Chrome for better performance.
 
 仪表设计参考：http://www.dof.cn/redstar/lesson/2instru/basicins.htm
 
+https://www.quora.com/Airplanes/What-do-all-the-controls-in-an-airplanes-cockpit-do/answer/Tim-Morgan-5
+
 | 仪表名 | 中文 | 接受输入 |
 | - | - | - |
 | airspeed | 空速表 | speed |
@@ -106,6 +108,8 @@ micro:bit传感器自由度：倾角（roll,pitch,即俯仰和转向）和节流
 - [ ] HUD
 - [ ] FDR & CVR
 - [ ] Sensitive
+
+https://developer.mozilla.org/zh-CN/docs/Web/API/Gamepad_API/Using_the_Gamepad_API
 
 ## Credits
 
