@@ -1,7 +1,7 @@
 {
-	"name": "Mi-Plane",
+	"name": "mi-plane",
 	"version": "0.0.1",
-	"description": "An single-player Flight Simulator game",
+	"description": "A single-player flight simulator game",
 	"main": "server.js",
 	"scripts": {
 		"start": "node server.js"
@@ -15,7 +15,7 @@
 		"Simulator",
 		"Game"
 	],
-	"author": "Mimi",
+	"author": "Mimi <stevenjoezhang@gmail.com> https://zhangshuqiao.org",
 	"license": "MIT",
 	"bugs": {
 		"url": "https://github.com/stevenjoezhang/Mi-Plane/issues"
