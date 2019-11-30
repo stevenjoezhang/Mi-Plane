@@ -12,9 +12,6 @@ server.listen(port, () => {
 });
 //Routing
 app.use(express.static(path.join(__dirname, "public")));
-app.get("/port", (req, res) => {
-	res.end(port.toString());
-});
 
 var WebSocket = require("ws"),
 	wss = new WebSocket.Server({

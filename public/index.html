@@ -188,8 +188,8 @@ function(
 			}
 		});
 
-		function wsinit(port, protocol) {
-			window.ws = new WebSocket(`${protocol}//${window.location.hostname}:${port}`);
+		function wsinit(protocol) {
+			window.ws = new WebSocket(`${protocol}//${location.host}`);
 			ws.onopen = function() {
 				console.log("Websocket connection is successful");
 			};
@@ -201,18 +201,13 @@ function(
 			ws.onclose = function() {
 				console.log("Websocket connection failed, please refresh the page and try again");
 				setTimeout(function() {
-					wsinit(port, protocol);
+					wsinit(protocol);
 				}, 5000);
 			};
 		}
 
-		fetch("/port").then(response => {
-			return response.text();
-		}).then(data => {
-			var port = data,
-				protocol = location.protocol == "https:" ? "wss:" : "ws:";
-			wsinit(port, protocol);
-		});
+		var protocol = location.protocol.replace("http", "ws");
+		wsinit(protocol);
 
 		// Initialize maps and views
 		var main = new Map({
