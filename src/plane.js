@@ -25,7 +25,7 @@ function Plane() {
 	this.autopilot = new Autopilot();
 	this.lastTime = null;
 	this.update = function() {
-		var time = new Date().getTime();
+		var time = Date.now();
 		var deltaT = this.lastTime ? time - this.lastTime : 0; // ms
 		this.lastTime = time;
 
