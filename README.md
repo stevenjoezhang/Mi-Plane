@@ -12,7 +12,9 @@ The App in Action:
 
 ## Install
 
-To clone and run this repository you'll need [Git](https://git-scm.com) and [Node.js](https://nodejs.org/en/download) (which comes with [npm](http://npmjs.com)) installed on your computer. From your command line:
+To clone and run this repository you'll need [Git](https://git-scm.com) and [Node.js](https://nodejs.org/en/download) (which comes with [npm](http://npmjs.com)) installed on your computer. [Python3](https://python.org) and pip3 is required if you want to use PS4 controller.
+
+From your command line:
 ```bash
 # Clone this repository
 git clone https://github.com/stevenjoezhang/Mi-Plane.git
@@ -24,14 +26,15 @@ npm install
 npm start
 ```
 
-[Python3](https://python.org) and pip3 is required if you want to use PS4 controller.
+Next you need to open your browser to view it. Please see the following introduction to features.
 
 ## Feature
 
 The App provides several views in the cockpit.
 
 ### Main view
-WebGL is required to render the canvas. Use Chrome for better performance.
+
+WebGL is required to render the canvas. Please make sure your browser supports WebGL and hardware acceleration is enabled, otherwise the map may not be rendered. Use Chrome for better performance.
 
 ### Indicators view
 
