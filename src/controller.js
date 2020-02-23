@@ -32,9 +32,9 @@ var locations = [
 ]
 
 function applyLocations(data, locat) {
-	data.location.x = locat.x;
-	data.location.y = locat.y;
-	data.location.z = locat.z;
+	data.position.x = locat.x;
+	data.position.y = locat.y;
+	data.position.z = locat.z;
 	data.heading = locat.heading;
 }
 

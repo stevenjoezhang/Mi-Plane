@@ -21,7 +21,7 @@ function Autopilot() {
 			data.vspeed += dVS;
 		}
 		if (data.enable[3] && !data.enable[2]) {
-			var deltaZ = this.config[3] - data.location.z;
+			var deltaZ = this.config[3] - data.position.z;
 			//if (deltaZ < -5000) config.
 		}
 		if (data.enable[2] && data.enable[3]) {

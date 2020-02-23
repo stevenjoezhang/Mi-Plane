@@ -4,7 +4,7 @@ const Autopilot = require("./autopilot");
 function Plane() {
 	// Plane flight details
 	this.data = {
-		location: {
+		position: {
 			x: 12988000,
 			y: 4865000,
 			z: 5000
@@ -31,14 +31,14 @@ function Plane() {
 
 		this.data = this.controller.update(deltaT, this.data);
 		this.data = this.autopilot.update(deltaT, this.data);
-		this.updateLocation(deltaT);
+		this.updatePosition(deltaT);
 	};
-	this.updateLocation = function(deltaT) {
+	this.updatePosition = function(deltaT) {
 		var deltaS = this.data.speed * deltaT / 1000;
 
-		this.data.location.x += deltaS * Math.sin(this.data.heading * Math.PI / 180);
-		this.data.location.y += deltaS * Math.cos(this.data.heading * Math.PI / 180);
-		this.data.location.z += this.data.vspeed * deltaT / 1000;
+		this.data.position.x += deltaS * Math.sin(this.data.heading * Math.PI / 180);
+		this.data.position.y += deltaS * Math.cos(this.data.heading * Math.PI / 180);
+		this.data.position.z += this.data.vspeed * deltaT / 1000;
 	};
 	this.stringify = function() {
 		return JSON.stringify(this.data);

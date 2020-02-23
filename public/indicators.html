@@ -1,13 +1,11 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<meta name="author" content="Esri">
 <title>Mi Plane</title>
-<link rel="shortcut icon" href="favicon.ico">
-<link rel="stylesheet" href="css/flightindicators.min.css">
-<link rel="stylesheet" href="css/style.css">
+<link rel="shortcut icon" href="/favicon.ico">
+<link rel="stylesheet" href="/css/flightindicators.min.css">
+<link rel="stylesheet" href="/css/style.css">
 <style>
 body {
 	background-color: #333;
@@ -18,8 +16,8 @@ body {
 </style>
 </head>
 <body>
-<script src="js/jquery.min.js"></script>
-<script src="js/jquery.flightindicators.js"></script>
+<script src="/js/jquery.min.js"></script>
+<script src="/js/jquery.flightindicators.js"></script>
 <div id="container">
 	<span id="airspeed"></span>
 	<span id="attitude"></span>
@@ -62,8 +60,8 @@ function wsinit() {
 		indicator.attitude.setRoll(-plane.attitude.roll);
 		indicator.attitude.setPitch(plane.attitude.pitch);
 		// Altimeter update
-		indicator.altimeter.setAltitude(plane.location.z / 0.3048);
-		indicator.altimeter.setPressure(Math.pow((1 - plane.location.z / 44300), 5.256) * 1013.25);
+		indicator.altimeter.setAltitude(plane.position.z / 0.3048);
+		indicator.altimeter.setPressure(Math.pow((1 - plane.position.z / 44300), 5.256) * 1013.25);
 		// TC update
 		indicator.turn_coordinator.setTurn(0);
 		// Heading update

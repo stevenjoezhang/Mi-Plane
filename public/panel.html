@@ -1,12 +1,10 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<meta name="author" content="Mimi">
 <title>Mi Plane</title>
-<link rel="shortcut icon" href="favicon.ico">
-<link rel="stylesheet" href="css/style.css">
+<link rel="shortcut icon" href="/favicon.ico">
+<link rel="stylesheet" href="/css/style.css">
 <style>
 @font-face {
 	font-family: "7Seg";
@@ -78,7 +76,7 @@ input.seven-seg {
 </style>
 </head>
 <body>
-<script src="js/format.min.js"></script>
+<script src="/js/format.min.js"></script>
 <div id="container">
 	<div id="warning">
 		<div id="fire" class="button">
@@ -156,7 +154,7 @@ input.seven-seg {
 	"use strict";
 
 	window.plane = {
-		location: {
+		position: {
 			x: 12988000,
 			y: 4865000,
 			z: 3000
@@ -194,7 +192,7 @@ input.seven-seg {
 
 	function update() {
 		document.querySelector("#speed input").value = format.format(",")(plane.speed);
-		document.querySelector("#altitude input").value = format.format(",")(plane.location.z);
+		document.querySelector("#altitude input").value = format.format(",")(plane.position.z);
 		document.querySelector("#heading input").value = format.format(",")(plane.heading);
 	}
 	update();
@@ -210,12 +208,12 @@ document.getElementById("button-speed-dn").addEventListener("click", () => {
 	}
 });
 document.getElementById("button-altitude-up").addEventListener("click", () => {
-	location.z += 100;
+	position.z += 100;
 });
 document.getElementById("button-altitude-dn").addEventListener("click", () => {
-	location.z -= 100;
-	if (location.z < 0) {
-		location.z = 0;
+	position.z -= 100;
+	if (position.z < 0) {
+		position.z = 0;
 	}
 });
 document.getElementById("button-heading-up").addEventListener("click", () => {

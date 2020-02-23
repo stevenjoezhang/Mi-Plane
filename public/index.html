@@ -1,13 +1,11 @@
-﻿<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<meta name="author" content="Esri">
 <title>Mi Plane</title>
-<link rel="shortcut icon" href="favicon.ico">
+<link rel="shortcut icon" href="/favicon.ico">
 <link rel="stylesheet" href="//js.arcgis.com/4.11/esri/css/main.css">
-<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="/css/style.css">
 <style>
 #screen {
 	position: absolute;
@@ -101,7 +99,7 @@
 </style>
 </head>
 <body>
-<script src="js/format.min.js"></script>
+<script src="/js/format.min.js"></script>
 <script src="//js.arcgis.com/4.11/dojo/dojo.js"></script>
 <div id="screen">
 	<div id="screen-top">
@@ -150,7 +148,7 @@ require([
 	"esri/geometry/support/webMercatorUtils",
 	"dojo/domReady!"
 ],
-function(
+(
 	Map,
 	Camera,
 	MapView,
@@ -158,7 +156,7 @@ function(
 	Viewpoint,
 	Point,
 	webMercatorUtils
-) {
+) => {
 	// Enforce strict mode
 	"use strict";
 
