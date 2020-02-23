@@ -110,7 +110,6 @@ require([
 	"esri/Camera",
 	"esri/views/MapView",
 	"esri/views/SceneView",
-	"esri/Viewpoint",
 	"esri/geometry/Point",
 	"esri/geometry/support/webMercatorUtils",
 	"dojo/domReady!"
@@ -120,7 +119,6 @@ require([
 	Camera,
 	MapView,
 	SceneView,
-	Viewpoint,
 	Point,
 	webMercatorUtils
 ) => {
@@ -163,9 +161,7 @@ require([
 
 		ws.onclose = function() {
 			console.log("Websocket connection failed, please refresh the page and try again");
-			setTimeout(function() {
-				wsinit();
-			}, 5000);
+			setTimeout(wsinit, 5000);
 		};
 	})();
 
@@ -187,7 +183,7 @@ require([
 	});
 	var viewForward = new SceneView({
 		container: "forward-map",
-		map: map,
+		map,
 		environment: {
 			lighting: {
 				date: Date.now(),
@@ -206,7 +202,7 @@ require([
 	});
 	var viewLeft = new SceneView({
 		container: "left-map",
-		map: map,
+		map,
 		environment: {
 			lighting: {
 				date: Date.now(),
@@ -225,7 +221,7 @@ require([
 	});
 	var viewRight = new SceneView({
 		container: "right-map",
-		map: map,
+		map,
 		environment: {
 			lighting: {
 				date: Date.now(),

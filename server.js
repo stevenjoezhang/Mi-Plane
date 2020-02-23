@@ -5,7 +5,7 @@ const server = require("http").createServer(app);
 
 const Plane = require("./src/plane");
 
-var port = 9500;
+var port = 8080;
 
 server.listen(port, () => {
 	console.log("Server listening at port %d", port);
@@ -52,7 +52,7 @@ wss.on("error", error => {
 });
 
 var plane = new Plane();
-setInterval(function() {
+setInterval(() => {
 	plane.update();
 	wss.clients.forEach(client => {
 		if (client.readyState === WebSocket.OPEN) client.send(plane.stringify());

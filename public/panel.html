@@ -183,9 +183,7 @@ input.seven-seg {
 
 		ws.onclose = function() {
 			console.log("Websocket connection failed, please refresh the page and try again");
-			setTimeout(function() {
-				wsinit();
-			}, 5000);
+			setTimeout(wsinit, 5000);
 		};
 	}
 	wsinit();
