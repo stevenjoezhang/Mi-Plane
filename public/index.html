@@ -101,7 +101,6 @@
 </style>
 </head>
 <body>
-<script src="js/jquery.min.js"></script>
 <script src="js/format.min.js"></script>
 <script src="//js.arcgis.com/4.11/dojo/dojo.js"></script>
 <div id="screen">
@@ -160,167 +159,166 @@ function(
 	Point,
 	webMercatorUtils
 ) {
-	$(document).ready(function() {
-		// Enforce strict mode
-		"use strict";
+	// Enforce strict mode
+	"use strict";
 
-		window.plane = {
-			location: {
-				x: 12988000,
-				y: 4865000,
-				z: 3000
-			},
-			attitude: {
-				pitch: 0,
-				roll: 0,
-				yaw: 0
-			},
-			speed: 120,
-			heading: 270
+	window.plane = {
+		location: {
+			x: 12988000,
+			y: 4865000,
+			z: 3000
+		},
+		attitude: {
+			pitch: 0,
+			roll: 0,
+			yaw: 0
+		},
+		speed: 120,
+		heading: 270
+	}
+
+	var location = new Point({
+		...plane.location,
+		spatialReference: {
+			wkid: 102100
 		}
-
-		var location = new Point({
-			x: plane.location.x,
-			y: plane.location.y,
-			z: plane.location.z,
-			spatialReference: {
-				wkid: 102100
-			}
-		});
-
-		function wsinit(protocol) {
-			window.ws = new WebSocket(`${protocol}//${location.host}`);
-			ws.onopen = function() {
-				console.log("Websocket connection is successful");
-			};
-
-			ws.onmessage = function(event) {
-				plane = JSON.parse(event.data);
-			};
-
-			ws.onclose = function() {
-				console.log("Websocket connection failed, please refresh the page and try again");
-				setTimeout(function() {
-					wsinit(protocol);
-				}, 5000);
-			};
-		}
-
-		var protocol = location.protocol.replace("http", "ws");
-		wsinit(protocol);
-
-		// Initialize maps and views
-		var main = new Map({
-			basemap: "satellite"
-		});
-		var viewMain = new MapView({
-			container: "map",
-			map: main,
-			zoom: 12,
-			rotation: 0,
-			center: location
-		});
-
-		var map = new Map({
-			basemap: "satellite",
-			ground: "world-elevation"
-		});
-		var viewForward = new SceneView({
-			container: "forward-map",
-			map: map,
-			environment: {
-				lighting: {
-					date: Date.now(),
-					directShadowsEnabled: true,
-					ambientOcclusionEnabled: true
-				},
-				atmosphere: {
-					quality: "high"
-				}
-			},
-			camera: {
-				heading: 0,
-				position: location,
-				tilt: 85
-			}
-		});
-		var viewLeft = new SceneView({
-			container: "left-map",
-			map: map,
-			environment: {
-				lighting: {
-					date: Date.now(),
-					directShadowsEnabled: true,
-					ambientOcclusionEnabled: true
-				},
-				atmosphere: {
-					quality: "high"
-				}
-			},
-			camera: {
-				heading: 270,
-				position: location,
-				tilt: 80
-			}
-		});
-		var viewRight = new SceneView({
-			container: "right-map",
-			map: map,
-			environment: {
-				lighting: {
-					date: Date.now(),
-					directShadowsEnabled: true,
-					ambientOcclusionEnabled: true
-				},
-				atmosphere: {
-					quality: "high"
-				}
-			},
-			camera: {
-				heading: 90,
-				position: location,
-				tilt: 80
-			}
-		});
-
-		viewMain.ui.components = ["compass", "zoom"];
-		viewMain.ui.add($(`<div id="coordsWidget" class="esri-widget esri-component"></div>`)[0], "bottom-right");
-
-		viewForward.ui.components = [];
-		viewLeft.ui.components = [];
-		viewRight.ui.components = [];
-
-		function draw() {
-			location.x = plane.location.x;
-			location.y = plane.location.y;
-			location.z = plane.location.z;
-
-			viewMain.center = location;
-			viewMain.rotation = -plane.heading;
-			viewForward.camera = new Camera({
-				heading: plane.heading + plane.attitude.yaw,
-				position: location,
-				tilt: 85 + plane.attitude.pitch
-			});
-			viewLeft.camera = new Camera({
-				heading: plane.heading - 90,
-				position: location,
-				tilt: 80 + plane.attitude.roll
-			});
-			viewRight.camera = new Camera({
-				heading: plane.heading + 90,
-				position: location,
-				tilt: 80 - plane.attitude.roll
-			});
-
-			var geographic = webMercatorUtils.webMercatorToGeographic(location);
-			$("#coordsWidget").html(ConvertDDToDMS(geographic.x, true) + "<br/>" + ConvertDDToDMS(geographic.y, false))
-
-			requestAnimationFrame(draw);
-		}
-
-		draw();
 	});
+
+	var protocol = window.location.protocol.replace("http", "ws");
+
+	function wsinit() {
+		window.ws = new WebSocket(`${protocol}//${window.location.host}`);
+		ws.onopen = function() {
+			console.log("Websocket connection is successful");
+		};
+
+		ws.onmessage = function(event) {
+			plane = JSON.parse(event.data);
+		};
+
+		ws.onclose = function() {
+			console.log("Websocket connection failed, please refresh the page and try again");
+			setTimeout(function() {
+				wsinit();
+			}, 5000);
+		};
+	}
+	wsinit();
+
+	// Initialize maps and views
+	var main = new Map({
+		basemap: "satellite"
+	});
+	var viewMain = new MapView({
+		container: "map",
+		map: main,
+		zoom: 12,
+		rotation: 0,
+		center: location
+	});
+
+	var map = new Map({
+		basemap: "satellite",
+		ground: "world-elevation"
+	});
+	var viewForward = new SceneView({
+		container: "forward-map",
+		map: map,
+		environment: {
+			lighting: {
+				date: Date.now(),
+				directShadowsEnabled: true,
+				ambientOcclusionEnabled: true
+			},
+			atmosphere: {
+				quality: "high"
+			}
+		},
+		camera: {
+			heading: 0,
+			position: location,
+			tilt: 85
+		}
+	});
+	var viewLeft = new SceneView({
+		container: "left-map",
+		map: map,
+		environment: {
+			lighting: {
+				date: Date.now(),
+				directShadowsEnabled: true,
+				ambientOcclusionEnabled: true
+			},
+			atmosphere: {
+				quality: "high"
+			}
+		},
+		camera: {
+			heading: 270,
+			position: location,
+			tilt: 80
+		}
+	});
+	var viewRight = new SceneView({
+		container: "right-map",
+		map: map,
+		environment: {
+			lighting: {
+				date: Date.now(),
+				directShadowsEnabled: true,
+				ambientOcclusionEnabled: true
+			},
+			atmosphere: {
+				quality: "high"
+			}
+		},
+		camera: {
+			heading: 90,
+			position: location,
+			tilt: 80
+		}
+	});
+
+	viewMain.ui.components = ["compass", "zoom"];
+	let coordsWidget = document.createElement("div");
+	coordsWidget.id = "coordsWidget";
+	coordsWidget.classList.add("esri-widget", "esri-component");
+	viewMain.ui.add(coordsWidget, "bottom-right");
+
+	viewForward.ui.components = [];
+	viewLeft.ui.components = [];
+	viewRight.ui.components = [];
+
+	function draw() {
+		location.x = plane.location.x;
+		location.y = plane.location.y;
+		location.z = plane.location.z;
+
+		viewMain.center = location;
+		viewMain.rotation = -plane.heading;
+		viewForward.camera = new Camera({
+			heading: plane.heading + plane.attitude.yaw,
+			position: location,
+			tilt: 85 + plane.attitude.pitch
+		});
+		viewLeft.camera = new Camera({
+			heading: plane.heading - 90,
+			position: location,
+			tilt: 80 + plane.attitude.roll
+		});
+		viewRight.camera = new Camera({
+			heading: plane.heading + 90,
+			position: location,
+			tilt: 80 - plane.attitude.roll
+		});
+
+		var geographic = webMercatorUtils.webMercatorToGeographic(location);
+		document.getElementById("coordsWidget").innerHTML = ConvertDDToDMS(geographic.x, true) + "<br>" + ConvertDDToDMS(geographic.y, false);
+
+		requestAnimationFrame(draw);
+	}
+
+	draw();
 });
 </script>
 </body>

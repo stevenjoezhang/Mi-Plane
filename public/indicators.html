@@ -46,7 +46,9 @@ function setSize() {
 }
 setSize();
 
-function wsinit(protocol) {
+var protocol = location.protocol.replace("http", "ws");
+
+function wsinit() {
 	window.ws = new WebSocket(`${protocol}//${location.host}`);
 	ws.onopen = function() {
 		console.log("Websocket connection is successful");
@@ -73,13 +75,11 @@ function wsinit(protocol) {
 	ws.onclose = function() {
 		console.log("Websocket connection failed, please refresh the page and try again");
 		setTimeout(function() {
-			wsinit(protocol);
+			wsinit();
 		}, 5000);
 	};
 }
-
-var protocol = location.protocol.replace("http", "ws");
-wsinit(protocol);
+wsinit();
 
 $(window).on("resize", setSize);
 </script>
