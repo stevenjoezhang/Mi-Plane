@@ -152,7 +152,7 @@ require([
 
 	var protocol = location.protocol.replace("http", "ws");
 
-	function wsinit() {
+	(function wsinit() {
 		window.ws = new WebSocket(`${protocol}//${location.host}`);
 		ws.onopen = function() {
 			console.log("Websocket connection is successful");
@@ -168,8 +168,7 @@ require([
 				wsinit();
 			}, 5000);
 		};
-	}
-	wsinit();
+	})();
 
 	// Initialize maps and views
 	var main = new Map({
@@ -255,7 +254,7 @@ require([
 	viewLeft.ui.components = [];
 	viewRight.ui.components = [];
 
-	function draw() {
+	(function draw() {
 		position.x = plane.position.x;
 		position.y = plane.position.y;
 		position.z = plane.position.z;
@@ -282,9 +281,7 @@ require([
 		document.getElementById("coordsWidget").innerHTML = ConvertDDToDMS(geographic.x, true) + "<br>" + ConvertDDToDMS(geographic.y, false);
 
 		requestAnimationFrame(draw);
-	}
-
-	draw();
+	})();
 });
 </script>
 </body>

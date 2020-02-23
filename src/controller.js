@@ -1,42 +1,45 @@
 var locations = [
 	{
-		x: 908075,
-		y: 5949449,
-		z: 1000,
+		position: {
+			x: 908075,
+			y: 5949449,
+			z: 1000
+		},
 		heading: 90
 	},//多瑙河
 	{
-		x: 9679304,
-		y: 3186526,
-		z: 8000,
+		position: {
+			x: 9679304,
+			y: 3186526,
+			z: 8000
+		},
 		heading: 0
 	},//珠峰
 	{
-		x: 263139,
-		y: 6227069,
-		z: 1000,
+		position: {
+			x: 263139,
+			y: 6227069,
+			z: 1000
+		},
 		heading: 0
 	},//巴黎
 	{
-		x: 12967002,
-		y: 4864889,
-		z: 2000,
+		position: {
+			x: 12967002,
+			y: 4864889,
+			z: 2000
+		},
 		heading: 270
 	},//北大
 	{
-		x: 779232,
-		y: 5780430,
-		z: 5000,
+		position: {
+			x: 779232,
+			y: 5780430,
+			z: 5000
+		},
 		heading: 0
 	} //法国与瑞士边界，莱芒湖（日内瓦湖）
-]
-
-function applyLocations(data, locat) {
-	data.position.x = locat.x;
-	data.position.y = locat.y;
-	data.position.z = locat.z;
-	data.heading = locat.heading;
-}
+];
 
 function Controller() {
 	this.input = [0, 0, 0, 0, 0];
@@ -65,7 +68,7 @@ function Controller() {
 		if (data.speed < 60) data.speed = 60;
 		if (this.input[4]) {
 			var locat = locations[Math.floor(Math.random() * locations.length)];
-			applyLocations(data, locat);
+			Object.assign(data, locat);
 		}
 		return data;
 	}

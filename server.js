@@ -65,7 +65,7 @@ var serialport = new SerialPort("/dev/cu.usbmodem14202", {
 });
 buffer = "";
 // Switches the serialport into "flowing mode"
-serialport.on("data", function (data) {
+serialport.on("data", data => {
 	char = data.toString();
 	buffer += char;
 	if (char == "\n") {
