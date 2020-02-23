@@ -10,7 +10,7 @@
 body {
 	background-color: #333;
 }
-#container span {
+#container div {
 	float: left;
 }
 </style>
@@ -19,12 +19,12 @@ body {
 <script src="/js/jquery.min.js"></script>
 <script src="/js/jquery.flightindicators.js"></script>
 <div id="container">
-	<span id="airspeed"></span>
-	<span id="attitude"></span>
-	<span id="altimeter"></span>
-	<span id="turn_coordinator"></span>
-	<span id="heading"></span>
-	<span id="variometer"></span>
+	<div id="airspeed"></div>
+	<div id="attitude"></div>
+	<div id="altimeter"></div>
+	<div id="turn_coordinator"></div>
+	<div id="heading"></div>
+	<div id="variometer"></div>
 </div>
 <script>
 var indicator = {};
@@ -36,13 +36,9 @@ indicator.turn_coordinator = $.flightIndicator("#turn_coordinator", "turn_coordi
 indicator.heading = $.flightIndicator("#heading", "heading", {heading: 150});
 indicator.variometer = $.flightIndicator("#variometer", "variometer", {vario: -5});
 
-function setSize() {
-	var size = window.innerWidth > window.innerHeight ? window.innerWidth / 3.1 : window.innerWidth / 2.1;
-	for (var ins in indicator) {
-		indicator[ins].resize(size);
-	}
+for (var ins in indicator) {
+	indicator[ins].resize("33vw");
 }
-setSize();
 
 var protocol = location.protocol.replace("http", "ws");
 
@@ -78,8 +74,6 @@ function wsinit() {
 	};
 }
 wsinit();
-
-$(window).on("resize", setSize);
 </script>
 </body>
 </html>
