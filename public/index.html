@@ -71,7 +71,6 @@
 </style>
 </head>
 <body>
-<script src="/js/format.min.js"></script>
 <script src="//js.arcgis.com/4.14/dojo/dojo.js"></script>
 <div id="screen">
 	<div id="forward-map"></div>
@@ -98,7 +97,7 @@ function ConvertDDToDMS(d, lng) {
 	var deg = 0 | (d < 0 ? d = -d : d);
 	var min = 0 | d % 1 * 60;
 	var sec = (0 | d * 60 % 1 * 60);
-	return deg + "° " + format.format("02d")(min) + "' " + format.format("02d")(sec) + "\" " + dir;
+	return `${deg}° ${min.toString().padStart(2, 0)}' ${sec.toString().padStart(2, 0)}" ${dir}`;
 }
 
 /* -----------------------------------------------------------------------------------
