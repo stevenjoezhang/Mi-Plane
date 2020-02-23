@@ -89,6 +89,7 @@ micro:bit传感器自由度：倾角（roll,pitch,即俯仰和转向）和节流
 ## 数据结构与算法
 
 ### 概述
+
 为保证参数自洽性，所有输入参数通过Websocket传递到服务器进行计算，然后向各个屏幕输出。将运算与显示分离。
 
 服务器以30Hz发送plane。各终端反馈的方式为发送json到服务器，规范为：
@@ -100,6 +101,7 @@ micro:bit传感器自由度：倾角（roll,pitch,即俯仰和转向）和节流
 | autopilot | 设置autopilot | altitude,pressure |
 
 ### Camera
+
 在转向过程中，需要改变Camera的tilt
 
 ## TODO
@@ -120,18 +122,17 @@ This application makes use of the following libraries:
 
 - [ArcGIS API for JavaScript](https://developers.arcgis.com/javascript/) by [Esri](http://www.esri.com/)  
   *Esri's JavaScript library for mapping and analysis.*
-- [d3-format](https://github.com/d3/d3-format) by [Mike Bostock](https://github.com/mbostock)  
-  *Format numbers for human consumption.*
 - [jQuery](http://jquery.com/) by jQuery Foundataion Inc  
   *A JavaScript framework for DOM manipulation and a foundation for many other frameworks.*
+- [jQuery-Flight-Indicators](https://github.com/sebmatton/jQuery-Flight-Indicators) by [Matton Sébastien](https://github.com/sebmatton)  
+  *The Flight Indicators Plugin allows you to display high quality flight indicators using html, css3, jQuery and SVG vector images.*
 
 This application is inspired by the following GitHub repos:
 
 - [Esri-Flight-Simulator](https://github.com/richiecarmichael/Esri-Flight-Simulator) by [Richie Carmichael](https://github.com/richiecarmichael)  
   *A basic flight simulator with four synchronized views. Live demo: http://maps.esri.com/rc/simulator/index.html*
-- [jQuery-Flight-Indicators](https://github.com/sebmatton/jQuery-Flight-Indicators) by [Matton Sébastien](https://github.com/sebmatton)  
-  *The Flight Indicators Plugin allows you to display high quality flight indicators using html, css3, jQuery and SVG vector images.*
 
 ## License
+
 Released under the GNU General Public License v3  
 http://www.gnu.org/licenses/gpl-3.0.html

@@ -68,8 +68,8 @@ buffer = "";
 serialport.on("data", data => {
 	char = data.toString();
 	buffer += char;
-	if (char == "\n") {
-		if (buffer[0] == "(") {
+	if (char === "\n") {
+		if (buffer[0] === "(") {
 			value = buffer.split("(")[1].split(")")[0].split(",");
 			accelerometer = value.map(x => parseFloat(x));
 			console.log("Data:", accelerometer);
