@@ -25,8 +25,8 @@ function Plane() {
 	this.autopilot = new Autopilot();
 	this.lastTime = null;
 	this.update = function() {
-		var time = Date.now();
-		var deltaT = this.lastTime ? time - this.lastTime : 0; // ms
+		const time = Date.now();
+		const deltaT = this.lastTime ? time - this.lastTime : 0; // ms
 		this.lastTime = time;
 
 		this.data = this.controller.update(deltaT, this.data);
@@ -34,7 +34,7 @@ function Plane() {
 		this.updatePosition(deltaT);
 	};
 	this.updatePosition = function(deltaT) {
-		var deltaS = this.data.speed * deltaT / 1000;
+		const deltaS = this.data.speed * deltaT / 1000;
 
 		this.data.position.x += deltaS * Math.sin(this.data.heading * Math.PI / 180);
 		this.data.position.y += deltaS * Math.cos(this.data.heading * Math.PI / 180);

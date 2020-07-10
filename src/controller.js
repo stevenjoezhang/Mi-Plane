@@ -1,4 +1,4 @@
-var locations = [
+const locations = [
 	{
 		position: {
 			x: 908075,
@@ -67,7 +67,7 @@ function Controller() {
 		if (data.speed > 250) data.speed = 250;
 		if (data.speed < 60) data.speed = 60;
 		if (this.input[4]) {
-			var locat = locations[Math.floor(Math.random() * locations.length)];
+			const locat = locations[Math.floor(Math.random() * locations.length)];
 			Object.assign(data, locat);
 		}
 		return data;

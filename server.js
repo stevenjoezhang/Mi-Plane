@@ -5,7 +5,7 @@ const server = require("http").createServer(app);
 
 const Plane = require("./src/plane");
 
-var port = 8080;
+const port = 8080;
 
 server.listen(port, () => {
 	console.log("Server listening at port %d", port);
@@ -13,12 +13,12 @@ server.listen(port, () => {
 //Routing
 app.use(express.static(path.join(__dirname, "public")));
 
-var WebSocket = require("ws"),
-	wss = new WebSocket.Server({
-		clientTracking: true,
-		maxPayload: 1300,
-		server
-	});
+const WebSocket = require("ws"),
+      wss = new WebSocket.Server({
+          clientTracking: true,
+          maxPayload: 1300,
+          server
+      });
 
 wss.on("connection", ws => {
 
@@ -51,7 +51,7 @@ wss.on("error", error => {
 	console.error("[ERROR] " + error);
 });
 
-var plane = new Plane();
+const plane = new Plane();
 setInterval(() => {
 	plane.update();
 	wss.clients.forEach(client => {
@@ -59,8 +59,8 @@ setInterval(() => {
 	});
 }, 1000 / 30);
 
-var SerialPort = require("serialport");
-var serialport = new SerialPort("/dev/cu.usbmodem14202", {
+const SerialPort = require("serialport");
+const serialport = new SerialPort("/dev/cu.usbmodem14202", {
 	baudRate: 115200
 });
 buffer = "";
