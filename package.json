@@ -15,7 +15,7 @@
 		"Simulator",
 		"Game"
 	],
-	"author": "Mimi <stevenjoezhang@gmail.com> https://zhangshuqiao.org",
+	"author": "Mimi <stevenjoezhang@gmail.com> (https://zhangshuqiao.org)",
 	"license": "MIT",
 	"bugs": {
 		"url": "https://github.com/stevenjoezhang/Mi-Plane/issues"
@@ -24,6 +24,6 @@
 	"dependencies": {
 		"express": "^4.17.1",
 		"serialport": "^9.0.0",
-		"ws": "^7.2.1"
+		"ws": "^7.3.1"
 	}
 }

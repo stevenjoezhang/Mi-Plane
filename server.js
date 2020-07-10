@@ -77,4 +77,4 @@ serialport.on("data", data => {
 		}
 		buffer = "";
 	}
-});
+}).on("error", console.error);
