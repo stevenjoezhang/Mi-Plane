@@ -12,6 +12,7 @@ server.listen(port, () => {
 });
 //Routing
 app.use(express.static(path.join(__dirname, "public")));
+app.use("/js/jquery.slim.min.js", express.static(path.join(__dirname, "node_modules/jquery/dist/jquery.slim.min.js")));
 
 const WebSocket = require("ws"),
       wss = new WebSocket.Server({
