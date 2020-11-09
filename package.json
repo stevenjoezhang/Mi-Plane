@@ -22,6 +22,7 @@
 	},
 	"homepage": "https://github.com/stevenjoezhang/Mi-Plane",
 	"dependencies": {
+		"d3-format": "^2.0.0",
 		"express": "^4.17.1",
 		"jquery": "^3.5.1",
 		"serialport": "^9.0.2",

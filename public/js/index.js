@@ -61,22 +61,9 @@ require([
 	});
 
 	const protocol = location.protocol.replace("http", "ws");
-
-	(function wsinit() {
-		window.ws = new WebSocket(`${protocol}//${location.host}`);
-		ws.onopen = () => {
-			console.log("Websocket connection is successful");
-		};
-
-		ws.onmessage = event => {
-			plane = JSON.parse(event.data);
-		};
-
-		ws.onclose = () => {
-			console.log("Websocket connection failed, please refresh the page and try again");
-			setTimeout(wsinit, 5000);
-		};
-	})();
+	new WebSocketController(`${protocol}//${location.host}`, event => {
+		plane = JSON.parse(event.data);
+	});
 
 	// Initialize maps and views
 	const main = new Map({

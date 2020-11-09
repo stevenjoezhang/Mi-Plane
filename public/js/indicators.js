@@ -12,34 +12,20 @@ for (const ins in indicator) {
 }
 
 const protocol = location.protocol.replace("http", "ws");
-
-function wsinit() {
-	window.ws = new WebSocket(`${protocol}//${location.host}`);
-	ws.onopen = () => {
-		console.log("Websocket connection is successful");
-	};
-
-	ws.onmessage = event => {
-		plane = JSON.parse(event.data);
-		// Airspeed update
-		indicator.airspeed.setAirSpeed(plane.speed * 1.943844);
-		// Attitude update
-		indicator.attitude.setRoll(-plane.attitude.roll);
-		indicator.attitude.setPitch(plane.attitude.pitch);
-		// Altimeter update
-		indicator.altimeter.setAltitude(plane.position.z / 0.3048);
-		indicator.altimeter.setPressure(Math.pow((1 - plane.position.z / 44300), 5.256) * 1013.25);
-		// TC update
-		indicator.turn_coordinator.setTurn(0);
-		// Heading update
-		indicator.heading.setHeading(plane.heading);
-		// Vario update
-		indicator.variometer.setVario(plane.vspeed * 60 / 304.8);
-	};
-
-	ws.onclose = () => {
-		console.log("Websocket connection failed, please refresh the page and try again");
-		setTimeout(wsinit, 5000);
-	};
-}
-wsinit();
+new WebSocketController(`${protocol}//${location.host}`, event => {
+	plane = JSON.parse(event.data);
+	// Airspeed update
+	indicator.airspeed.setAirSpeed(plane.speed * 1.943844);
+	// Attitude update
+	indicator.attitude.setRoll(-plane.attitude.roll);
+	indicator.attitude.setPitch(plane.attitude.pitch);
+	// Altimeter update
+	indicator.altimeter.setAltitude(plane.position.z / 0.3048);
+	indicator.altimeter.setPressure(Math.pow((1 - plane.position.z / 44300), 5.256) * 1013.25);
+	// TC update
+	indicator.turn_coordinator.setTurn(0);
+	// Heading update
+	indicator.heading.setHeading(plane.heading);
+	// Vario update
+	indicator.variometer.setVario(plane.vspeed * 60 / 304.8);
+});

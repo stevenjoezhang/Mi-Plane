@@ -18,29 +18,15 @@
 	};
 
 	const protocol = location.protocol.replace("http", "ws");
-
-	function wsinit() {
-		window.ws = new WebSocket(`${protocol}//${location.host}`);
-		ws.onopen = () => {
-			console.log("Websocket connection is successful");
-		};
-
-		ws.onmessage = event => {
-			plane = JSON.parse(event.data);
-			update();
-		};
-
-		ws.onclose = () => {
-			console.log("Websocket connection failed, please refresh the page and try again");
-			setTimeout(wsinit, 5000);
-		};
-	}
-	wsinit();
+	new WebSocketController(`${protocol}//${location.host}`, event => {
+		plane = JSON.parse(event.data);
+		update();
+	});
 
 	function update() {
-		document.querySelector("#speed input").value = format.format(",")(plane.speed);
-		document.querySelector("#altitude input").value = format.format(",")(plane.position.z);
-		document.querySelector("#heading input").value = format.format(",")(plane.heading);
+		document.querySelector("#speed input").value = d3.format(",")(plane.speed);
+		document.querySelector("#altitude input").value = d3.format(",")(plane.position.z);
+		document.querySelector("#heading input").value = d3.format(",")(plane.heading);
 	}
 	update();
 })();
