@@ -13,7 +13,7 @@ for (const ins in indicator) {
 
 const protocol = location.protocol.replace("http", "ws");
 new WebSocketController(`${protocol}//${location.host}`, event => {
-	plane = JSON.parse(event.data);
+	const plane = JSON.parse(event.data);
 	// Airspeed update
 	indicator.airspeed.setAirSpeed(plane.speed * 1.943844);
 	// Attitude update

@@ -1,31 +1,32 @@
 {
-	"name": "mi-plane",
-	"version": "0.0.1",
-	"description": "A single-player flight simulator game.",
-	"main": "server.js",
-	"scripts": {
-		"start": "node server.js"
-	},
-	"repository": {
-		"type": "git",
-		"url": "git+https://github.com/stevenjoezhang/Mi-Plane.git"
-	},
-	"keywords": [
-		"Flight",
-		"Simulator",
-		"Game"
-	],
-	"author": "Mimi <stevenjoezhang@gmail.com> (https://zhangshuqiao.org)",
-	"license": "MIT",
-	"bugs": {
-		"url": "https://github.com/stevenjoezhang/Mi-Plane/issues"
-	},
-	"homepage": "https://github.com/stevenjoezhang/Mi-Plane",
-	"dependencies": {
-		"d3-format": "^2.0.0",
-		"express": "^4.17.1",
-		"jquery": "^3.5.1",
-		"serialport": "^9.0.2",
-		"ws": "^7.4.0"
-	}
+  "name": "mi-plane",
+  "version": "0.0.1",
+  "private": true,
+  "description": "A single-player flight simulator game.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/stevenjoezhang/Mi-Plane.git"
+  },
+  "keywords": [
+    "Flight",
+    "Simulator",
+    "Game"
+  ],
+  "author": "Mimi <stevenjoezhang@gmail.com> (https://zhangshuqiao.org)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/stevenjoezhang/Mi-Plane/issues"
+  },
+  "homepage": "https://github.com/stevenjoezhang/Mi-Plane",
+  "dependencies": {
+    "d3-format": "^2.0.0",
+    "jquery": "^3.5.1",
+    "mimi-server": "^0.0.1",
+    "serialport": "^9.0.2",
+    "ws": "^7.4.0"
+  }
 }

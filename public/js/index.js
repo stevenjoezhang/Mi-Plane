@@ -140,7 +140,7 @@ require([
 	});
 
 	viewMain.ui.components = ["compass", "zoom"];
-	let coordsWidget = document.createElement("div");
+	const coordsWidget = document.createElement("div");
 	coordsWidget.id = "coordsWidget";
 	coordsWidget.classList.add("esri-widget", "esri-component");
 	viewMain.ui.add(coordsWidget, "bottom-right");

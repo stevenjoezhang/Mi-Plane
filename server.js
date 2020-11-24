@@ -1,26 +1,24 @@
+const MiServer = require("mimi-server");
 const express = require("express");
-const app = express();
 const path = require("path");
-const server = require("http").createServer(app);
+
+const { app, server } = new MiServer({
+	port: 8080,
+	static: path.join(__dirname, "public")
+});
 
 const Plane = require("./src/plane");
 
-const port = 8080;
-
-server.listen(port, () => {
-	console.log("Server listening at port %d", port);
-});
-//Routing
-app.use(express.static(path.join(__dirname, "public")));
+// Routing
 app.use("/js/jquery.slim.min.js", express.static(path.join(__dirname, "node_modules/jquery/dist/jquery.slim.min.js")));
 app.use("/js/d3-format.min.js", express.static(path.join(__dirname, "node_modules/d3-format/dist/d3-format.min.js")));
 
-const WebSocket = require("ws"),
-      wss = new WebSocket.Server({
-          clientTracking: true,
-          maxPayload: 1300,
-          server
-      });
+const WebSocket = require("ws");
+const wss = new WebSocket.Server({
+	clientTracking: true,
+	maxPayload: 1300,
+	server
+});
 
 wss.on("connection", ws => {
 
@@ -65,7 +63,7 @@ const SerialPort = require("serialport");
 const serialport = new SerialPort("/dev/cu.usbmodem14202", {
 	baudRate: 115200
 });
-buffer = "";
+let buffer = "";
 // Switches the serialport into "flowing mode"
 serialport.on("data", data => {
 	char = data.toString();
