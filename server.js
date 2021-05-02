@@ -1,19 +1,22 @@
-const MiServer = require("mimi-server");
-const express = require("express");
-const path = require("path");
+import MiServer from "mimi-server";
+import express from "express";
+import path from "path";
+import { fileURLToPath } from "url";
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const { app, server } = new MiServer({
 	port: 8080,
 	static: path.join(__dirname, "public")
 });
 
-const Plane = require("./src/plane");
+import Plane from "./src/plane.js";
 
 // Routing
 app.use("/js/jquery.slim.min.js", express.static(path.join(__dirname, "node_modules/jquery/dist/jquery.slim.min.js")));
 app.use("/js/d3-format.min.js", express.static(path.join(__dirname, "node_modules/d3-format/dist/d3-format.min.js")));
 
-const WebSocket = require("ws");
+import WebSocket from "ws";
 const wss = new WebSocket.Server({
 	clientTracking: true,
 	maxPayload: 1300,
@@ -59,7 +62,7 @@ setInterval(() => {
 	});
 }, 1000 / 30);
 
-const SerialPort = require("serialport");
+import SerialPort from "serialport";
 const serialport = new SerialPort("/dev/cu.usbmodem14202", {
 	baudRate: 115200
 });

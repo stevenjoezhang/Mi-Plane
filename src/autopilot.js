@@ -31,4 +31,4 @@ function Autopilot() {
 	}
 }
 
-module.exports = Autopilot;
+export default Autopilot;

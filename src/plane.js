@@ -1,5 +1,5 @@
-const Controller = require("./controller");
-const Autopilot = require("./autopilot");
+import Controller from "./controller.js";
+import Autopilot from "./autopilot.js";
 
 function Plane() {
 	// Plane flight details
@@ -45,4 +45,4 @@ function Plane() {
 	};
 }
 
-module.exports = Plane;
+export default Plane;

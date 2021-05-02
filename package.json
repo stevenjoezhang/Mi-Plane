@@ -4,13 +4,11 @@
   "private": true,
   "description": "A single-player flight simulator game.",
   "main": "server.js",
+  "type": "module",
   "scripts": {
     "start": "node server.js"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/stevenjoezhang/Mi-Plane.git"
-  },
+  "repository": "stevenjoezhang/Mi-Plane",
   "keywords": [
     "Flight",
     "Simulator",
@@ -23,10 +21,10 @@
   },
   "homepage": "https://github.com/stevenjoezhang/Mi-Plane",
   "dependencies": {
-    "d3-format": "^2.0.0",
-    "jquery": "^3.5.1",
+    "d3-format": "^3.0.0",
+    "jquery": "^3.6.0",
     "mimi-server": "^0.0.1",
-    "serialport": "^9.0.2",
-    "ws": "^7.4.0"
+    "serialport": "^9.0.7",
+    "ws": "^7.4.5"
   }
 }
