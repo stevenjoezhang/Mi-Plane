@@ -5,6 +5,11 @@
   "description": "Flight data visualization.",
   "main": "server.js",
   "type": "module",
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "eject": "react-scripts eject"
+  },
   "repository": "stevenjoezhang/flight-vis",
   "keywords": [
     "Flight",
@@ -20,5 +25,20 @@
     "mimi-server": "^0.0.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2"
+  },
+  "devDependencies": {
+    "react-scripts": "^4.0.3"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
   }
 }

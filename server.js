@@ -30,24 +30,12 @@ const port = process.env.PORT || 8080;
 
 const { app, server } = new MiServer({
     port,
-    static: path.join(__dirname, "public")
-});
-
-const react = fs.readFileSync(path.join(__dirname, "node_modules/react/umd/react.development.js"));
-const reactDom = fs.readFileSync(path.join(__dirname, "node_modules/react-dom/umd/react-dom.development.js"));
-const babel = fs.readFileSync(path.join(__dirname, "node_modules/babel-standalone/babel.min.js"))
-app.get("/react.js", (req, res) => {
-    res.end(react);
-});
-app.get("/react-dom.js", (req, res) => {
-    res.end(reactDom);
-});
-app.get("/babel.js", (req, res) => {
-    res.end(babel);
+    static: path.join(__dirname, "build")
 });
 
 app.get("/flights/:id/", async (req, res) => {
     res.setHeader('Content-Type', 'application/json');
+    res.setHeader('Access-Control-Allow-Origin', '*');
     const id = await getIdent(req.params.id);
     const result = await flights(id);
     res.end(result);
@@ -55,6 +43,7 @@ app.get("/flights/:id/", async (req, res) => {
 
 app.get("/live/*", async (req, res) => {
     res.setHeader('Content-Type', 'application/json');
+    res.setHeader('Access-Control-Allow-Origin', '*');
     //const id = await getIdent(req.params.id);
     const result = await flight(req.path);
     res.end(result);
