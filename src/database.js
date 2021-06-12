@@ -1,29 +1,49 @@
 class DataBase {
     constructor(url) {
-        ;
+        this.start = Date.now();
     }
 
-    async loadData() {
-        const response = await fetch("/flights/3U8834/");
-        this.data = await response.json();
+    loadData(data) {
+        if (data.time.length < 2) {
+            console.warn("Invalid database!");
+            return;
+        }
+        this.data = data;
+    }
+
+    autoUpdate() {
+        const data = this.query(Date.now() - this.start, true);
+        window.plane = {
+            position: {
+                longitude: data.longitude,
+                latitude: data.latitude,
+                altitude: data.altitude
+            },
+            attitude: {
+                pitch: 0,
+                roll: 0,
+                yaw: 0
+            },
+            speed: 120,
+            heading: data.heading
+        };
+        draw();
+        requestAnimationFrame(this.autoUpdate.bind(this));
     }
 
     linearInterpolation(x, [x1, x2], [y1, y2]) {
         return y1 + (x - x1) / (x2 - x1) * (y2 - y1);
     }
 
-    query(t) {
+    query(t, relative = false) {
         const { time } = this.data;
-        if (time.length < 2) {
-            console.warn("Invalid database!");
-            return null;
-        }
+        if (relative) t += time[0];
         if (t < time[0] || t > time[time.length - 1]) {
             console.warn("Invalid query!");
             return null;
         }
         let index = time.findIndex(item => item >= t);
-        if (index === time.length - 1) index--;
+        if (index !== 0) index--;
         const data = {};
         Object.keys(this.data).forEach(key => {
             data[key] = this.linearInterpolation(t, [time[index], time[index + 1]], [this.data[key][index], this.data[key][index + 1]]);
@@ -31,3 +51,5 @@ class DataBase {
         return data;
     }
 }
+
+export default DataBase;

@@ -1,12 +1,14 @@
 import React, { Component } from "react";
 import Modal from "./modal";
+import DataBase from "./database";
 
 class FlightTable extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            data: []
+            flights: []
         };
+        this.db = new DataBase();
         this.load();
     }
 
@@ -15,7 +17,7 @@ class FlightTable extends Component {
             .then(response => response.json())
             .then(data => {
                 this.setState({
-                    data: Object.values(data.flights)[0].activityLog.flights
+                    flights: Object.values(data.flights)[0].activityLog.flights
                 });
             });
     }
@@ -25,7 +27,8 @@ class FlightTable extends Component {
         fetch(`http://localhost:8080${href}`)
             .then(response => response.json())
             .then(data => {
-                console.log(data);
+                this.db.loadData(data);
+                window.db = this.db;
             });
     }
 
@@ -42,7 +45,7 @@ class FlightTable extends Component {
                 </tr>
             </thead>
             <tbody>
-                {this.state.data.map(row => (<tr key={row.flightId}>
+                {this.state.flights.map(row => (<tr key={row.flightId}>
                     <td>{new Date(row.flightPlan.departure * 1e3).toLocaleString()}</td>
                     <td>{new Date(row.takeoffTimes.actual * 1e3).toTimeString() + row.origin.friendlyName}</td>
                     <td>{new Date(row.landingTimes.actual * 1e3).toTimeString() + row.destination.friendlyName}</td>

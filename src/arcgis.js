@@ -28,9 +28,9 @@ window.require([
 
         window.plane = {
             position: {
-                x: 12988000,
-                y: 4865000,
-                z: 3000
+                longitude: 106.6925,
+                latitude: 29.8542,
+                altitude: 3000
             },
             attitude: {
                 pitch: 0,
@@ -42,7 +42,9 @@ window.require([
         };
 
         const position = new Point({
-            ...plane.position,
+            x: 12988000,
+            y: 4865000,
+            z: 3000,
             spatialReference: {
                 wkid: 102100
             }
@@ -132,10 +134,11 @@ window.require([
         viewLeft.ui.components = [];
         viewRight.ui.components = [];
 
-        (function draw() {
-            position.x = plane.position.x;
-            position.y = plane.position.y;
-            position.z = plane.position.z;
+        window.draw = function() {
+            const xy = webMercatorUtils.lngLatToXY(plane.position.longitude, plane.position.latitude);
+            position.x = xy[0];
+            position.y = xy[1];
+            position.z = plane.position.altitude;
 
             viewMain.center = position;
             viewMain.rotation = -plane.heading;
@@ -157,7 +160,5 @@ window.require([
 
             const geographic = webMercatorUtils.webMercatorToGeographic(position);
             document.getElementById("coordsWidget").innerHTML = ConvertDDToDMS(geographic.x, true) + "<br>" + ConvertDDToDMS(geographic.y, false);
-
-            requestAnimationFrame(draw);
-        })();
+        };
     });
