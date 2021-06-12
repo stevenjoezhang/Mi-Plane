@@ -1,4 +1,5 @@
-import React, { Component } from 'react';
+import React, { Component } from "react";
+import Modal from "./modal";
 
 class FlightTable extends Component {
     constructor(props) {
@@ -29,15 +30,30 @@ class FlightTable extends Component {
     }
 
     render() {
+        const element = <table className="table">
+            <thead>
+                <tr>
+                    <th>日期</th>
+                    <th>离港</th>
+                    <th>到达</th>
+                    <th>飞机</th>
+                    <th style={{ whiteSpace: 'nowrap' }}>飞行时间</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {this.state.data.map(row => (<tr key={row.flightId}>
+                    <td>{new Date(row.flightPlan.departure * 1e3).toLocaleString()}</td>
+                    <td>{new Date(row.takeoffTimes.actual * 1e3).toTimeString() + row.origin.friendlyName}</td>
+                    <td>{new Date(row.landingTimes.actual * 1e3).toTimeString() + row.destination.friendlyName}</td>
+                    <td>{row.aircraftTypeFriendly}</td>
+                    <td>{row.flightPlan.ete / 60 + "分"}</td>
+                    <td style={{ whiteSpace: 'nowrap' }}><button type="button" className="btn btn-primary" onClick={() => this.trackLog(row.links.trackLog)}>查看</button></td>
+                </tr>))}
+            </tbody>
+        </table>;
         return (
-            this.state.data.map(row => (<tr key={row.flightId}>
-                <td>{new Date(row.flightPlan.departure * 1e3).toLocaleString()}</td>
-                <td>{new Date(row.takeoffTimes.actual * 1e3).toTimeString() + row.origin.friendlyName}</td>
-                <td>{new Date(row.landingTimes.actual * 1e3).toTimeString() + row.destination.friendlyName}</td>
-                <td>{row.aircraftTypeFriendly}</td>
-                <td>{row.flightPlan.ete / 60 + "分"}</td>
-                <td><button type="button" class="btn btn-primary" onClick={() => this.trackLog(row.links.trackLog)}>查看</button></td>
-            </tr>))
+            <Modal title={'航班查询'} body={element}/>
         );
     }
 }
