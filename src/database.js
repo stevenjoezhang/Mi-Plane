@@ -13,21 +13,15 @@ class DataBase {
 
     autoUpdate() {
         const data = this.query(Date.now() - this.start, true);
-        window.plane = {
-            position: {
-                longitude: data.longitude,
-                latitude: data.latitude,
-                altitude: data.altitude
-            },
+        draw({
+            ...data,
             attitude: {
                 pitch: 0,
                 roll: 0,
                 yaw: 0
             },
-            speed: 120,
-            heading: data.heading
-        };
-        draw();
+            speed: 120
+        });
         requestAnimationFrame(this.autoUpdate.bind(this));
     }
 

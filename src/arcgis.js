@@ -26,21 +26,6 @@ window.require([
         // Enforce strict mode
         "use strict";
 
-        window.plane = {
-            position: {
-                longitude: 106.6925,
-                latitude: 29.8542,
-                altitude: 3000
-            },
-            attitude: {
-                pitch: 0,
-                roll: 0,
-                yaw: 0
-            },
-            speed: 120,
-            heading: 270
-        };
-
         const position = new Point({
             x: 12988000,
             y: 4865000,
@@ -134,29 +119,36 @@ window.require([
         viewLeft.ui.components = [];
         viewRight.ui.components = [];
 
-        window.draw = function() {
-            const xy = webMercatorUtils.lngLatToXY(plane.position.longitude, plane.position.latitude);
+        window.draw = function(plane) {
+            const xy = webMercatorUtils.lngLatToXY(plane.longitude, plane.latitude);
+            const time = new Date(plane.time);
             position.x = xy[0];
             position.y = xy[1];
-            position.z = plane.position.altitude;
+            position.z = plane.altitude;
 
             viewMain.center = position;
             viewMain.rotation = -plane.heading;
+
             viewForward.camera = new Camera({
                 heading: plane.heading + plane.attitude.yaw,
                 position,
                 tilt: 85 + plane.attitude.pitch
             });
+            viewForward.environment.lighting.date = time;
+
             viewLeft.camera = new Camera({
                 heading: plane.heading - 90,
                 position,
                 tilt: 80 + plane.attitude.roll
             });
+            viewLeft.environment.lighting.date = time;
+
             viewRight.camera = new Camera({
                 heading: plane.heading + 90,
                 position,
                 tilt: 80 - plane.attitude.roll
             });
+            viewRight.environment.lighting.date = time;
 
             const geographic = webMercatorUtils.webMercatorToGeographic(position);
             document.getElementById("coordsWidget").innerHTML = ConvertDDToDMS(geographic.x, true) + "<br>" + ConvertDDToDMS(geographic.y, false);
