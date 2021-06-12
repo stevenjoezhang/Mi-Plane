@@ -5,8 +5,22 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <link rel="stylesheet" href="https://js.arcgis.com/4.19/esri/css/main.css">
 </head>
 <body>
+    <script src="https://js.arcgis.com/4.19/dojo/dojo.js"></script>
+    <div id="screen">
+        <div id="forward-map"></div>
+        <div id="left-map"></div>
+        <div id="middle-map">
+            <div id="map"></div>
+            <div id="plane"></div>
+        </div>
+        <div id="right-map"></div>
+    </div>
+    <div id="logo">
+        Mi Plane
+    </div>
     <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
         Launch static backdrop modal
     </button>
