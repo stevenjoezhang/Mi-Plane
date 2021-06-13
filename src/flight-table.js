@@ -17,7 +17,7 @@ class FlightTable extends Component {
             .then(response => response.json())
             .then(data => {
                 this.setState({
-                    flights: Object.values(data.flights)[0].activityLog.flights
+                    flights: Object.values(data.flights)[0].activityLog.flights.filter(row => row.flightPlan?.departure)
                 });
             });
     }
@@ -60,8 +60,8 @@ class FlightTable extends Component {
                     <td>{new Date(row.takeoffTimes.actual * 1e3).toTimeString() + row.origin.friendlyName}</td>
                     <td>{new Date(row.landingTimes.actual * 1e3).toTimeString() + row.destination.friendlyName}</td>
                     <td>{row.aircraftTypeFriendly}</td>
-                    <td>{row.flightPlan.ete / 60 + "分"}</td>
-                    <td style={{ whiteSpace: 'nowrap' }}><button type="button" className="btn btn-primary" onClick={this.trackLog.bind(this, row.links.trackLog)} data-bs-toggle="modal" data-bs-target="#overview-modal">查看</button></td>
+                    <td>{Math.floor(row.flightPlan.ete / 60) + "分"}</td>
+                    <td style={{ whiteSpace: 'nowrap' }}><button type="button" className="btn btn-primary" onClick={this.trackLog.bind(this, row.links.trackLog)} data-bs-toggle="modal" data-bs-target="#overview-modal" data-bs-dismiss="modal">预览</button></td>
                 </tr>))}
             </tbody>
         </table>;

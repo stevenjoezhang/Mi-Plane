@@ -9,6 +9,7 @@ class DataBase {
             return;
         }
         this.data = data;
+        console.log(data)
         overview(this.data);
     }
 

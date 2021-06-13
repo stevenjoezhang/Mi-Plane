@@ -134,8 +134,11 @@ window.require([
             scale: 50000000,
             center: [-101.17, 21.78]
         });
+        overView.ui.components = ["zoom", "navigation-toggle", "compass"];
 
-        const graphicsLayer = new GraphicsLayer();
+        const graphicsLayer = new GraphicsLayer({
+            //elevationInfo: "relative-to-ground"
+        });
         overviewMap.add(graphicsLayer);
 
         window.draw = function(plane) {
@@ -184,7 +187,6 @@ window.require([
                 x += longitude[i];
                 y += latitude[i];
             }
-            console.log(paths);
             overView.center = [x / length, y / length];
 
             const polyline = {
