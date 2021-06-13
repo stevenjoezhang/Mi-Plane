@@ -11,6 +11,8 @@ window.require([
     "esri/Camera",
     "esri/views/MapView",
     "esri/views/SceneView",
+    "esri/layers/GraphicsLayer",
+    "esri/Graphic",
     "esri/geometry/Point",
     "esri/geometry/support/webMercatorUtils",
     "dojo/domReady!"
@@ -20,6 +22,8 @@ window.require([
         Camera,
         MapView,
         SceneView,
+        GraphicsLayer,
+        Graphic,
         Point,
         webMercatorUtils
     ) => {
@@ -119,6 +123,21 @@ window.require([
         viewLeft.ui.components = [];
         viewRight.ui.components = [];
 
+        const overviewMap = new Map({
+            basemap: "topo-vector",
+            ground: "world-elevation"
+        });
+
+        const overView = new SceneView({
+            container: "overview-map",
+            map: overviewMap,
+            scale: 50000000,
+            center: [-101.17, 21.78]
+        });
+
+        const graphicsLayer = new GraphicsLayer();
+        overviewMap.add(graphicsLayer);
+
         window.draw = function(plane) {
             const xy = webMercatorUtils.lngLatToXY(plane.longitude, plane.latitude);
             const time = new Date(plane.time);
@@ -153,4 +172,37 @@ window.require([
             const geographic = webMercatorUtils.webMercatorToGeographic(position);
             document.getElementById("coordsWidget").innerHTML = ConvertDDToDMS(geographic.x, true) + "<br>" + ConvertDDToDMS(geographic.y, false);
         };
+
+        window.overview = function(data) {
+            const { latitude, longitude, altitude } = data;
+            const paths = [];
+            const { length } = latitude;
+            let x = 0;
+            let y = 0;
+            for (let i in latitude) {
+                paths.push([longitude[i], latitude[i], altitude[i]]);
+                x += longitude[i];
+                y += latitude[i];
+            }
+            console.log(paths);
+            overView.center = [x / length, y / length];
+
+            const polyline = {
+                type: "polyline", // autocasts as new Polyline()
+                paths
+            };
+
+            const lineSymbol = {
+                type: "simple-line", // autocasts as SimpleLineSymbol()
+                color: [226, 119, 40],
+                width: 4
+            };
+
+            const polylineGraphic = new Graphic({
+                geometry: polyline,
+                symbol: lineSymbol
+            });
+
+            graphicsLayer.add(polylineGraphic);
+        }
     });

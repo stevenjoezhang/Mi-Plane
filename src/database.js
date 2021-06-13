@@ -9,6 +9,7 @@ class DataBase {
             return;
         }
         this.data = data;
+        overview(this.data);
     }
 
     autoUpdate() {

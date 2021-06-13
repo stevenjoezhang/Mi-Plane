@@ -28,7 +28,7 @@ class FlightTable extends Component {
             .then(data => {
                 this.db.loadData(data);
                 window.db = this.db;
-                this.db.autoUpdate();
+                //this.db.autoUpdate();
             });
     }
 
@@ -61,13 +61,13 @@ class FlightTable extends Component {
                     <td>{new Date(row.landingTimes.actual * 1e3).toTimeString() + row.destination.friendlyName}</td>
                     <td>{row.aircraftTypeFriendly}</td>
                     <td>{row.flightPlan.ete / 60 + "分"}</td>
-                    <td style={{ whiteSpace: 'nowrap' }}><button type="button" className="btn btn-primary" onClick={this.trackLog.bind(this, row.links.trackLog)}>查看</button></td>
+                    <td style={{ whiteSpace: 'nowrap' }}><button type="button" className="btn btn-primary" onClick={this.trackLog.bind(this, row.links.trackLog)} data-bs-toggle="modal" data-bs-target="#overview-modal">查看</button></td>
                 </tr>))}
             </tbody>
         </table>;
         const element = <>{input}{this.state.flights.length ? table : ''}</>;
         return (
-            <Modal title={'航班查询'} body={element}/>
+            <Modal id="staticBackdrop" title="航班查询" body={element}/>
         );
     }
 }

@@ -56,3 +56,6 @@
 .esri-view-surface::after {
     display: none;
 }
+#overview-map {
+    height: 80vh;
+}

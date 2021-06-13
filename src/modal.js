@@ -10,7 +10,7 @@ class Modal extends Component {
 
     render() {
         return (
-            <div className="modal fade" tabIndex="-1" id="staticBackdrop">
+            <div className="modal fade" tabIndex="-1" id={this.props.id}>
                 <div className="modal-dialog modal-lg modal-dialog-centered">
                     <div className="modal-content">
                         <div className="modal-header">
