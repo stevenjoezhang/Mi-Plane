@@ -6,14 +6,14 @@ class FlightTable extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            value: '',
             flights: []
         };
         this.db = new DataBase();
-        this.load();
     }
 
     load() {
-        fetch("http://localhost:8080/flights/3U8834/")
+        fetch(`http://localhost:8080/flights/${this.state.value}/`)
             .then(response => response.json())
             .then(data => {
                 this.setState({
@@ -23,17 +23,27 @@ class FlightTable extends Component {
     }
 
     trackLog(href) {
-        console.log(href);
         fetch(`http://localhost:8080${href}`)
             .then(response => response.json())
             .then(data => {
                 this.db.loadData(data);
                 window.db = this.db;
+                this.db.autoUpdate();
             });
     }
 
+    handleChange(event) {
+        this.setState({
+            value: event.target.value
+        });
+    }
+
     render() {
-        const element = <table className="table">
+        const input = <div className="input-group">
+            <input type="text" className="form-control" placeholder="航班号" aria-label="航班号" value={this.state.value} onChange={this.handleChange.bind(this)}/>
+            <button className="btn btn-outline-secondary" type="button" onClick={this.load.bind(this)}>搜索</button>
+        </div>;
+        const table = <table className="table mt-3">
             <thead>
                 <tr>
                     <th>日期</th>
@@ -51,10 +61,11 @@ class FlightTable extends Component {
                     <td>{new Date(row.landingTimes.actual * 1e3).toTimeString() + row.destination.friendlyName}</td>
                     <td>{row.aircraftTypeFriendly}</td>
                     <td>{row.flightPlan.ete / 60 + "分"}</td>
-                    <td style={{ whiteSpace: 'nowrap' }}><button type="button" className="btn btn-primary" onClick={() => this.trackLog(row.links.trackLog)}>查看</button></td>
+                    <td style={{ whiteSpace: 'nowrap' }}><button type="button" className="btn btn-primary" onClick={this.trackLog.bind(this, row.links.trackLog)}>查看</button></td>
                 </tr>))}
             </tbody>
         </table>;
+        const element = <>{input}{this.state.flights.length ? table : ''}</>;
         return (
             <Modal title={'航班查询'} body={element}/>
         );

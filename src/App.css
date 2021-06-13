@@ -47,15 +47,12 @@
     padding: 5px 8px 3px;
     text-align: right;
 }
-#logo {
-    position: absolute;
-    top: 10px;
-    left: 10px;
+.navbar {
     opacity: 0.5;
-    font-size: 2.625em;
-    line-height: 1em;
-    pointer-events: none;
 }
 #forward-map, #left-map, #right-map {
     pointer-events: none;
+}
+.esri-view-surface::after {
+    display: none;
 }
