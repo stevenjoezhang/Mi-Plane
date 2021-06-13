@@ -177,9 +177,8 @@ window.require([
         };
 
         window.overview = function(data) {
-            const { latitude, longitude, altitude } = data;
+            const { latitude, longitude, altitude, length } = data;
             const paths = [];
-            const { length } = latitude;
             let x = 0;
             let y = 0;
             for (let i in latitude) {

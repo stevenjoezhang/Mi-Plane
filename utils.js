@@ -29,7 +29,7 @@ class DataBase {
 
         const $ = cheerio.load(tracklog);
         $(".smallrow1, .smallrow2").each((index, ele) => {
-            if (this.data.length > time.length || $(ele).is(".flight_event_facility, .flight_event")) {
+            if (this.data.length === time.length || $(ele).is(".flight_event_facility, .flight_event")) {
                 return;
             }
             const children = $(ele).children();

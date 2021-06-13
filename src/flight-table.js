@@ -10,6 +10,8 @@ class FlightTable extends Component {
             flights: []
         };
         this.db = new DataBase();
+        this.modal = React.createRef();
+        this.input = React.createRef();
     }
 
     load() {
@@ -38,9 +40,22 @@ class FlightTable extends Component {
         });
     }
 
+    handleKeyDown(event) {
+        if (event.key === "Enter") {
+            this.load();
+        }
+    }
+
+    componentDidMount() {
+        console.log(this.modal);
+        this.modal.current.addEventListener("shown.bs.modal", () => {
+            this.input.current.focus();
+        });
+    }
+
     render() {
         const input = <div className="input-group">
-            <input type="text" className="form-control" placeholder="航班号" aria-label="航班号" value={this.state.value} onChange={this.handleChange.bind(this)}/>
+            <input type="text" className="form-control" placeholder="航班号" aria-label="航班号" value={this.state.value} onChange={this.handleChange.bind(this)} onKeyDown={this.handleKeyDown.bind(this)} ref={this.input}/>
             <button className="btn btn-outline-secondary" type="button" onClick={this.load.bind(this)}>搜索</button>
         </div>;
         const table = <table className="table mt-3">
@@ -67,7 +82,7 @@ class FlightTable extends Component {
         </table>;
         const element = <>{input}{this.state.flights.length ? table : ''}</>;
         return (
-            <Modal id="staticBackdrop" title="航班查询" body={element}/>
+            <Modal id="staticBackdrop" title="航班查询" body={element} modalRef={this.modal}/>
         );
     }
 }
