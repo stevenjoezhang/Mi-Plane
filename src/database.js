@@ -42,7 +42,13 @@ class DataBase {
         if (index !== 0) index--;
         const data = {};
         Object.keys(this.data).forEach(key => {
-            data[key] = this.linearInterpolation(t, [time[index], time[index + 1]], [this.data[key][index], this.data[key][index + 1]]);
+            let y1 = this.data[key][index];
+            let y2 = this.data[key][index + 1];
+            if (key === "heading" && Math.abs(y1 - y2) > 180) {
+                if (y1 > y2) y2 += 360;
+                else y1 += 360;
+            }
+            data[key] = this.linearInterpolation(t, [time[index], time[index + 1]], [y1, y2]);
         });
         return data;
     }
