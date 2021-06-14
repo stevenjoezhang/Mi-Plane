@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import Modal from "./modal";
 import DataBase from "./database";
+import Loading from "./loading";
 
 class FlightTable extends Component {
     constructor(props) {
@@ -47,7 +48,6 @@ class FlightTable extends Component {
     }
 
     componentDidMount() {
-        console.log(this.modal);
         this.modal.current.addEventListener("shown.bs.modal", () => {
             this.input.current.focus();
         });
@@ -80,9 +80,11 @@ class FlightTable extends Component {
                 </tr>))}
             </tbody>
         </table>;
-        const element = <>{input}{this.state.flights.length ? table : ''}</>;
+        const element = <>{input}{this.state.flights.length ? table : <Loading/>}</>;
         return (
-            <Modal id="staticBackdrop" title="航班查询" body={element} modalRef={this.modal}/>
+            <Modal id="staticBackdrop" title="航班查询" modalRef={this.modal}>
+                {element}
+            </Modal>
         );
     }
 }

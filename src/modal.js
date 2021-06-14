@@ -18,7 +18,7 @@ class Modal extends Component {
                             <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div className="modal-body">
-                            {this.props.body}
+                            {this.props.children}
                         </div>
                         {this.props.footer && <div className="modal-footer">
                             {this.props.footer}

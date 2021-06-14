@@ -16,7 +16,9 @@ class Overview extends Component {
             <button type="button" className="btn btn-primary" data-bs-dismiss="modal" onClick={this.view.bind(this)}>查看</button>
         </>;
         return (
-            <Modal id="overview-modal" title="航线预览" body={<div id="overview-map"></div>} footer={footer}/>
+            <Modal id="overview-modal" title="航线预览" footer={footer}>
+                <div id="overview-map"></div>
+            </Modal>
         );
     }
 }
