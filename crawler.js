@@ -24,7 +24,7 @@ async function request(url) {
 
 async function getIdent(id) {
     const result = await request(`https://e1.flightcdn.com/ajax/ignoreall/omnisearch/flight.rvt?searchterm=${id}`);
-    return JSON.parse(result).data[0].ident;
+    return JSON.parse(result).data[0]?.ident || id;
 }
 
 async function flights(number) {

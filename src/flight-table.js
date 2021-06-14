@@ -8,7 +8,8 @@ class FlightTable extends Component {
         super(props);
         this.state = {
             value: '',
-            flights: []
+            flights: [],
+            loading: false
         };
         this.db = new DataBase();
         this.modal = React.createRef();
@@ -16,11 +17,17 @@ class FlightTable extends Component {
     }
 
     load() {
-        fetch(`http://localhost:8080/flights/${this.state.value}/`)
+        this.setState({
+            loading: true
+        });
+        fetch(`http://localhost:8080/flights/${this.input.current.value}/`)
             .then(response => response.json())
             .then(data => {
+                data = Object.values(data.flights)[0];
+                if (data.unknown) alert("Flight not found!");
                 this.setState({
-                    flights: Object.values(data.flights)[0].activityLog.flights.filter(row => row.flightPlan?.departure)
+                    flights: data.activityLog.flights.filter(row => row.flightPlan?.departure),
+                    loading: false
                 });
             });
     }
@@ -31,14 +38,7 @@ class FlightTable extends Component {
             .then(data => {
                 this.db.loadData(data);
                 window.db = this.db;
-                //this.db.autoUpdate();
             });
-    }
-
-    handleChange(event) {
-        this.setState({
-            value: event.target.value
-        });
     }
 
     handleKeyDown(event) {
@@ -55,7 +55,7 @@ class FlightTable extends Component {
 
     render() {
         const input = <div className="input-group">
-            <input type="text" className="form-control" placeholder="航班号" aria-label="航班号" value={this.state.value} onChange={this.handleChange.bind(this)} onKeyDown={this.handleKeyDown.bind(this)} ref={this.input}/>
+            <input type="text" className="form-control" placeholder="航班号" aria-label="航班号" onKeyDown={this.handleKeyDown.bind(this)} ref={this.input}/>
             <button className="btn btn-outline-secondary" type="button" onClick={this.load.bind(this)}>搜索</button>
         </div>;
         const table = <table className="table mt-3">
@@ -80,10 +80,10 @@ class FlightTable extends Component {
                 </tr>))}
             </tbody>
         </table>;
-        const element = <>{input}{this.state.flights.length ? table : <Loading/>}</>;
         return (
             <Modal id="staticBackdrop" title="航班查询" modalRef={this.modal}>
-                {element}
+                {input}
+                {this.state.flights.length ? table : (this.state.loading ? <Loading /> : '')}
             </Modal>
         );
     }
