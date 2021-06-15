@@ -18,7 +18,6 @@
 
 import MiServer from "mimi-server";
 
-import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
 
@@ -34,16 +33,14 @@ const { app, server } = new MiServer({
 });
 
 app.get("/flights/:id/", async (req, res) => {
-    res.setHeader('Content-Type', 'application/json');
-    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader("Content-Type", "application/json");
     const id = await getIdent(req.params.id);
     const result = await flights(id);
     res.end(result);
 });
 
 app.get("/live/*", async (req, res) => {
-    res.setHeader('Content-Type', 'application/json');
-    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader("Content-Type", "application/json");
     //const id = await getIdent(req.params.id);
     const result = await flight(req.path);
     res.end(result);

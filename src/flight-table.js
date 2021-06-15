@@ -18,7 +18,7 @@ class FlightTable extends Component {
     }
 
     trackLog(href) {
-        fetch(`http://localhost:8080${href}`)
+        fetch(href)
             .then(response => response.json())
             .then(data => {
                 this.db.loadData(data);
@@ -44,7 +44,7 @@ class FlightTable extends Component {
             loading: true
         });
         new bootstrap.Modal(this.modal.current).show();
-        fetch(`http://localhost:8080/flights/${this.input.current.value}/`)
+        fetch(`/flights/${this.input.current.value}/`)
             .then(response => response.json())
             .then(data => {
                 data = Object.values(data.flights)[0];
