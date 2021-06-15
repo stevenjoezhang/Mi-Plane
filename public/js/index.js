@@ -1,10 +1,3 @@
-window.requestAnimationFrame = window.requestAnimationFrame
-	|| window.webkitRequestAnimationFrame
-	|| window.mozRequestAnimationFrame
-	|| window.oRequestAnimationFrame
-	|| window.msRequestAnimationFrame
-	|| (callback => { window.setTimeout(callback, 1000 / 30) });
-
 function ConvertDDToDMS(d, lng) {
 	const dir = d < 0 ? lng ? "W" : "S" : lng ? "E" : "N";
 	const deg = 0 | (d < 0 ? d = -d : d);
