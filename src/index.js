@@ -6,5 +6,5 @@ import "./arcgis";
 
 ReactDOM.render(
     <App />,
-    document.getElementById("table-body")
+    document.getElementById("main")
 );

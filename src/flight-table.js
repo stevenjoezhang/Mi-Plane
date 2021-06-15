@@ -2,34 +2,19 @@ import React, { Component } from "react";
 import Modal from "./modal";
 import DataBase from "./database";
 import Loading from "./loading";
+import * as bootstrap from "bootstrap";
 
 class FlightTable extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            value: '',
+            valid: true,
             flights: [],
             loading: false
         };
         this.db = new DataBase();
         this.modal = React.createRef();
         this.input = React.createRef();
-    }
-
-    load() {
-        this.setState({
-            loading: true
-        });
-        fetch(`http://localhost:8080/flights/${this.input.current.value}/`)
-            .then(response => response.json())
-            .then(data => {
-                data = Object.values(data.flights)[0];
-                if (data.unknown) alert("Flight not found!");
-                this.setState({
-                    flights: data.activityLog.flights.filter(row => row.flightPlan?.departure),
-                    loading: false
-                });
-            });
     }
 
     trackLog(href) {
@@ -43,21 +28,48 @@ class FlightTable extends Component {
 
     handleKeyDown(event) {
         if (event.key === "Enter") {
-            this.load();
+            this.search();
         }
     }
 
-    componentDidMount() {
-        this.modal.current.addEventListener("shown.bs.modal", () => {
-            this.input.current.focus();
+    search() {
+        if (!this.input.current.value) {
+            this.setState({
+                valid: false
+            });
+            return;
+        }
+        this.setState({
+            valid: true,
+            loading: true
         });
+        new bootstrap.Modal(this.modal.current).show();
+        fetch(`http://localhost:8080/flights/${this.input.current.value}/`)
+            .then(response => response.json())
+            .then(data => {
+                data = Object.values(data.flights)[0];
+                if (data.unknown) alert("Flight not found!");
+                this.setState({
+                    flights: data.activityLog.flights.filter(row => row.flightPlan?.departure),
+                    loading: false
+                });
+            });
+    }
+
+    componentDidMount() {
+        this.input.current.focus();
     }
 
     render() {
-        const input = <div className="input-group">
-            <input type="text" className="form-control" placeholder="航班号" aria-label="航班号" onKeyDown={this.handleKeyDown.bind(this)} ref={this.input}/>
-            <button className="btn btn-outline-secondary" type="button" onClick={this.load.bind(this)}>搜索</button>
-        </div>;
+        const nav = <nav className="navbar fixed-top navbar-light bg-light">
+            <div className="container-fluid">
+                <a className="navbar-brand" href="#">Mi Plane</a>
+                <div className="d-flex">
+                    <input className={`form-control me-2${this.state.valid ? "" : " is-invalid"}`} type="text" placeholder="航班号" aria-label="航班号" onKeyDown={this.handleKeyDown.bind(this)} ref={this.input} />
+                    <button className="btn btn-outline-success flex-shrink-0" type="button" onClick={this.search.bind(this)}>搜索</button>
+                </div>
+            </div>
+        </nav>;
         const table = <table className="table mt-3">
             <thead>
                 <tr>
@@ -80,12 +92,12 @@ class FlightTable extends Component {
                 </tr>))}
             </tbody>
         </table>;
-        return (
-            <Modal id="staticBackdrop" title="航班查询" modalRef={this.modal}>
-                {input}
+        return (<>
+            {nav}
+            <Modal title="航班查询" modalRef={this.modal}>
                 {this.state.flights.length ? table : (this.state.loading ? <Loading /> : '')}
             </Modal>
-        );
+        </>);
     }
 }
 
