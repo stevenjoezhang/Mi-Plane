@@ -1,3 +1,5 @@
+import { draw, overview } from "./arcgis";
+
 class DataBase {
     constructor(url) {
         this.start = Date.now();
