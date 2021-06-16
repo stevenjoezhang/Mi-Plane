@@ -4,10 +4,15 @@ import Modal from "./modal";
 class Overview extends Component {
     constructor(props) {
         super(props);
+        this.db = props.db;
     }
 
     view() {
-        db.autoUpdate();
+        this.db.autoUpdate();
+    }
+
+    componentDidMount() {
+        this.db.initOverview();
     }
 
     render() {

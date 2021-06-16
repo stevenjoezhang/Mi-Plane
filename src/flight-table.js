@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import Modal from "./modal";
-import DataBase from "./database";
 import Loading from "./loading";
 import * as bootstrap from "bootstrap";
 
@@ -12,7 +11,7 @@ class FlightTable extends Component {
             flights: [],
             loading: false
         };
-        this.db = new DataBase();
+        this.db = props.db;
         this.modal = React.createRef();
         this.input = React.createRef();
     }
@@ -22,7 +21,6 @@ class FlightTable extends Component {
             .then(response => response.json())
             .then(data => {
                 this.db.loadData(data);
-                window.db = this.db;
             });
     }
 

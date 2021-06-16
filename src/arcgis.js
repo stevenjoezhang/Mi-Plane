@@ -108,16 +108,6 @@ viewForward.ui.components = [];
 viewLeft.ui.components = [];
 viewRight.ui.components = [];
 
-const overviewMap = new Map({
-    basemap: "topo-vector",
-    ground: "world-elevation"
-});
-
-const graphicsLayer = new GraphicsLayer({
-    //elevationInfo: "relative-to-ground"
-});
-overviewMap.add(graphicsLayer);
-
 function draw(plane) {
     const xy = webMercatorUtils.lngLatToXY(plane.longitude, plane.latitude);
     const time = new Date(plane.time);
@@ -153,43 +143,58 @@ function draw(plane) {
     document.getElementById("coordsWidget").innerHTML = ConvertDDToDMS(geographic.x, true) + "<br>" + ConvertDDToDMS(geographic.y, false);
 };
 
-function overview(data) {
-    const { latitude, longitude, altitude, length } = data;
-    const paths = [];
-    let x = 0;
-    let y = 0;
-    for (let i in latitude) {
-        paths.push([longitude[i], latitude[i], altitude[i]]);
-        x += longitude[i];
-        y += latitude[i];
+class Overview {
+    constructor() {
+        this.map = new Map({
+            basemap: "topo-vector",
+            ground: "world-elevation"
+        });
+
+        this.graphicsLayer = new GraphicsLayer({
+            //elevationInfo: "relative-to-ground"
+        });
+        this.map.add(this.graphicsLayer);
+
+        this.view = new SceneView({
+            container: "overview-map",
+            map: this.map,
+            scale: 50000000,
+            center: [-101.17, 21.78]
+        });
+        this.view.ui.components = ["zoom", "navigation-toggle", "compass"];
     }
 
-    const overView = new SceneView({
-        container: "overview-map",
-        map: overviewMap,
-        scale: 50000000,
-        center: [-101.17, 21.78]
-    });
-    overView.ui.components = ["zoom", "navigation-toggle", "compass"];
-    overView.center = [x / length, y / length];
+    render(data) {
+        const { latitude, longitude, altitude, length } = data;
+        const paths = [];
+        let x = 0;
+        let y = 0;
+        for (let i in latitude) {
+            paths.push([longitude[i], latitude[i], altitude[i]]);
+            x += longitude[i];
+            y += latitude[i];
+        }
+        this.view.center = [x / length, y / length];
 
-    const polyline = {
-        type: "polyline", // autocasts as new Polyline()
-        paths
-    };
+        const polyline = {
+            type: "polyline", // autocasts as new Polyline()
+            paths
+        };
 
-    const lineSymbol = {
-        type: "simple-line", // autocasts as SimpleLineSymbol()
-        color: [226, 119, 40],
-        width: 4
-    };
+        const lineSymbol = {
+            type: "simple-line", // autocasts as SimpleLineSymbol()
+            color: [226, 119, 40],
+            width: 4
+        };
 
-    const polylineGraphic = new Graphic({
-        geometry: polyline,
-        symbol: lineSymbol
-    });
+        const polylineGraphic = new Graphic({
+            geometry: polyline,
+            symbol: lineSymbol
+        });
 
-    graphicsLayer.add(polylineGraphic);
+        this.graphicsLayer.removeAll();
+        this.graphicsLayer.add(polylineGraphic);
+    }
 }
 
-export { draw, overview };
+export { draw, Overview };

@@ -6,9 +6,9 @@
   "main": "server.js",
   "type": "module",
   "scripts": {
-    "start": "concurrently \"react-scripts start\" \"node server.js\"",
+    "start": "concurrently \"react-scripts start\" \"npm run serve\"",
     "build": "GENERATE_SOURCEMAP=false react-scripts build",
-    "eject": "react-scripts eject"
+    "serve": "node server.js"
   },
   "repository": "stevenjoezhang/flight-vis",
   "keywords": [

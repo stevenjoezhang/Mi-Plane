@@ -1,4 +1,4 @@
-import { draw, overview } from "./arcgis";
+import { draw, Overview } from "./arcgis";
 
 class DataBase {
     constructor(url) {
@@ -11,8 +11,11 @@ class DataBase {
             return;
         }
         this.data = data;
-        console.log(data)
-        overview(this.data);
+        this.overview.render(this.data);
+    }
+
+    initOverview() {
+        this.overview = new Overview();
     }
 
     autoUpdate() {
