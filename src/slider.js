@@ -3,7 +3,17 @@ import { Range, getTrackBackground } from "react-range";
 import background from "./images/aircraft-white-50.png";
 
 class Slider extends Component {
-    state = { values: [50] };
+    constructor(props) {
+        super(props);
+        this.state = { values: [50] };
+        this.updateChart = props.updateChart;
+    }
+
+    update(values) {
+        this.setState({ values });
+        this.updateChart(values);
+    }
+
     render() {
         return (
             <Range
@@ -11,7 +21,7 @@ class Slider extends Component {
                 min={0}
                 max={100}
                 values={this.state.values}
-                onChange={(values) => this.setState({ values })}
+                onChange={this.update.bind(this)}
                 renderTrack={({ props, children }) => (
                     <div
                         {...props}

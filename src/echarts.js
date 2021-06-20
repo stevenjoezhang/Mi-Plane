@@ -15,7 +15,7 @@ class Echarts extends Component {
     }
 
     update({ time, altitude, speed }) {
-        const option = {
+        this.option = {
             tooltip: {
                 trigger: "axis",
                 formatter: params => {
@@ -153,10 +153,26 @@ class Echarts extends Component {
                     shadowBlur: 20
                 },
                 data: transpose([time, speed])
+            }, {
+                type: "line",
+                markLine: {
+                    data: [],
+                    label: {
+                        show: false
+                    },
+                    animation: false
+                }
             }]
         };
         // 绘制图表
-        this.chart.setOption(option);
+        this.chart.setOption(this.option);
+    }
+
+    updateMarkLine(percentage) {
+        if (!this.option) return;
+        const xAxis = this.db.getTime(percentage / 100);
+        this.option.series[2].markLine.data = [{ xAxis }];
+        this.chart.setOption(this.option, false, true);
     }
 
     componentDidMount() {
@@ -166,7 +182,7 @@ class Echarts extends Component {
     render() {
         return <div className="echarts-container">
             <div className="echarts" ref={this.element} />
-            <div className="slider"><Slider /></div>
+            <div className="slider"><Slider updateChart={this.updateMarkLine.bind(this)} /></div>
         </div>;
     }
 }

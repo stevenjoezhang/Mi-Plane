@@ -37,6 +37,11 @@ class DataBase {
         return y1 + (x - x1) / (x2 - x1) * (y2 - y1);
     }
 
+    getTime(percentage) {
+        const { time } = this.data;
+        return time[0] + percentage * (time[time.length - 1] - time[0]);
+    }
+
     query(t, relative = false) {
         const { time } = this.data;
         if (relative) t += time[0];
