@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import Modal from "./modal";
+import "./overview.css";
 
 class Overview extends Component {
     constructor(props) {

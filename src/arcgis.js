@@ -59,54 +59,17 @@ const viewForward = new SceneView({
         tilt: 85
     }
 });
-const viewLeft = new SceneView({
-    container: "left-map",
-    map,
-    environment: {
-        lighting: {
-            date: Date.now(),
-            directShadowsEnabled: true,
-            ambientOcclusionEnabled: true
-        },
-        atmosphere: {
-            quality: "high"
-        }
-    },
-    camera: {
-        heading: 270,
-        position,
-        tilt: 80
-    }
-});
-const viewRight = new SceneView({
-    container: "right-map",
-    map,
-    environment: {
-        lighting: {
-            date: Date.now(),
-            directShadowsEnabled: true,
-            ambientOcclusionEnabled: true
-        },
-        atmosphere: {
-            quality: "high"
-        }
-    },
-    camera: {
-        heading: 90,
-        position,
-        tilt: 80
-    }
-});
 
 viewMain.ui.components = ["compass", "zoom"];
 const coordsWidget = document.createElement("div");
 coordsWidget.id = "coordsWidget";
 coordsWidget.classList.add("esri-widget", "esri-component");
 viewMain.ui.add(coordsWidget, "bottom-right");
+const planeWidget = document.createElement("div");
+planeWidget.id = "plane";
+viewMain.ui.add(planeWidget, "manual");
 
 viewForward.ui.components = [];
-viewLeft.ui.components = [];
-viewRight.ui.components = [];
 
 function draw(plane) {
     const xy = webMercatorUtils.lngLatToXY(plane.longitude, plane.latitude);
@@ -125,20 +88,6 @@ function draw(plane) {
     });
     viewForward.environment.lighting.date = time;
 
-    viewLeft.camera = new Camera({
-        heading: plane.heading - 90,
-        position,
-        tilt: 80 + plane.attitude.roll
-    });
-    viewLeft.environment.lighting.date = time;
-
-    viewRight.camera = new Camera({
-        heading: plane.heading + 90,
-        position,
-        tilt: 80 - plane.attitude.roll
-    });
-    viewRight.environment.lighting.date = time;
-
     const geographic = webMercatorUtils.webMercatorToGeographic(position);
     document.getElementById("coordsWidget").innerHTML = ConvertDDToDMS(geographic.x, true) + "<br>" + ConvertDDToDMS(geographic.y, false);
 };
@@ -154,6 +103,7 @@ class Overview {
             //elevationInfo: "relative-to-ground"
         });
         this.map.add(this.graphicsLayer);
+        main.add(this.graphicsLayer);
 
         this.view = new SceneView({
             container: "overview-map",
