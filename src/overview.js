@@ -9,7 +9,7 @@ class Overview extends Component {
     }
 
     view() {
-        this.db.autoUpdate();
+        this.db.echarts.play();
     }
 
     componentDidMount() {
@@ -18,7 +18,7 @@ class Overview extends Component {
 
     render() {
         const footer = <>
-            <button type="button" className="btn btn-secondary" data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#staticBackdrop">返回</button>
+            <button type="button" className="btn btn-secondary" data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#flight-table">返回</button>
             <button type="button" className="btn btn-primary" data-bs-dismiss="modal" onClick={this.view.bind(this)}>查看</button>
         </>;
         return (

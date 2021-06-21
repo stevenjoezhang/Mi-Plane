@@ -3,6 +3,7 @@ import * as echarts from "echarts";
 import "./echarts.css";
 import { ConvertMSToHHMM } from "./utils";
 import Slider from "./slider";
+import { Play, Pause } from "react-bootstrap-icons";
 
 const transpose = array => array[0].map((r, i) => array.map(c => c[i]));
 
@@ -11,7 +12,38 @@ class Echarts extends Component {
         super(props);
         this.element = React.createRef();
         this.db = props.db;
-        this.db.echarts = this.update.bind(this);
+        this.db.echarts = this;
+        this.state = {
+            isPlaying: false
+        };
+        this.resetTimer();
+    }
+
+    resetTimer(t = 0) {
+        this.refTime = t;
+        this.startTime = Date.now();
+    }
+
+    play() {
+        this.setState({
+            isPlaying: true
+        }, () => {
+            this.resetTimer(this.lastTime);
+            this.autoUpdate();
+        });
+    }
+
+    pause() {
+        this.setState({
+            isPlaying: false
+        });
+    }
+
+    autoUpdate() {
+        if (!this.state.isPlaying) return;
+        this.lastTime = Date.now() - this.startTime + this.refTime;
+        this.db.update(this.lastTime);
+        requestAnimationFrame(this.autoUpdate.bind(this));
     }
 
     update({ time, altitude, speed }) {
@@ -175,6 +207,10 @@ class Echarts extends Component {
         this.chart.setOption(this.option, false, true);
     }
 
+    toggle() {
+        this.state.isPlaying ? this.pause() : this.play();
+    }
+
     componentDidMount() {
         this.chart = echarts.init(this.element.current);
     }
@@ -182,7 +218,12 @@ class Echarts extends Component {
     render() {
         return <div className="echarts-container">
             <div className="echarts" ref={this.element} />
-            <div className="slider"><Slider updateChart={this.updateMarkLine.bind(this)} /></div>
+            <div className="slider d-flex">
+                <button className="btn btn-outline-primary d-flex" type="button" onClick={this.toggle.bind(this)}>
+                    {this.state.isPlaying ? <Pause size={32} /> : <Play size={32} />}
+                </button>
+                <Slider updateChart={this.updateMarkLine.bind(this)} />
+            </div>
         </div>;
     }
 }

@@ -2,7 +2,7 @@ import { draw, Overview } from "./arcgis";
 
 class DataBase {
     constructor(url) {
-        this.start = Date.now();
+        //this.startTime = Date.now();
     }
 
     loadData(data) {
@@ -12,15 +12,15 @@ class DataBase {
         }
         this.data = data;
         this.overview.render(this.data);
-        this.echarts(this.data);
+        this.echarts.update(this.data);
     }
 
     initOverview() {
         this.overview = new Overview();
     }
 
-    autoUpdate() {
-        const data = this.query(Date.now() - this.start, true);
+    update(t) {
+        const data = this.query(t, true);
         draw({
             ...data,
             attitude: {
@@ -30,7 +30,6 @@ class DataBase {
             },
             speed: 120
         });
-        requestAnimationFrame(this.autoUpdate.bind(this));
     }
 
     linearInterpolation(x, [x1, x2], [y1, y2]) {

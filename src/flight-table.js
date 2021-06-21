@@ -93,7 +93,7 @@ class FlightTable extends Component {
         </table>;
         return (<>
             {nav}
-            <Modal title="航班查询" modalRef={this.modal}>
+            <Modal title="航班查询" modalRef={this.modal} id="flight-table">
                 {this.state.flights.length ? table : (this.state.loading ? <Loading /> : '')}
             </Modal>
         </>);
