@@ -6,14 +6,7 @@ import GraphicsLayer from "@arcgis/core/layers/GraphicsLayer";
 import Graphic from "@arcgis/core/Graphic";
 import Point from "@arcgis/core/geometry/Point";
 import * as webMercatorUtils from "@arcgis/core/geometry/support/webMercatorUtils";
-
-function ConvertDDToDMS(d, lng) {
-    const dir = d < 0 ? lng ? "W" : "S" : lng ? "E" : "N";
-    const deg = 0 | (d < 0 ? d = -d : d);
-    const min = 0 | d % 1 * 60;
-    const sec = (0 | d * 60 % 1 * 60);
-    return `${deg}° ${min.toString().padStart(2, 0)}' ${sec.toString().padStart(2, 0)}" ${dir}`;
-}
+import { ConvertDDToDMS } from "./utils";
 
 const position = new Point({
     x: 12988000,

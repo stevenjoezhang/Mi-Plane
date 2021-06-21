@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import Modal from "./modal";
 import Loading from "./loading";
 import * as bootstrap from "bootstrap";
+import { ConvertMSToHHMM } from "./utils";
 
 class FlightTable extends Component {
     constructor(props) {
@@ -85,7 +86,7 @@ class FlightTable extends Component {
                     <td>{new Date(row.takeoffTimes.actual * 1e3).toTimeString() + row.origin.friendlyName}</td>
                     <td>{new Date(row.landingTimes.actual * 1e3).toTimeString() + row.destination.friendlyName}</td>
                     <td>{row.aircraftTypeFriendly}</td>
-                    <td>{Math.floor(row.flightPlan.ete / 60) + "分"}</td>
+                    <td>{ConvertMSToHHMM(row.flightPlan.ete * 1000)}</td>
                     <td style={{ whiteSpace: 'nowrap' }}><button type="button" className="btn btn-primary" onClick={this.trackLog.bind(this, row.links.trackLog)} data-bs-toggle="modal" data-bs-target="#overview-modal" data-bs-dismiss="modal">预览</button></td>
                 </tr>))}
             </tbody>
