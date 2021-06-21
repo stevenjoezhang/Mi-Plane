@@ -21,7 +21,7 @@
     height: 50px;
     margin-left: -25px;
     margin-top: -25px;
-    background-image: url(airplane.png);
+    background-image: url(images/airplane.png);
     background-size: cover;
     background-repeat: no-repeat;
     pointer-events: none;
