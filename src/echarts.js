@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import * as echarts from "echarts";
 import "./echarts.css";
 import { ConvertMSToHHMM } from "./utils";
+import Slider from "./slider";
+
 const transpose = array => array[0].map((r, i) => array.map(c => c[i]));
 
 class Echarts extends Component {
@@ -14,7 +16,6 @@ class Echarts extends Component {
 
     update({ time, altitude, speed }) {
         const option = {
-            backgroundColor: "#080b30",
             tooltip: {
                 trigger: "axis",
                 formatter: params => {
@@ -163,7 +164,10 @@ class Echarts extends Component {
     }
 
     render() {
-        return <div className="echarts-container"><div className="echarts" ref={this.element} /></div>;
+        return <div className="echarts-container">
+            <div className="echarts" ref={this.element} />
+            <div className="slider"><Slider /></div>
+        </div>;
     }
 }
 
