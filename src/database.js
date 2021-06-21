@@ -12,6 +12,7 @@ class DataBase {
         }
         this.data = data;
         this.overview.render(this.data);
+        this.echarts(this.data);
     }
 
     initOverview() {
