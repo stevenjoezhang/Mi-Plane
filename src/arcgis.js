@@ -1,21 +1,15 @@
 import Map from "@arcgis/core/Map";
-import Camera from "@arcgis/core/Camera";
 import MapView from "@arcgis/core/views/MapView";
 import SceneView from "@arcgis/core/views/SceneView";
 import GraphicsLayer from "@arcgis/core/layers/GraphicsLayer";
 import Graphic from "@arcgis/core/Graphic";
-import Point from "@arcgis/core/geometry/Point";
-import * as webMercatorUtils from "@arcgis/core/geometry/support/webMercatorUtils";
 import { ConvertDDToDMS } from "./utils";
 
-const position = new Point({
-    x: 12988000,
-    y: 4865000,
-    z: 3000,
-    spatialReference: {
-        wkid: 102100
-    }
-});
+const position = {
+    longitude: 116.3037,
+    latitude: 39.9934,
+    z: 3000
+};
 
 // Initialize maps and views
 const main = new Map({
@@ -65,24 +59,22 @@ viewMain.ui.add(planeWidget, "manual");
 viewForward.ui.components = [];
 
 function draw(plane) {
-    const xy = webMercatorUtils.lngLatToXY(plane.longitude, plane.latitude);
     const time = new Date(plane.time);
-    position.x = xy[0];
-    position.y = xy[1];
+    position.longitude = plane.longitude;
+    position.latitude = plane.latitude;
     position.z = plane.altitude;
 
     viewMain.center = position;
     viewMain.rotation = -plane.heading;
 
-    viewForward.camera = new Camera({
+    viewForward.camera = {
         heading: plane.heading + plane.attitude.yaw,
         position,
         tilt: 85 + plane.attitude.pitch
-    });
+    };
     viewForward.environment.lighting.date = time;
 
-    const geographic = webMercatorUtils.webMercatorToGeographic(position);
-    document.getElementById("coordsWidget").innerHTML = ConvertDDToDMS(geographic.x, true) + "<br>" + ConvertDDToDMS(geographic.y, false);
+    document.getElementById("coordsWidget").innerHTML = ConvertDDToDMS(position.longitude, true) + "<br>" + ConvertDDToDMS(position.latitude, false);
 };
 
 class Overview {
@@ -119,20 +111,16 @@ class Overview {
         }
         this.view.center = [x / length, y / length];
 
-        const polyline = {
-            type: "polyline", // autocasts as new Polyline()
-            paths
-        };
-
-        const lineSymbol = {
-            type: "simple-line", // autocasts as SimpleLineSymbol()
-            color: [226, 119, 40],
-            width: 4
-        };
-
         const polylineGraphic = new Graphic({
-            geometry: polyline,
-            symbol: lineSymbol
+            geometry: {
+                type: "polyline", // autocasts as new Polyline()
+                paths
+            },
+            symbol: {
+                type: "simple-line", // autocasts as SimpleLineSymbol()
+                color: [226, 119, 40],
+                width: 4
+            }
         });
 
         this.graphicsLayer.removeAll();
