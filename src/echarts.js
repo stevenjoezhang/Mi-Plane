@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import * as echarts from "echarts";
+import { graphic, init } from "echarts";
 import "./echarts.css";
 import { ConvertMSToHHMM } from "./utils";
 import Slider from "./slider";
@@ -144,7 +144,7 @@ class Echarts extends Component {
                     show: true
                 },
                 areaStyle: {
-                    color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
+                    color: new graphic.LinearGradient(0, 0, 0, 1, [{
                         offset: 0,
                         color: "rgba(108,80,243,0.3)"
                     }, {
@@ -174,7 +174,7 @@ class Echarts extends Component {
                     show: true
                 },
                 areaStyle: {
-                    color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
+                    color: new graphic.LinearGradient(0, 0, 0, 1, [{
                         offset: 0,
                         color: "rgba(0,202,149,0.3)"
                     }, {
@@ -212,7 +212,7 @@ class Echarts extends Component {
     }
 
     componentDidMount() {
-        this.chart = echarts.init(this.element.current);
+        this.chart = init(this.element.current);
     }
 
     render() {

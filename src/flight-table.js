@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import Modal from "./modal";
 import Loading from "./loading";
-import * as bootstrap from "bootstrap";
+import { Modal as bsModal } from "bootstrap";
 import { ConvertMSToHHMM } from "./utils";
 
 class FlightTable extends Component {
@@ -42,7 +42,7 @@ class FlightTable extends Component {
             valid: true,
             loading: true
         });
-        new bootstrap.Modal(this.modal.current).show();
+        new bsModal(this.modal.current).show();
         fetch(`/flights/${this.input.current.value}/`)
             .then(response => response.json())
             .then(data => {
