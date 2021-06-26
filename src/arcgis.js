@@ -58,6 +58,21 @@ viewMain.ui.add(planeWidget, "manual");
 
 viewForward.ui.components = [];
 
+let mouseX = viewForward.width / 2;
+let lastX = viewForward.width / 2;
+viewForward.on("resize", function(event) {
+    mouseX = event.width / 2;
+    lastX = event.width / 2;
+});
+viewForward.on("pointer-down", function(event) {
+    lastX = event.x;
+});
+viewForward.on("drag", function(event) {
+    mouseX = Math.max(Math.min(mouseX + event.x - lastX, viewForward.width), 0);
+    lastX = event.x;
+    event.stopPropagation();
+});
+
 // https://developers.arcgis.com/javascript/latest/sample-code/import-gltf/
 const graphic = new Graphic({
     geometry: {
@@ -107,9 +122,10 @@ function draw(plane) {
         }]
     };
 
+    const heading = plane.heading + mouseX / viewForward.width * 180 - 90;
     viewForward.camera = {
-        heading: plane.heading,
-        position: cameraCoord(position, plane.heading, 200),
+        heading,
+        position: cameraCoord(position, heading, 200),
         tilt: 85
     };
     viewForward.environment.lighting.date = time;
