@@ -3,7 +3,8 @@ import MapView from "@arcgis/core/views/MapView";
 import SceneView from "@arcgis/core/views/SceneView";
 import GraphicsLayer from "@arcgis/core/layers/GraphicsLayer";
 import Graphic from "@arcgis/core/Graphic";
-import { ConvertDDToDMS } from "./utils";
+import { ConvertDDToDMS, cameraCoord } from "./utils";
+import glb from "./assets/plane.glb";
 
 const position = {
     longitude: 116.3037,
@@ -19,7 +20,6 @@ const viewMain = new MapView({
     container: "map",
     map: main,
     zoom: 12,
-    rotation: 0,
     center: position
 });
 
@@ -42,7 +42,7 @@ const viewForward = new SceneView({
     },
     camera: {
         heading: 0,
-        position,
+        position: cameraCoord(position, 0, 200),
         tilt: 85
     }
 });
@@ -58,6 +58,29 @@ viewMain.ui.add(planeWidget, "manual");
 
 viewForward.ui.components = [];
 
+// https://developers.arcgis.com/javascript/latest/sample-code/import-gltf/
+const graphic = new Graphic({
+    geometry: {
+        type: "point",
+        ...position
+    },
+    symbol: {
+        type: "point-3d",
+        symbolLayers: [{
+            type: "object",
+            height: 10,
+            heading: 180,
+            resource: {
+                href: glb
+            }
+        }]
+    }
+});
+const graphicsLayer = new GraphicsLayer();
+
+map.add(graphicsLayer);
+graphicsLayer.add(graphic);
+
 function draw(plane) {
     const time = new Date(plane.time);
     position.longitude = plane.longitude;
@@ -67,10 +90,27 @@ function draw(plane) {
     viewMain.center = position;
     viewMain.rotation = -plane.heading;
 
+    graphic.geometry = {
+        type: "point",
+        ...position
+    };
+    graphic.symbol = {
+        type: "point-3d",
+        symbolLayers: [{
+            type: "object",
+            height: 10,
+            heading: plane.heading + plane.attitude.yaw + 180,
+            tilt: -plane.attitude.pitch,
+            resource: {
+                href: glb
+            }
+        }]
+    };
+
     viewForward.camera = {
-        heading: plane.heading + plane.attitude.yaw,
-        position,
-        tilt: 85 + plane.attitude.pitch
+        heading: plane.heading,
+        position: cameraCoord(position, plane.heading, 200),
+        tilt: 85
     };
     viewForward.environment.lighting.date = time;
 
@@ -84,9 +124,7 @@ class Overview {
             ground: "world-elevation"
         });
 
-        this.graphicsLayer = new GraphicsLayer({
-            //elevationInfo: "relative-to-ground"
-        });
+        this.graphicsLayer = new GraphicsLayer();
         this.map.add(this.graphicsLayer);
         main.add(this.graphicsLayer);
 
