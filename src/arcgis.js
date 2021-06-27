@@ -141,9 +141,10 @@ class Overview {
             ground: "world-elevation"
         });
 
-        this.graphicsLayer = new GraphicsLayer();
-        this.map.add(this.graphicsLayer);
-        main.add(this.graphicsLayer);
+        this.mapGraphicsLayer = new GraphicsLayer();
+        this.mainGraphicsLayer = new GraphicsLayer();
+        this.map.add(this.mapGraphicsLayer);
+        main.add(this.mainGraphicsLayer);
 
         this.view = new SceneView({
             container: "overview-map",
@@ -178,8 +179,10 @@ class Overview {
             }
         });
 
-        this.graphicsLayer.removeAll();
-        this.graphicsLayer.add(polylineGraphic);
+        this.mapGraphicsLayer.removeAll();
+        this.mapGraphicsLayer.add(polylineGraphic);
+        this.mainGraphicsLayer.removeAll();
+        this.mainGraphicsLayer.add(polylineGraphic.clone());
     }
 }
 
