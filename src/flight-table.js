@@ -4,6 +4,42 @@ import Loading from "./loading";
 import { Modal as bsModal } from "bootstrap";
 import { ConvertMSToHHMM } from "./utils";
 
+class SearchHistory extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            history: this.getHistory()
+        };
+    }
+
+    getHistory() {
+        const history = localStorage.getItem("flight-vis");
+        if (!history) return new Set();
+        return new Set(JSON.parse(history));
+    }
+
+    saveHistory() {
+        localStorage.setItem("flight-vis", JSON.stringify([...this.state.history]));
+    }
+
+    removeHistory(item) {
+        const history = new Set(this.state.history);
+        history.delete(item);
+        this.setState({
+            history
+        }, this.saveHistory);
+    }
+
+    render() {
+        return (this.state.history.size && <ul className="list-group position-absolute" style={{ top: "40px", width: "220px" }}>
+            {[...this.state.history].map(row => <li className="list-group-item d-flex justify-content-between align-items-center" key={row}>
+                {row}
+                <button type="button" className="btn-close" aria-label="Close" onClick={this.removeHistory.bind(this, row)}></button>
+            </li>)}
+        </ul>);
+    }
+}
+
 class FlightTable extends Component {
     constructor(props) {
         super(props);
@@ -63,9 +99,10 @@ class FlightTable extends Component {
         const nav = <nav className="navbar fixed-top navbar-light bg-light">
             <div className="container-fluid">
                 <a className="navbar-brand" href="#">Mi Plane</a>
-                <div className="d-flex">
+                <div className="d-flex position-relative">
                     <input className={`form-control me-2${this.state.valid ? "" : " is-invalid"}`} type="text" placeholder="航班号" aria-label="航班号" onKeyDown={this.handleKeyDown.bind(this)} ref={this.input} />
                     <button className="btn btn-outline-success flex-shrink-0" type="button" onClick={this.search.bind(this)}>搜索</button>
+                    <SearchHistory/>
                 </div>
             </div>
         </nav>;
@@ -76,7 +113,7 @@ class FlightTable extends Component {
                     <th>离港</th>
                     <th>到达</th>
                     <th>飞机</th>
-                    <th style={{ whiteSpace: 'nowrap' }}>飞行时间</th>
+                    <th style={{ whiteSpace: "nowrap" }}>飞行时间</th>
                     <th></th>
                 </tr>
             </thead>
@@ -87,14 +124,14 @@ class FlightTable extends Component {
                     <td>{new Date(row.landingTimes.actual * 1e3).toTimeString() + row.destination.friendlyName}</td>
                     <td>{row.aircraftTypeFriendly}</td>
                     <td>{ConvertMSToHHMM(row.flightPlan.ete * 1000)}</td>
-                    <td style={{ whiteSpace: 'nowrap' }}><button type="button" className="btn btn-primary" onClick={this.trackLog.bind(this, row.links.trackLog)} data-bs-toggle="modal" data-bs-target="#overview-modal" data-bs-dismiss="modal">预览</button></td>
+                    <td style={{ whiteSpace: "nowrap" }}><button type="button" className="btn btn-primary" onClick={this.trackLog.bind(this, row.links.trackLog)} data-bs-toggle="modal" data-bs-target="#overview-modal" data-bs-dismiss="modal">预览</button></td>
                 </tr>))}
             </tbody>
         </table>;
         return (<>
             {nav}
             <Modal title="航班查询" modalRef={this.modal} id="flight-table">
-                {this.state.flights.length ? table : (this.state.loading ? <Loading /> : '')}
+                {this.state.flights.length ? table : (this.state.loading ? <Loading /> : "")}
             </Modal>
         </>);
     }
