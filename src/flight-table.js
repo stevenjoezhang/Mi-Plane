@@ -7,6 +7,8 @@ import { ConvertMSToHHMM } from "./utils";
 class SearchHistory extends Component {
     constructor(props) {
         super(props);
+        this.input = this.props.input;
+        this.search = this.props.search;
         this.state = {
             history: this.getHistory()
         };
@@ -22,6 +24,14 @@ class SearchHistory extends Component {
         localStorage.setItem("flight-vis", JSON.stringify([...this.state.history]));
     }
 
+    addHistory(item) {
+        const history = new Set(this.state.history);
+        history.add(item);
+        this.setState({
+            history
+        }, this.saveHistory);
+    }
+
     removeHistory(item) {
         const history = new Set(this.state.history);
         history.delete(item);
@@ -30,13 +40,18 @@ class SearchHistory extends Component {
         }, this.saveHistory);
     }
 
+    applyHistory(item) {
+        this.input.current.value = item;
+        this.search();
+    }
+
     render() {
-        return (this.state.history.size && <ul className="list-group position-absolute" style={{ top: "40px", width: "220px" }}>
+        return (this.state.history.size ? <ul className="list-group position-absolute" style={{ top: "40px", width: "220px" }}>
             {[...this.state.history].map(row => <li className="list-group-item d-flex justify-content-between align-items-center" key={row}>
-                {row}
+                <button className="btn flex-grow-1 text-start" onClick={this.applyHistory.bind(this, row)}>{row}</button>
                 <button type="button" className="btn-close" aria-label="Close" onClick={this.removeHistory.bind(this, row)}></button>
             </li>)}
-        </ul>);
+        </ul> : "");
     }
 }
 
@@ -51,6 +66,7 @@ class FlightTable extends Component {
         this.db = props.db;
         this.modal = React.createRef();
         this.input = React.createRef();
+        this.searchHistory = React.createRef();
     }
 
     trackLog(href) {
@@ -82,11 +98,17 @@ class FlightTable extends Component {
         fetch(`/flights/${this.input.current.value}/`)
             .then(response => response.json())
             .then(data => {
-                data = Object.values(data.flights)[0];
-                if (data.unknown) alert("Flight not found!");
                 this.setState({
-                    flights: data.activityLog.flights.filter(row => row.flightPlan?.departure),
                     loading: false
+                });
+                data = Object.values(data.flights)[0];
+                if (!data.iataIdent) {
+                    alert("Flight not found!");
+                    return;
+                }
+                this.searchHistory.current.addHistory(data.iataIdent);
+                this.setState({
+                    flights: data.activityLog.flights.filter(row => row.flightPlan?.departure)
                 });
             });
     }
@@ -102,7 +124,7 @@ class FlightTable extends Component {
                 <div className="d-flex position-relative">
                     <input className={`form-control me-2${this.state.valid ? "" : " is-invalid"}`} type="text" placeholder="航班号" aria-label="航班号" onKeyDown={this.handleKeyDown.bind(this)} ref={this.input} />
                     <button className="btn btn-outline-success flex-shrink-0" type="button" onClick={this.search.bind(this)}>搜索</button>
-                    <SearchHistory/>
+                    <SearchHistory input={this.input} ref={this.searchHistory} search={this.search.bind(this)} />
                 </div>
             </div>
         </nav>;
