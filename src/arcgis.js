@@ -5,6 +5,7 @@ import GraphicsLayer from "@arcgis/core/layers/GraphicsLayer";
 import Graphic from "@arcgis/core/Graphic";
 import { ConvertDDToDMS, cameraCoord } from "./utils";
 import glb from "./assets/plane.glb";
+import "./arcgis.css";
 
 const position = {
     longitude: 116.3037,

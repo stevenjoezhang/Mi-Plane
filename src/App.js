@@ -5,7 +5,6 @@ import DataBase from "./database";
 import Echarts from "./echarts";
 import "bootstrap/dist/css/bootstrap.css";
 import "@arcgis/core/assets/esri/themes/light/main.css";
-import "./App.css";
 
 class App extends Component {
     constructor(props) {
