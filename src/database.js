@@ -20,7 +20,7 @@ class DataBase {
     }
 
     update(t) {
-        const data = this.query(t, true);
+        const data = this.query(t);
         draw({
             ...data,
             attitude: {
@@ -36,23 +36,23 @@ class DataBase {
         return y1 + (x - x1) / (x2 - x1) * (y2 - y1);
     }
 
-    getTime(percentage, relative = false) {
-        const { time } = this.data;
-        const relativeTime = percentage * (time[time.length - 1] - time[0]);
-        return relative ? relativeTime : time[0] + relativeTime;
+    getTime(percentage) {
+        const { time, length } = this.data;
+        return percentage * time[length - 1];
     }
 
-    query(t, relative = false) {
-        const { time } = this.data;
-        if (relative) t += time[0];
-        if (t < time[0] || t > time[time.length - 1]) {
+    query(t) {
+        const { start, time, length } = this.data;
+        if (t < 0 || t > time[length - 1]) {
             console.warn("Invalid query!");
             return null;
         }
         let index = time.findIndex(item => item >= t);
         if (index !== 0) index--;
-        const data = {};
-        Object.keys(this.data).forEach(key => {
+        const data = {
+            time: t + start
+        };
+        ["latitude", "longitude", "heading", "altitude"].forEach(key => {
             let y1 = this.data[key][index];
             let y2 = this.data[key][index + 1];
             if (key === "heading" && Math.abs(y1 - y2) > 180) {

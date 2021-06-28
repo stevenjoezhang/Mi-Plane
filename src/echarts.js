@@ -62,7 +62,7 @@ class Echarts extends Component {
                 trigger: "axis",
                 formatter: params => {
                     const content = params.map(item => `${item.seriesName}: ${item.data[1]}${["m", "km/h"][item.componentIndex]}`).join("<br>");
-                    return ConvertMSToHHMM(params[0].axisValue - time[0]) + "<br>" + content;
+                    return ConvertMSToHHMM(params[0].axisValue) + "<br>" + content;
                 },
                 axisPointer: {
                     lineStyle: {
@@ -219,7 +219,7 @@ class Echarts extends Component {
         this.option.series[2].markLine.data = [{ xAxis }];
         this.chart.setOption(this.option, false, true);
         this.pause(() => {
-            this.frame(this.db.getTime(percentage / 100, true));
+            this.frame(xAxis);
         });
     }
 

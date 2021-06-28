@@ -15,10 +15,12 @@ class DataBase {
         altitude = JSON.parse(altitude);
         speed = JSON.parse(speed);
 
-        const time = altitude.map(alt => alt[0]);
+        const start = altitude[0][0];
+        const time = altitude.map(alt => alt[0] - start);
         altitude = altitude.map(alt => alt[1]);
         speed = speed.map(spd => spd[1]);
         this.data = {
+            start,
             time,
             altitude,
             speed,
