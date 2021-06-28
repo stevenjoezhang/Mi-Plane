@@ -3,6 +3,7 @@ import Modal from "./modal";
 import Loading from "./loading";
 import { Modal as bsModal } from "bootstrap";
 import { ConvertMSToHHMM } from "./utils";
+import "./flight-table.css";
 
 class SearchHistory extends Component {
     constructor(props) {
@@ -46,7 +47,7 @@ class SearchHistory extends Component {
     }
 
     render() {
-        return (this.state.history.size ? <ul className="list-group position-absolute" style={{ top: "40px", width: "220px" }}>
+        return (this.state.history.size ? <ul className="list-group position-absolute search-history">
             {[...this.state.history].map(row => <li className="list-group-item d-flex justify-content-between align-items-center" key={row}>
                 <button className="btn flex-grow-1 text-start" onClick={this.applyHistory.bind(this, row)}>{row}</button>
                 <button type="button" className="btn-close" aria-label="Close" onClick={this.removeHistory.bind(this, row)}></button>
@@ -123,8 +124,8 @@ class FlightTable extends Component {
                 <a className="navbar-brand" href="#">Mi Plane</a>
                 <div className="d-flex position-relative">
                     <input className={`form-control me-2${this.state.valid ? "" : " is-invalid"}`} type="text" placeholder="航班号" aria-label="航班号" onKeyDown={this.handleKeyDown.bind(this)} ref={this.input} />
-                    <button className="btn btn-outline-success flex-shrink-0" type="button" onClick={this.search.bind(this)}>搜索</button>
                     <SearchHistory input={this.input} ref={this.searchHistory} search={this.search.bind(this)} />
+                    <button className="btn btn-outline-success flex-shrink-0" type="button" onClick={this.search.bind(this)}>搜索</button>
                 </div>
             </div>
         </nav>;

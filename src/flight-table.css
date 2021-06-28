@@ -1,0 +1,8 @@
+.form-control + .search-history {
+    display: none;
+    top: 40px;
+    width: 220px;
+}
+.navbar:hover .search-history, .form-control:focus + .search-history, .search-history:hover {
+    display: flex;
+}
