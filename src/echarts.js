@@ -201,8 +201,8 @@ class Echarts extends Component {
             initialized: true
         });
         // 绘制图表
+        if (!this.chart) this.chart = init(this.element.current);
         this.chart.setOption(this.option);
-        this.chart.resize();
     }
 
     updateMarkLine(percentage) {
@@ -214,10 +214,6 @@ class Echarts extends Component {
 
     toggle() {
         this.state.isPlaying ? this.pause() : this.play();
-    }
-
-    componentDidMount() {
-        this.chart = init(this.element.current);
     }
 
     render() {
