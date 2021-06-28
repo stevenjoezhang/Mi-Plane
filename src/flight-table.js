@@ -121,7 +121,7 @@ class FlightTable extends Component {
     render() {
         const nav = <nav className="navbar fixed-top navbar-light bg-light">
             <div className="container-fluid">
-                <a className="navbar-brand" href="#">Mi Plane</a>
+                <a className="navbar-brand" href="#">Flight VIS</a>
                 <div className="d-flex position-relative">
                     <input className={`form-control me-2${this.state.valid ? "" : " is-invalid"}`} type="text" placeholder="航班号" aria-label="航班号" onKeyDown={this.handleKeyDown.bind(this)} ref={this.input} />
                     <SearchHistory input={this.input} ref={this.searchHistory} search={this.search.bind(this)} />

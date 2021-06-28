@@ -1,6 +1,6 @@
 /*
- * Mimi Chat
- * Created by Shuqiao Zhang in 2018.
+ * Flight VIS
+ * Created by Shuqiao Zhang in 2021.
  * https://zhangshuqiao.org
  */
 
