@@ -14,7 +14,8 @@ class Echarts extends Component {
         this.db = props.db;
         this.db.echarts = this;
         this.state = {
-            isPlaying: false
+            isPlaying: false,
+            initialized: false
         };
         this.resetTimer();
     }
@@ -196,8 +197,12 @@ class Echarts extends Component {
                 }
             }]
         };
+        this.setState({
+            initialized: true
+        });
         // 绘制图表
         this.chart.setOption(this.option);
+        this.chart.resize();
     }
 
     updateMarkLine(percentage) {
@@ -216,7 +221,7 @@ class Echarts extends Component {
     }
 
     render() {
-        return <div className="echarts-container">
+        return <div className={`echarts-container${this.state.initialized ? "" : " d-none"}`}>
             <div className="echarts" ref={this.element} />
             <div className="slider d-flex">
                 <button className="btn btn-outline-primary d-flex" type="button" onClick={this.toggle.bind(this)}>
