@@ -19,6 +19,7 @@
   "license": "GPL-3.0-or-later",
   "dependencies": {
     "@arcgis/core": "^4.19.3",
+    "@vvo/tzdb": "^6.7.0",
     "bootstrap": "^5.0.1",
     "cheerio": "^1.0.0-rc.10",
     "echarts": "^5.1.2",

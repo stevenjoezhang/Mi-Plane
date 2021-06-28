@@ -1,5 +1,6 @@
 import https from "https";
 import cheerio from "cheerio";
+import { rawTimeZones } from "@vvo/tzdb";
 
 class DataBase {
     constructor(tracklog) {
@@ -19,8 +20,15 @@ class DataBase {
         const time = altitude.map(alt => alt[0] - start);
         altitude = altitude.map(alt => alt[1]);
         speed = speed.map(spd => spd[1]);
+
+        const user = tracklog.match(/user = (.*?);/)[1];
+        const timezone = JSON.parse(user).TZ.replace(":", "");
+        const offset = rawTimeZones.find(tz => {
+            return tz.name === timezone;
+        }).rawOffsetInMinutes * 60 * 1000;
+
         this.data = {
-            start,
+            start: start - offset,
             time,
             altitude,
             speed,

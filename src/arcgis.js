@@ -99,7 +99,6 @@ map.add(graphicsLayer);
 graphicsLayer.add(graphic);
 
 function draw(plane) {
-    const time = new Date(plane.time);
     position.longitude = plane.longitude;
     position.latitude = plane.latitude;
     position.z = plane.altitude;
@@ -130,7 +129,7 @@ function draw(plane) {
         position: cameraCoord(position, heading, 200),
         tilt: 85
     };
-    viewForward.environment.lighting.date = time;
+    viewForward.environment.lighting.date = new Date(plane.time);
 
     document.getElementById("coordsWidget").innerHTML = ConvertDDToDMS(position.longitude, true) + "<br>" + ConvertDDToDMS(position.latitude, false);
 };

@@ -20,9 +20,8 @@ class DataBase {
     }
 
     update(t) {
-        const data = this.query(t);
         draw({
-            ...data,
+            ...this.query(t),
             attitude: {
                 pitch: 0,
                 roll: 0,
