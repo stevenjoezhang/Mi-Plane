@@ -21,8 +21,16 @@ class Echarts extends Component {
     }
 
     resetTimer(t = 0) {
+        // 最后一次连续播放开始时在时间轴的位置，为相对时间
         this.refTime = t;
+        // 最后一次连续播放开始时的时间戳
         this.startTime = Date.now();
+    }
+
+    frame(t = 0) {
+        this.refTime = t;
+        this.lastTime = t;
+        this.db.update(this.lastTime);
     }
 
     play() {
@@ -34,14 +42,15 @@ class Echarts extends Component {
         });
     }
 
-    pause() {
+    pause(callback = () => {}) {
         this.setState({
             isPlaying: false
-        });
+        }, callback);
     }
 
     autoUpdate() {
         if (!this.state.isPlaying) return;
+        // 连续播放到的时间轴的位置，为相对时间
         this.lastTime = Date.now() - this.startTime + this.refTime;
         this.db.update(this.lastTime);
         requestAnimationFrame(this.autoUpdate.bind(this));
@@ -206,10 +215,12 @@ class Echarts extends Component {
     }
 
     updateMarkLine(percentage) {
-        if (!this.option) return;
         const xAxis = this.db.getTime(percentage / 100);
         this.option.series[2].markLine.data = [{ xAxis }];
         this.chart.setOption(this.option, false, true);
+        this.pause(() => {
+            this.frame(this.db.getTime(percentage / 100, true));
+        });
     }
 
     toggle() {
