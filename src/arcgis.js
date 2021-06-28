@@ -55,6 +55,7 @@ coordsWidget.classList.add("esri-widget", "esri-component");
 viewMain.ui.add(coordsWidget, "bottom-right");
 const planeWidget = document.createElement("div");
 planeWidget.id = "plane";
+planeWidget.classList.add("position-absolute");
 viewMain.ui.add(planeWidget, "manual");
 
 viewForward.ui.components = [];

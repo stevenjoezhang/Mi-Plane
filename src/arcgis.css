@@ -1,20 +1,17 @@
 #forward-map {
-    position: absolute;
     top: 0px;
     left: 0px;
     right: 0px;
-    height: 100%;
+    bottom: 0px;
 }
 #map {
     border: 2px solid white;
-    position: absolute;
     right: 0px;
     bottom: 0px;
     height: 300px;
     width: 300px;
 }
 #plane {
-    position: absolute;
     left: 50%;
     top: 50%;
     width: 50px;
