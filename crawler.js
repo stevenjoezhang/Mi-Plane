@@ -12,7 +12,12 @@ class DataBase {
     }
 
     fromTracklog(tracklog) {
-        let [all, altitude, speed] = tracklog.match(/altitude_json = (.*?); speed_json = (.*?); facility_json/);
+        const matches = tracklog.match(/altitude_json = (.*?); speed_json = (.*?); facility_json/);
+        if (!matches) {
+            this.data = {};
+            return;
+        }
+        let [all, altitude, speed] = matches;
         altitude = JSON.parse(altitude);
         speed = JSON.parse(speed);
 
