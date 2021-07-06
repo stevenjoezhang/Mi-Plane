@@ -4,7 +4,12 @@ import { rawTimeZones } from "@vvo/tzdb";
 
 class DataBase {
     constructor(tracklog) {
-        this.fromTracklog(tracklog);
+        try {
+            this.fromTracklog(tracklog);
+        } catch (e) {
+            console.warn(e);
+            this.data = {};
+        }
     }
 
     getText(ele, index) {
@@ -12,12 +17,7 @@ class DataBase {
     }
 
     fromTracklog(tracklog) {
-        const matches = tracklog.match(/altitude_json = (.*?); speed_json = (.*?); facility_json/);
-        if (!matches) {
-            this.data = {};
-            return;
-        }
-        let [all, altitude, speed] = matches;
+        let [all, altitude, speed] = tracklog.match(/altitude_json = (.*?); speed_json = (.*?); facility_json/);
         altitude = JSON.parse(altitude);
         speed = JSON.parse(speed);
 
@@ -45,7 +45,7 @@ class DataBase {
 
         const $ = cheerio.load(tracklog);
         $(".smallrow1, .smallrow2").each((index, ele) => {
-            if (this.data.length === time.length || $(ele).is(".flight_event_facility, .flight_event")) {
+            if (this.data.length === time.length || $(ele).attr("class").includes("flight_event")) {
                 return;
             }
             const children = $(ele).children();

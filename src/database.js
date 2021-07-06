@@ -6,8 +6,8 @@ class DataBase {
     }
 
     loadData(data) {
-        if (data.time.length < 2) {
-            console.warn("Invalid database!");
+        if (!data.length) {
+            alert("The current flight data is not available, please choose another time!");
             return;
         }
         this.data = data;
