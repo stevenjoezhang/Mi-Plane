@@ -85,8 +85,11 @@ async function getIdent(id) {
 
 async function flights(number) {
     const html = await request(`https://zh.flightaware.com/live/flight/${number}`);
-    const result = html.match(/<script>var trackpollBootstrap = (\{.*?\});<\/script>/)[1];
-    return result;
+    const result = html.match(/<script>var trackpollBootstrap = (\{.*?\});<\/script>/);
+    if (!result) {
+        return {};
+    }
+    return result[1];
 }
 
 async function flight(path) {

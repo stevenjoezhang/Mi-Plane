@@ -102,6 +102,10 @@ class FlightTable extends Component {
                 this.setState({
                     loading: false
                 });
+                if (!data.flights) {
+                    alert("Flight not found!");
+                    return;
+                }
                 data = Object.values(data.flights)[0];
                 if (!data.iataIdent) {
                     alert("Flight not found!");
