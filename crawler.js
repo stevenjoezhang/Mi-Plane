@@ -87,7 +87,7 @@ async function flights(number) {
     const html = await request(`https://zh.flightaware.com/live/flight/${number}`);
     const result = html.match(/<script>var trackpollBootstrap = (\{.*?\});<\/script>/);
     if (!result) {
-        return {};
+        return "{}";
     }
     return result[1];
 }
