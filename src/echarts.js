@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import { graphic, init } from "echarts";
 import "./echarts.css";
-import { ConvertMSToHHMM } from "./utils";
-import Slider from "./slider";
+import { ConvertMSToHHMM } from "./utils.js";
+import Slider from "./slider.js";
 import { Play, Pause } from "react-bootstrap-icons";
 
 const transpose = array => array[0].map((r, i) => array.map(c => c[i]));

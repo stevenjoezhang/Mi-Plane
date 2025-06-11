@@ -1,9 +1,9 @@
-import Map from "@arcgis/core/Map";
-import MapView from "@arcgis/core/views/MapView";
-import SceneView from "@arcgis/core/views/SceneView";
-import GraphicsLayer from "@arcgis/core/layers/GraphicsLayer";
-import Graphic from "@arcgis/core/Graphic";
-import { ConvertDDToDMS, cameraCoord } from "./utils";
+import Map from "@arcgis/core/Map.js";
+import MapView from "@arcgis/core/views/MapView.js";
+import SceneView from "@arcgis/core/views/SceneView.js";
+import GraphicsLayer from "@arcgis/core/layers/GraphicsLayer.js";
+import Graphic from "@arcgis/core/Graphic.js";
+import { ConvertDDToDMS, cameraCoord } from "./utils.js";
 import glb from "./assets/plane.glb";
 import "./arcgis.css";
 

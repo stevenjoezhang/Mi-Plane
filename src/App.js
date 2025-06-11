@@ -1,8 +1,8 @@
 import React, { Component } from "react";
-import FlightTable from "./flight-table";
-import Overview from "./overview";
-import DataBase from "./database";
-import Echarts from "./echarts";
+import FlightTable from "./flight-table.js";
+import Overview from "./overview.js";
+import DataBase from "./database.js";
+import Echarts from "./echarts.js";
 import "bootstrap/dist/css/bootstrap.css";
 import "@arcgis/core/assets/esri/themes/light/main.css";
 

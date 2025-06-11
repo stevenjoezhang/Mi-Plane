@@ -1,4 +1,4 @@
-import { draw, Overview } from "./arcgis";
+import { draw, Overview } from "./arcgis.js";
 
 class DataBase {
     constructor(url) {
