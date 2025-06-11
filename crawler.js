@@ -13,8 +13,8 @@ class DataBase {
 
     fromJSON(tracklog) {
         const { track } = tracklog.result.response.data.flight;
-        const start = track[0].timestamp;
-        const time = track.map(t => t.timestamp - start);
+        const start = track[0].timestamp * 1000; // Convert to milliseconds
+        const time = track.map(t => t.timestamp * 1000 - start); // Convert to milliseconds
         const altitude = track.map(t => t.altitude.meters);
         const speed = track.map(t => t.speed.kmh);
         const latitude = track.map(t => t.latitude);
