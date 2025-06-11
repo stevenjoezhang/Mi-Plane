@@ -18,7 +18,7 @@
   "author": "Mimi <stevenjoezhang@gmail.com> (https://zhangshuqiao.org)",
   "license": "GPL-3.0-or-later",
   "dependencies": {
-    "@arcgis/core": "^4.32.10",
+    "@arcgis/core": "4.25.0",
     "bootstrap": "^5.3.6",
     "cheerio": "^1.1.0",
     "echarts": "^5.6.0",
