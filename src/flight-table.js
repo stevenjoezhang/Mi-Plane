@@ -1,8 +1,8 @@
 import React, { Component } from "react";
-import Modal from "./modal";
-import Loading from "./loading";
+import Modal from "./modal.js";
+import Loading from "./loading.js";
 import { Modal as bsModal } from "bootstrap";
-import { ConvertMSToHHMM } from "./utils";
+import { ConvertMSToHHMM } from "./utils.js";
 import "./flight-table.css";
 
 class SearchHistory extends Component {
@@ -85,7 +85,8 @@ class FlightTable extends Component {
     }
 
     search() {
-        if (!this.input.current.value) {
+        const query = this.input.current.value.trim().toLowerCase();
+        if (!query) {
             this.setState({
                 valid: false
             });
@@ -96,24 +97,19 @@ class FlightTable extends Component {
             loading: true
         });
         new bsModal(this.modal.current).show();
-        fetch(`/flights/${this.input.current.value}/`)
+        fetch(`/flights/${query}/`)
             .then(response => response.json())
-            .then(data => {
+            .then(flights => {
                 this.setState({
                     loading: false
                 });
-                if (!data.flights) {
+                if (!flights.length) {
                     alert("Flight not found!");
                     return;
                 }
-                data = Object.values(data.flights)[0];
-                if (!data.iataIdent) {
-                    alert("Flight not found!");
-                    return;
-                }
-                this.searchHistory.current.addHistory(data.iataIdent);
+                this.searchHistory.current.addHistory(query);
                 this.setState({
-                    flights: data.activityLog.flights.filter(row => row.flightPlan?.departure)
+                    flights
                 });
             });
     }
@@ -146,12 +142,12 @@ class FlightTable extends Component {
             </thead>
             <tbody>
                 {this.state.flights.map(row => (<tr key={row.flightId}>
-                    <td>{new Date(row.flightPlan.departure * 1e3).toLocaleString()}</td>
-                    <td>{new Date(row.takeoffTimes.actual * 1e3).toTimeString() + row.origin.friendlyName}</td>
-                    <td>{new Date(row.landingTimes.actual * 1e3).toTimeString() + row.destination.friendlyName}</td>
+                    <td>{new Date(row.departure * 1e3).toLocaleString()}</td>
+                    <td>{new Date(row.actual * 1e3).toTimeString()} {row.origin}</td>
+                    <td>{new Date(row.landingTimes * 1e3).toTimeString()} {row.destination}</td>
                     <td>{row.aircraftTypeFriendly}</td>
-                    <td>{ConvertMSToHHMM(row.flightPlan.ete * 1000)}</td>
-                    <td style={{ whiteSpace: "nowrap" }}><button type="button" className="btn btn-primary" onClick={this.trackLog.bind(this, row.links.trackLog)} data-bs-toggle="modal" data-bs-target="#overview-modal" data-bs-dismiss="modal">预览</button></td>
+                    <td>{row.ete}</td>
+                    <td style={{ whiteSpace: "nowrap" }}><button type="button" className="btn btn-primary" onClick={this.trackLog.bind(this, row.trackLog)} data-bs-toggle="modal" data-bs-target="#overview-modal" data-bs-dismiss="modal">预览</button></td>
                 </tr>))}
             </tbody>
         </table>;

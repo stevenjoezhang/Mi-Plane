@@ -21,7 +21,7 @@ import MiServer from "mimi-server";
 import path from "path";
 import { fileURLToPath } from "url";
 
-import { getIdent, flights, flight } from "./crawler.js";
+import { flights, flight } from "./crawler.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -34,14 +34,12 @@ const { app, server } = new MiServer({
 
 app.get("/flights/:id/", async (req, res) => {
     res.setHeader("Content-Type", "application/json");
-    const id = await getIdent(req.params.id);
-    const result = await flights(id);
-    res.end(result);
+    const result = await flights(req.params.id);
+    res.end(JSON.stringify(result));
 });
 
-app.get("/live/*", async (req, res) => {
+app.get("/live/:flightId/:timestamp", async (req, res) => {
     res.setHeader("Content-Type", "application/json");
-    //const id = await getIdent(req.params.id);
-    const result = await flight(req.path);
+    const result = await flight(req.params.flightId, req.params.timestamp);
     res.end(result);
 });

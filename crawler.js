@@ -1,59 +1,36 @@
-import https from "https";
-import cheerio from "cheerio";
-import { rawTimeZones } from "@vvo/tzdb";
+import * as cheerio from "cheerio";
 
 class DataBase {
-    constructor(tracklog) {
+    constructor(json) {
         try {
-            this.fromTracklog(tracklog);
+            const tracklog = JSON.parse(json);
+            this.fromJSON(tracklog);
         } catch (e) {
             console.warn(e);
             this.data = {};
         }
     }
 
-    getText(ele, index) {
-        return ele.eq(index).children(".show-for-medium-up").text();
-    }
-
-    fromTracklog(tracklog) {
-        let [all, altitude, speed] = tracklog.match(/altitude_json = (.*?); speed_json = (.*?); facility_json/);
-        altitude = JSON.parse(altitude);
-        speed = JSON.parse(speed);
-
-        const start = altitude[0][0];
-        const time = altitude.map(alt => alt[0] - start);
-        altitude = altitude.map(alt => alt[1]);
-        speed = speed.map(spd => spd[1]);
-
-        const user = tracklog.match(/user = (.*?);/)[1];
-        const timezone = JSON.parse(user).TZ.replace(":", "");
-        const offset = rawTimeZones.find(tz => {
-            return tz.name === timezone;
-        }).rawOffsetInMinutes * 60 * 1000;
-
+    fromJSON(tracklog) {
+        const { track } = tracklog.result.response.data.flight;
+        const start = track[0].timestamp;
+        const time = track.map(t => t.timestamp - start);
+        const altitude = track.map(t => t.altitude.meters);
+        const speed = track.map(t => t.speed.kmh);
+        const latitude = track.map(t => t.latitude);
+        const longitude = track.map(t => t.longitude);
+        const heading = track.map(t => t.heading);
+        const length = track.length;
         this.data = {
-            start: start - offset,
+            start,
             time,
             altitude,
             speed,
-            latitude: [],
-            longitude: [],
-            heading: [],
-            length: 0
+            latitude,
+            longitude,
+            heading,
+            length
         };
-
-        const $ = cheerio.load(tracklog);
-        $(".smallrow1, .smallrow2").each((index, ele) => {
-            if (this.data.length === time.length || $(ele).attr("class").includes("flight_event")) {
-                return;
-            }
-            const children = $(ele).children();
-            this.data.latitude.push(parseFloat(this.getText(children, 1)));
-            this.data.longitude.push(parseFloat(this.getText(children, 2)));
-            this.data.heading.push(parseInt(children.eq(3).text().match(/\d+/)[0]));
-            this.data.length++;
-        });
     }
 
     stringify() {
@@ -63,39 +40,50 @@ class DataBase {
 
 async function request(url) {
     console.log("REQ", url);
-    return new Promise((resolve, reject) => {
-        https.get(url, res => {
-            const chunks = [];
-            res.on("data", data => {
-                chunks.push(data);
-            });
-            res.on("end", () => {
-                resolve(chunks.join(""));
-            });
-        }).on("error", err => {
-            reject("Error with http(s) request: " + err);
-        });
-    });
-}
-
-async function getIdent(id) {
-    const result = await request(`https://e1.flightcdn.com/ajax/ignoreall/omnisearch/flight.rvt?searchterm=${id}`);
-    return JSON.parse(result).data[0]?.ident || id;
+    const res = await fetch(url);
+    return res.text();
 }
 
 async function flights(number) {
-    const html = await request(`https://zh.flightaware.com/live/flight/${number}`);
-    const result = html.match(/<script>var trackpollBootstrap = (\{.*?\});<\/script>/);
-    if (!result) {
-        return "{}";
-    }
-    return result[1];
+    const html = await request(`https://www.flightradar24.com/data/flights/${number}`);
+    const result = [];
+    const $ = cheerio.load(html);
+    $("tr.data-row").each((index, ele) => {
+        const a = $(ele).find("a.btn-playback");
+        if ($(a).attr("class").includes("disabled")) {
+            return;
+        }
+        const tds = $(ele).find("td");
+        const origin = tds.eq(3).text().split("\n")[1].trim();
+        const destination = tds.eq(4).text().split("\n")[1].trim();
+        const aircraftTypeFriendly = tds.eq(5).text().split("\n")[1].trim();
+        const ete = tds.eq(6).text().trim();
+        const departure = tds.eq(7).attr("data-timestamp");
+        const actual = tds.eq(8).attr("data-timestamp");
+        const landingTimes = tds.eq(9).attr("data-timestamp");
+        const flightId = $(a).attr("data-flight-hex");
+        const timestamp = $(ele).attr("data-timestamp");
+        const trackLog = `/live/${flightId}/${timestamp}`;
+        result.push({
+            origin,
+            destination,
+            aircraftTypeFriendly,
+            ete,
+            departure: parseInt(departure, 10),
+            actual: parseInt(actual, 10),
+            landingTimes: parseInt(landingTimes, 10),
+            flightId,
+            timestamp,
+            trackLog
+        });
+    });
+    return result;
 }
 
-async function flight(path) {
-    const html = await request(`https://zh.flightaware.com${path}`);
-    const db = new DataBase(html);
+async function flight(flightId, timestamp) {
+    const json = await request(`https://api.flightradar24.com/common/v1/flight-playback.json?flightId=${flightId}&timestamp=${timestamp}`);
+    const db = new DataBase(json);
     return db.stringify();
 }
 
-export { getIdent, flights, flight };
+export { flights, flight };
