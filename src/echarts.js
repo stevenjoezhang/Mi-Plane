@@ -18,6 +18,27 @@ class Echarts extends Component {
             initialized: false
         };
         this.resetTimer();
+        this.handleResize = this._handleResize.bind(this);
+    }
+
+    componentDidMount() {
+        window.addEventListener('resize', this.handleResize);
+    }
+
+    componentWillUnmount() {
+        window.removeEventListener('resize', this.handleResize);
+        if (this.chart) {
+            this.chart.dispose();
+        }
+    }
+
+    _handleResize() {
+        if (this.chart) {
+            this.chart.resize({
+                width: this.element.current.clientWidth,
+                height: this.element.current.clientHeight
+            });
+        }
     }
 
     resetTimer(t = 0) {
@@ -110,7 +131,6 @@ class Echarts extends Component {
                 },
                 boundaryGap: false
             }],
-
             yAxis: [{
                 type: "value",
                 name: "高度 (m)",
@@ -212,6 +232,9 @@ class Echarts extends Component {
         // 绘制图表
         if (!this.chart) this.chart = init(this.element.current);
         this.chart.setOption(this.option);
+        setTimeout(() => {
+            this.handleResize();
+        }, 0);
     }
 
     updateMarkLine(percentage) {
