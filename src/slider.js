@@ -41,23 +41,27 @@ class Slider extends Component {
                         {children}
                     </div>
                 )}
-                renderThumb={({ props }) => (
-                    <div
-                        {...props}
-                        style={{
-                            ...props.style,
-                            background: `rgba(85,83,84,0.3) url(${background}) no-repeat 10px 8px`,
-                            backgroundSize: "36px 36px",
-                            borderRadius: "50%",
-                            cursor: "move",
-                            height: "50px",
-                            left: 0,
-                            position: "absolute",
-                            top: 0,
-                            width: "50px"
-                        }}
-                    />
-                )}
+                renderThumb={({ props }) => {
+                    const { key, ...restProps } = props;
+                    return (
+                        <div
+                            key={key}
+                            {...restProps}
+                            style={{
+                                ...props.style,
+                                background: `rgba(85,83,84,0.3) url(${background}) no-repeat 10px 8px`,
+                                backgroundSize: "36px 36px",
+                                borderRadius: "50%",
+                                cursor: "move",
+                                height: "50px",
+                                left: 0,
+                                position: "absolute",
+                                top: 0,
+                                width: "50px"
+                            }}
+                        />
+                    );
+                }}
             />
         );
     }
