@@ -54,9 +54,15 @@ async function flights(number) {
             return;
         }
         const tds = $(ele).find("td");
-        const origin = tds.eq(3).text().split("\n")[1].trim();
-        const destination = tds.eq(4).text().split("\n")[1].trim();
-        const aircraftTypeFriendly = tds.eq(5).text().split("\n")[1].trim();
+        const origin = tds.eq(3).contents().filter(function () {
+            return this.type === 'text';
+        }).text().trim();
+        const destination = tds.eq(4).contents().filter(function () {
+            return this.type === 'text';
+        }).text().trim();
+        const aircraftTypeFriendly = tds.eq(5).contents().filter(function () {
+            return this.type === 'text';
+        }).text().trim();
         const ete = tds.eq(6).text().trim();
         const departure = tds.eq(7).attr("data-timestamp");
         const actual = tds.eq(8).attr("data-timestamp");
