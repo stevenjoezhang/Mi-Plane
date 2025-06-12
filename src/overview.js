@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import { Component } from "react";
 import Modal from "./modal.js";
 import "./overview.css";
 

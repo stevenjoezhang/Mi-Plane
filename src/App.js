@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import { Component } from "react";
 import FlightTable from "./flight-table.js";
 import Overview from "./overview.js";
 import DataBase from "./database.js";

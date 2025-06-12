@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import { Component } from "react";
 import { Range, getTrackBackground } from "react-range";
 import background from "./images/aircraft-white-50.png";
 
