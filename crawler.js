@@ -65,6 +65,11 @@ class FlightDataBase {
         return result;
     }
 
+    static async getFlightsAPI(number) {
+        const json = await request(`https://api.flightradar24.com/common/v1/flight/list.json?&fetchBy=flight&page=1&limit=25&query=${number}`);
+        const flights = JSON.parse(json);
+    }
+
     static async getFlight(flightId, timestamp) {
         const json = await request(`https://api.flightradar24.com/common/v1/flight-playback.json?flightId=${flightId}&timestamp=${timestamp}`);
         let data = {};
@@ -84,12 +89,4 @@ async function request(url) {
     return res.text();
 }
 
-async function flights(number) {
-    return FlightDataBase.getFlights(number);
-}
-
-async function flight(flightId, timestamp) {
-    return FlightDataBase.getFlight(flightId, timestamp);
-}
-
-export { flights, flight };
+export { FlightDataBase };
