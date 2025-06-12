@@ -1,4 +1,4 @@
-import { Component } from "react";
+import React, { Component } from "react";
 import FlightTable from "./flight-table.js";
 import Overview from "./overview.js";
 import DataBase from "./database.js";
@@ -10,12 +10,14 @@ class App extends Component {
     constructor(props) {
         super(props);
         this.db = new DataBase();
+        this.tableModal = React.createRef();
+        this.overviewModal = React.createRef();
     }
 
     render() {
         return <>
-            <FlightTable db={this.db}/>
-            <Overview db={this.db} />
+            <FlightTable db={this.db} tableModal={this.tableModal} overviewModal={this.overviewModal} />
+            <Overview db={this.db} tableModal={this.tableModal} overviewModal={this.overviewModal} />
             <Echarts db={this.db} />
         </>;
     }

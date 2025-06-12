@@ -65,7 +65,8 @@ class FlightTable extends Component {
             loading: false
         };
         this.db = props.db;
-        this.modal = React.createRef();
+        this.tableModal = props.tableModal;
+        this.overviewModal = props.overviewModal;
         this.input = React.createRef();
         this.searchHistory = React.createRef();
     }
@@ -75,6 +76,8 @@ class FlightTable extends Component {
             .then(response => response.json())
             .then(data => {
                 this.db.loadData(data);
+                bsModal.getInstance(this.tableModal.current).hide();
+                new bsModal(this.overviewModal.current).show();
             });
     }
 
@@ -96,7 +99,7 @@ class FlightTable extends Component {
             valid: true,
             loading: true
         });
-        new bsModal(this.modal.current).show();
+        new bsModal(this.tableModal.current).show();
         fetch(`/flights/${query}/`)
             .then(response => response.json())
             .then(flights => {
@@ -147,13 +150,15 @@ class FlightTable extends Component {
                     <td>{new Date(row.landingTimes * 1e3).toTimeString()} {row.destination}</td>
                     <td>{row.aircraftTypeFriendly}</td>
                     <td>{row.ete}</td>
-                    <td style={{ whiteSpace: "nowrap" }}><button type="button" className="btn btn-primary" onClick={this.trackLog.bind(this, row.trackLog)} data-bs-toggle="modal" data-bs-target="#overview-modal" data-bs-dismiss="modal">预览</button></td>
+                    <td style={{ whiteSpace: "nowrap" }}>
+                        <button type="button" className="btn btn-primary" onClick={this.trackLog.bind(this, row.trackLog)}>预览</button>
+                    </td>
                 </tr>))}
             </tbody>
         </table>;
         return (<>
             {nav}
-            <Modal title="航班查询" modalRef={this.modal} id="flight-table">
+            <Modal title="航班查询" modalRef={this.tableModal}>
                 {this.state.flights.length ? table : (this.state.loading ? <Loading /> : "")}
             </Modal>
         </>);
