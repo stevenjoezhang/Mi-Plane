@@ -1,10 +1,6 @@
 import { draw, Overview } from "./arcgis.js";
 
 class DataBase {
-    constructor(url) {
-        //this.startTime = Date.now();
-    }
-
     loadData(data) {
         if (!data.length) {
             alert("The current flight data is not available, please choose another time!");

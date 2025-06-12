@@ -72,12 +72,12 @@ class FlightTable extends Component {
     }
 
     trackLog(href) {
+        bsModal.getInstance(this.tableModal.current).hide();
+        new bsModal(this.overviewModal.current).show();
         fetch(href)
             .then(response => response.json())
             .then(data => {
                 this.db.loadData(data);
-                bsModal.getInstance(this.tableModal.current).hide();
-                new bsModal(this.overviewModal.current).show();
             });
     }
 
