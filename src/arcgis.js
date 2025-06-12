@@ -31,6 +31,7 @@ const map = new Map({
 const viewForward = new SceneView({
     container: "forward-map",
     map,
+    qualityProfile: "high",
     environment: {
         lighting: {
             date: Date.now(),
@@ -150,7 +151,8 @@ class Overview {
             container: "overview-map",
             map: this.map,
             scale: 50000000,
-            center: [-101.17, 21.78]
+            center: [-101.17, 21.78],
+            qualityProfile: "high"
         });
         this.view.ui.components = ["zoom", "navigation-toggle", "compass"];
     }
