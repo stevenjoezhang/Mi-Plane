@@ -1,7 +1,7 @@
 import * as cheerio from "cheerio";
 
 class FlightDataBase {
-    fromJSON(tracklog) {
+    static fromJSON(tracklog) {
         const { track } = tracklog.result.response.data.flight;
         const start = track[0].timestamp * 1000; // Convert to milliseconds
         const time = track.map(t => t.timestamp * 1000 - start); // Convert to milliseconds
@@ -68,6 +68,24 @@ class FlightDataBase {
     static async getFlightsAPI(number) {
         const json = await request(`https://api.flightradar24.com/common/v1/flight/list.json?&fetchBy=flight&page=1&limit=25&query=${number}`);
         const flights = JSON.parse(json);
+        const { data } = flights.result.response;
+        const result = data
+            .filter(flight => flight.status.text.contains("Landed"))
+            .map(flight => {
+                return {
+                    origin: flight.airport.origin.position.region.city,
+                    destination: flight.airport.destination.position.region.city,
+                    aircraftTypeFriendly: flight.aircraft.model.text,
+                    ete: flight.time.other.eta,
+                    departure: flight.time.scheduled.departure,
+                    actual: flight.time.real.departure,
+                    landingTimes: flight.time.real.arrival,
+                    flightId: flight.identification.id,
+                    timestamp: 0,
+                    trackLog: `/live/${flight.identification.id}/${flight.time.real.departure}`,
+                };
+            });
+        return result;
     }
 
     static async getFlight(flightId, timestamp) {
@@ -79,7 +97,7 @@ class FlightDataBase {
         } catch (e) {
             console.warn(e);
         }
-        return JSON.stringify(data);
+        return data;
     }
 }
 

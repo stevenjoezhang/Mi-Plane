@@ -41,5 +41,5 @@ app.get("/flights/:id/", async (req, res) => {
 app.get("/live/:flightId/:timestamp", async (req, res) => {
     res.setHeader("Content-Type", "application/json");
     const result = await FlightDataBase.getFlight(req.params.flightId, req.params.timestamp);
-    res.end(result);
+    res.end(JSON.stringify(result));
 });
