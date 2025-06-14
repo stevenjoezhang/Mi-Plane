@@ -2,6 +2,14 @@
 
 The best flight visualization tool in your browser. Based on Node.js and WebGL.
 
+## Screenshots
+
+The app in action:
+
+![](assets/screenshot-1.png)
+
+![](assets/screenshot-2.png)
+
 ## Install
 
 To clone and run this repository you'll need [Git](https://git-scm.com) and [Node.js](https://nodejs.org/en/download) (which comes with [npm](http://npmjs.com)) installed on your computer.
